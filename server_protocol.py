@@ -71,8 +71,7 @@ def read (conn, mask):
                 data = data.decode()            
                 print(data)
                 try:
-                    v = json.loads(data)
-                    print(v)  
+                    v = json.loads(data)                                                     
                     v["id"] = clients[conn]
                     if ("x" in v):
                         updatecursor(v)
@@ -82,8 +81,6 @@ def read (conn, mask):
                         print("User specified no name and it isn't cursor")
                 except:
                     print("user with id " + str(clients[conn]) + " tried something incorrect")
-                print('###')                            
-#               print("Sent")
         mask &=~ selectors.EVENT_READ
     assert mask == 0
 
