@@ -89,7 +89,4 @@ def read (conn, mask):
 def sendMap(id, data):
     for x in clients:
         if (clients[x] == id):
-            x.send(bytes(data, 'utf-8'))                                            
- 
-initserver()
-
+            x.send(bytes(data, 'utf-8'))        
