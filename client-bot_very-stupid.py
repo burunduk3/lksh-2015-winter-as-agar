@@ -3,7 +3,7 @@ from protocol import *
 
 killed = False
 
-name = 'Vasya'
+name = 'Stupid Bot'
 
 id = registerMe(name)
 data = {}
@@ -28,7 +28,7 @@ def createMove():
 		dy = random.randint(-10000, 10000)			
 
 		x, y = x + dx, y + dy
-		arr = {'x': x, 'y': y, 's': 0}
+		arr = {'x': x, 'y': y, 's': 0, 'id': id}
 		sendMe(arr)
 	
 threading.Thread(target = getData).start()
