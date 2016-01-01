@@ -1,10 +1,9 @@
-import sys, time, json, threading
+import sys, time, json, threading, random
 from protocol import *
-from random import randint
 
 killed = False
 
-name = 'name'
+name = 'Vasya'
 
 id = registerMe(name)
 data = {}
@@ -25,7 +24,9 @@ def createMove():
 	global killed, data, id
 	while not killed:
 		x, y = getPosition()
-		dx = randint(-10000, 10000), dy = randint(-10000, 10000)			
+		dx = random.randint(-10000, 10000)
+		dy = random.randint(-10000, 10000)			
+
 		x, y = x + dx, y + dy
 		arr = {'x': x, 'y': y, 's': 0}
 		sendMe(arr)
@@ -35,3 +36,4 @@ threading.Thread(target = createMove).start()
 
 sys.stdin.readline()
 killed = True
+sys.exit(0)
