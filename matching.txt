@@ -1,0 +1,7 @@
+P (Physics): Санжар, Ян
+S (Server): Миша, Вася
+CU (Client.User): Миша, Игорь
+CB (Client.Bot): Антон, Аня
+D (Data Protocol): Гриша, Никита
+B (Beauty): Андрей, Саша
+
