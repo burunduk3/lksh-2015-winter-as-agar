@@ -42,7 +42,7 @@ def dp(a, b, c, d):
 
 
 def distRayPoint(p, a, b):
-    if (dp(a, b, a, p) <= 0)
+    if (dp(a, b, a, p) <= 0):
         return math.hypot(p[0] - a[0], p[1] - a[1])
     else:
         return distLinePoint(p, a, b)
