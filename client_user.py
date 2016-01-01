@@ -1,5 +1,6 @@
 from tkinter import *
 from draw import *
+from server import *
 
 import sys, json, threading, time	
                  
@@ -10,14 +11,14 @@ def onMotion(e):
 
 def sending():
 	global curx, cury, player_id
+	
 
-	ourx, ouury = 0, 0
-	for p in curList:
-	  if (p["id"] == player_id):
-	    ourx, oury = p["balls"][0]["x"], p["balls"][0]["y"]
-	    break 
-
-	while True:                      
+	while True:
+		ourx, oury = 0, 0
+		for p in curList:
+			if (p["id"] == player_id):
+				ourx, oury = p["balls"][0]["x"], p["balls"][0]["y"]
+				break
 		SendMe({"id" : player_id, "x" : ourx - 400 + curx, "y" : oury - 225 + cury, "s" : 0})
 		#{'x': 1, 'y': 1, 's': 0}
 		time.sleep(0.1)
@@ -26,16 +27,16 @@ def drawing():
 	global canvas, player_id, curList
 
 	while True:
-	    ourx, ouury = 0, 0
-	    curList = getField()
+		ourx, oury = 0, 0
+		curList = getField()
 		
-	    for p in curList:
-	      if (p["id"] == player_id):
-	        ourx, oury = p["balls"][0]["x"], p["balls"][0]["y"]
-	        break 
+		for p in curList:
+			if (p["id"] == player_id):
+				ourx, oury = p["balls"][0]["x"], p["balls"][0]["y"]
+				break 
 
 		#[{'name': 'Vasya', 'color': 'blue', 'id': 1, 'balls': [{'x': 1, 'm': 1, 'y': 1}]}]
-		canvas = draw_players(curList, canvas, player_id, ourx - 400, ourx - 225)
+		canvas = draw_players(canvas, (ourx - 400, ourx - 225), curList)
 		time.sleep(0.1)
 	
 
