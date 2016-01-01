@@ -74,7 +74,7 @@ def read (conn, mask):
                     v = json.loads(data)
                     print(v)  
                     if ("x" in v):
-                        updatecursor((v["x"], v["y"])                                                                           
+                        updatecursor((v["x"], v["y"]))                                                                           
                     elif ("name" in v):
                         addPlayer(v["name"], clients[conn])
                     else:
