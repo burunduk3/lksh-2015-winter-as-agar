@@ -11,18 +11,39 @@
 """
 
 import random
+import time
 
 
 class AgarioPlayer:
-    def __init__(self, name):
+    def __init__(self, name, cursor):
         self.name = name
         self.id = random.randint(1, 10 ** 36)
         self.circles = [(random.randint(0, 8000), random.randint(0, 4000), 10)]
-    
+        self.cursor = (0, 0)
+
 
 class AgarioServer:
     def __init__(self):
         """
             call init у сокетов
         """
-        self.players = []
+        self.players = dict()
+
+    def addPlayer(self, name):
+        player = AgarioPlayer(name)
+        self.player[player.id] = player
+
+    def updateCursor(self, cursor):
+        """
+            cursor['x'] = x курсора
+            cursor['y'] = y курсора
+            cursor['id'] = id игрока
+        """
+        self.player[cursor['id']].cursor = (cursor['x'], cursor['y'])
+
+
+server = AgarioServer()
+
+addPlayerCallback = lambda name: server.addPlayer(name)
+updateCursorCallback = lambda cursor: server.updateCursor(cursor)
+
