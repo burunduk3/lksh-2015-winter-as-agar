@@ -2,8 +2,7 @@ import tkinter as tk
 from math import sqrt
 
 
-def draw_player(c, p):
-    c = tk.Canvas()
+def draw_player(c, p):s
     r = sqrt(p['mass'])
     c.create_oval(p['x'] - r,
                   p['y'] - r,
