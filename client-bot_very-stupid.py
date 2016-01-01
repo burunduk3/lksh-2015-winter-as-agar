@@ -36,4 +36,5 @@ threading.Thread(target = createMove).start()
 
 sys.stdin.readline()
 killed = True
+killMe()
 sys.exit(0)

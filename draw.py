@@ -16,5 +16,5 @@ def draw_players(c, pos, ps):
                           lx + r,
                           ly + r,
                           fill = p['color'])
-            c.create_text(lx, ly, font='', text=p['name'])
+            c.create_text(lx, ly, font='Times New Roman', text=p['name'])
     return c
