@@ -19,9 +19,9 @@ from threading import *
 time_step = 0.03
 
 class AgarioPlayer:
-    def __init__(self, name, cursor):
+    def __init__(self, name, id, cursor):
         self.name = name
-        self.id = random.randint(1, 10 ** 36)
+        self.id = id
         self.circles = [(random.randint(0, 8000), random.randint(0, 4000), 10)]
         self.cursor = (0, 0)
 
@@ -67,9 +67,9 @@ class AgarioServer:
         self.cursorLock = Lock()
         self.players = dict()
 
-    def addPlayer(self, name):
+    def addPlayer(self, name, id):
         self.playerLock.acquire()
-        player = AgarioPlayer(name)
+        player = AgarioPlayer(name, id)
         self.player[player.id] = player
         self.playerLock.release()
         return player.id
@@ -100,7 +100,7 @@ class AgarioServer:
 
 server = AgarioServer()
 
-addPlayerCallback = lambda name: server.addPlayer(name)
+addPlayerCallback = lambda name: server.addPlayer(name, id)
 updateCursorCallback = lambda cursor: server.updateCursor(cursor)
 
 lastTime = time()
