@@ -19,11 +19,15 @@ from threading import *
 time_step = 0.03
 
 class AgarioPlayer:
-    def __init__(self, name, cursor):
+    def __init__(self, name, mass = 10):
         self.name = name
         self.id = random.randint(1, 10 ** 36)
-        self.circles = [(random.randint(0, 8000), random.randint(0, 4000), 10)]
-        self.cursor = (0, 0)
+        self.circles = [(random.randint(0, 8000), random.randint(0, 4000), mass)]
+        self.cursor = self.circles[0][:2]
+
+    def addCircle(self, mass = 1):
+        self.circles.append((random.randint(0, 8000), random.randint(0, 4000), mass))
+
 
 
 def distLinePoint(p, u, v):
@@ -42,7 +46,7 @@ def dp(a, b, c, d):
 
 
 def distRayPoint(p, a, b):
-    if (dp(a, b, a, p) <= 0)
+    if (dp(a, b, a, p) <= 0):
         return math.hypot(p[0] - a[0], p[1] - a[1])
     else:
         return distLinePoint(p, a, b)
@@ -65,14 +69,22 @@ class AgarioServer:
         """
         self.playerLock = Lock()
         self.cursorLock = Lock()
-        self.players = dict()
+        food = AgarioPlayer('Food', 1)
+        food.id = 0
+        self.players = {0 : food}
 
     def addPlayer(self, name):
         self.playerLock.acquire()
         player = AgarioPlayer(name)
         self.player[player.id] = player
+        self.realPlayers.add(player.id)
         self.playerLock.release()
         return player.id
+
+    def addFood(self, cnt):
+        food = self.players[0]
+        for i in range(cnt):
+            food.addCircle(1)
 
     def updateCursor(self, cursor):
         """
@@ -84,18 +96,22 @@ class AgarioServer:
         self.player[cursor['id']].cursor = (cursor['x'], cursor['y'])
         self.cursorLock.release()
 
+    def updateCirlces(self, circles):
+        for pl in self.players:
+            pl.circles = []
+        for circle in circles:
+            self.players[circle['id']].circles.append((circle['x'], circle['y'], circle['mass']))
+
     def makeFieldMessage(self, id):
-        center = players[id].circles[0][:2]
-        ans = []
-        for player in self.player:
+        center = self.players[id].circles[0][:2]
+        circles = []
+        for player in self.players:
             for circle in player.circles:
-                player_balls = []
                 if doCircleAndRectIntersect((circle[0], circle[1]), math.sqrt(circle[2]), \
                                             (center[0] - 400, center[1] - 200), (center[0] - 400, center[1] + 200), \
                                             (center[0] + 400, center[1] + 200), (center[0] + 400, center[1] - 200)):
-                    player_balls.append({'x' : circle[0], 'y': circle[1], 'm': circle[2]})
-                ans.append({'name': player.name, color:'blue', 'id': player.id, 'balls': player_balls})
-        return ans
+                    circles.append((player.id, circle))
+        return {'id': id, 'circles': circles}
 
 
 server = AgarioServer()
@@ -113,17 +129,20 @@ while True:
         """
         server.cursorLock.acquire()
         server.playerLock.acquire()
+
+        server.addFood(1)
         cursors = []
         circles = []
-
         for pl in server.players:
             id = pl.id
             cursors.append({'x' : pl.cursor[0], 'y' : pl.cursor[1], 'id' : id})
             for circle in pl.circles:
                 circles.append({'x' : circles[0], 'y' : circle[1], 'm' : circle[2], 'id' : id})
+        server.updateCirlces(circles)
+        newcirlces = physics.updateMap0(cursors, circles, time_step)
+
         server.cursorLock.release()
         server.playerLock.release()
-        newcirlces = physics.updateMap0(cursors, circles, time_step)
         """
             рассказать всем о новых полях
         """
