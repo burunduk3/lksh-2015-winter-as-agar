@@ -11,10 +11,14 @@
 """
 
 import random
+<<<<<<< HEAD
+import time
 import math
+=======
 import physics
 from time import *
 from threading import *
+>>>>>>> 66051271b926852d5378c25443d56e5227b5f1cf
 
 time_step = 0.03
 
@@ -71,8 +75,11 @@ class AgarioServer:
         self.playerLock.acquire()
         player = AgarioPlayer(name)
         self.player[player.id] = player
-        self.playerLock.release()
+<<<<<<< HEAD
         return player.id
+=======
+        self.playerLock.release()
+>>>>>>> 66051271b926852d5378c25443d56e5227b5f1cf
 
     def updateCursor(self, cursor):
         """
