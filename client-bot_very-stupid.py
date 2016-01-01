@@ -3,7 +3,7 @@ from protocol import *
 
 killed = False
 
-name = 'Vasya'
+name = 'Stupid Bot'
 
 id = registerMe(name)
 data = {}
