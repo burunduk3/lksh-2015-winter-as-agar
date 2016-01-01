@@ -94,7 +94,7 @@ class AgarioServer:
                                             (center[0] - 400, center[1] - 200), (center[0] - 400, center[1] + 200), \
                                             (center[0] + 400, center[1] + 200), (center[0] + 400, center[1] - 200)):
                     player_balls.append({'x' : circle[0], 'y': circle[1], 'm': circle[2]})
-                ans.append({'name': player.name, color:'blue', 'id': id, 'balls': player_balls})
+                ans.append({'name': player.name, color:'blue', 'id': player.id, 'balls': player_balls})
         return ans
 
 
