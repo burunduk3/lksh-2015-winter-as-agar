@@ -33,6 +33,9 @@ def asking():
     while True:
         # print("abacabadabacaba")
         curList = getField()
+        if curList == []:
+            root.quit()
+            exit(0)
         print('getField: '+str(curList))
         # print("abacaba")
         time.sleep(0.01)

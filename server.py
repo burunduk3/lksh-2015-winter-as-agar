@@ -140,7 +140,10 @@ class AgarioServer:
     	return self.playersColors[id]
 
     def makeFieldMessage(self, id):
-        center = self.players[id].circles[0][:2]
+        try:
+            center = self.players[id].circles[0][:2]
+        except IndexError:
+            return []
         ans = []
         for player in self.players.values():
             for circle in player.circles:

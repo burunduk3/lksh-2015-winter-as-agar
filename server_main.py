@@ -5,7 +5,7 @@ from server import *
 import server_protocol as protocol
 from threading import *
 
-FOOD_NUM = 30
+FOOD_NUM = 100
 
 server = AgarioServer()
 server.addFood(FOOD_NUM) #added this line
