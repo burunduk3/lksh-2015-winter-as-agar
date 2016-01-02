@@ -1,5 +1,5 @@
 import json, socket, time
-
+                    
 sock = socket.socket()
 
 def registerMe(name):     
@@ -9,8 +9,8 @@ def registerMe(name):
     config = inf.readline()
     tcp_ip, tcp_port = config.split(' ')
     tcp_port = int(tcp_port)
-
-    sock.connect((tcp_ip, tcp_port))             
+                                  
+    sock.connect((tcp_ip, tcp_port))
     id = json.loads(str(sock.recv(1024), 'utf-8'))['id']
     jdata = dict()
     jdata['name'] = name
@@ -22,15 +22,15 @@ def getField():
     global sock    
     data = sock.recv(1024)
     data = str(data, 'utf-8')
+    print("data = ", data)
     return json.loads(data)
 
 def sendMe(p):
     global sock
     data = json.dumps(p)
-    print(data)   
     sock.send(bytes(data, 'utf-8'))
 
 def killMe():
     global sock
     #sock.send(bytes('killme', 'utf-8'))
-    sock.close()
+    sock.close()  

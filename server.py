@@ -87,8 +87,10 @@ class AgarioServer:
         for i in range(cnt):
             food.addCircle(1)
 
-    def userExit(self, id):
+    def UserExit(self, id):
+        self.playerLock.acquire()
         del self.players[id]
+        self.playerLock.release()
 
     def updatecursor(self, cursor):
         """
@@ -108,7 +110,8 @@ class AgarioServer:
             self.players[player.id] = player
         self.pUpdates.clear()
         for cursor in self.cUpdates:
-            self.players[cursor['id']].cursor = (cursor['x'], cursor['y'])
+            if cursor['id'] in self.players:
+                self.players[cursor['id']].cursor = (cursor['x'], cursor['y'])
         self.cUpdates.clear()
         self.addFood(cnt)
         self.cursorLock.release()
@@ -126,8 +129,8 @@ class AgarioServer:
         for player in self.players.values():
             for circle in player.circles:
                 player_balls = []
-                if doCircleAndRectIntersect((circle[0], circle[1]), math.sqrt(circle[2]), \
-                                            (center[0] - 400, center[1] - 200), (center[0] - 400, center[1] + 200), \
+                if doCircleAndRectIntersect((circle[0], circle[1]), math.sqrt(circle[2]),
+                                            (center[0] - 400, center[1] - 200), (center[0] - 400, center[1] + 200),
                                             (center[0] + 400, center[1] + 200), (center[0] + 400, center[1] - 200)):
                     player_balls.append({'x' : circle[0], 'y': circle[1], 'm': circle[2]})
                 ans.append({'name': player.name, 'color' : 'blue', 'id': player.id, 'balls': player_balls})

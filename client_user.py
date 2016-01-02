@@ -35,11 +35,13 @@ def sending():
         time.sleep(0.1)
 
 def asking():
-    while True:
-        print("abacabadabacaba")
-        curList = getField()
-        print("abacaba")
-        time.sleep(0.12)
+	global curList
+	while True:
+		print("abacabadabacaba")
+		curList = getField()
+		print("abacaba")
+		time.sleep(0.12)
+
 
 def drawing():
     global canvas, player_id, curList
