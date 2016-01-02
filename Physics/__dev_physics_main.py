@@ -64,16 +64,28 @@ def update_map0(cursors, circles, t_step):
 
 # Merely dislocates circles 
 MAX_VEL = 0.4
-MIN_VEL = 0.1  
+MIN_VEL = 0.03  
 MAX_MASS = 1000
+VEL_CONST = 1000
 
-#Return a real number in range[0, 1]
-def calc_velocity(mass):
-	#ans = (MAX_MASS - mass) / MAX_MASS #VEL_CONST / mass
-	#ans = min(ans, MAX_VEL)
-	#ans = max(ans, MIN_VEL)
+def calc_velocity1(mass):
+	ans = (MAX_MAT- mass) / MAX_MASS #VEL_CONST / mass
+	ans = min(ans, MAX_VEL)
+	ans = max(ans, MIN_VEL)
+	return ans
+                                       
+def calc_velocity2(mass):
 	alpha = (MAX_MASS - min(MAX_MASS, mass)) / MAX_MASS
 	ans = MIN_VEL + alpha * (MAX_VEL - MIN_VEL)
+	return ans
+                               
+def calc_velocity3(mass):
+	ans = min(1.0, VEL_CONST / mass)
+	return ans
+
+#Returns a real number in range[0, 1]
+def calc_velocity(mass):
+	ans = calc_velocity2(mass)
 	print("result_vel =", ans)
 	return ans
 
@@ -155,7 +167,7 @@ def update_map3(in_cursors, in_circles, t_step):
 			if (cur_c.absorbable(prv_c)):
 				prv_c.absorbed = True
 				cur_c.mass += prv_c.mass
-
+				             	
 #	for c in circles: print(c)
 	result = list(filter(lambda x: x.absorbed == False, circles))
 	return list(map(lambda x: circle2dict(x), result))
@@ -163,7 +175,7 @@ def update_map3(in_cursors, in_circles, t_step):
 a = []
 b = []
 a.append({"x" : 0, "y" : 0, "m" : 100, "id" : 1})
-#a.append({"x" : 9, "y" : 0, "m" : 1, "id" : 0})
+a.append({"x" : 184, "y" : 110, "m" : 1, "id" : 0})
 b.append({"x" : 500, "y" : 300, "id" : 1})
 #b.append({"x" : 9, "y" : 0, "id" : 2})
 
