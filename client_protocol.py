@@ -26,9 +26,8 @@ def getField():
 
     s = old_data+data            
     l = s.split('\n')
-    l = s.split('\r')
 
-    if data[-1] == '\n' or data[-1] == '\r':
+    if data[-1] == '\n':
         old_data = ""
         return json.loads(l[-1])
     else:
