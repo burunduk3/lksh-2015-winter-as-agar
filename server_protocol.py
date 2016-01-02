@@ -100,6 +100,5 @@ def sendMap(id, data):
                 x.send(bytes(data, 'utf-8'))
     except:        
         del clients[ids[id]]
-        del ids[id]
         localServer.UserExit(id)
         
