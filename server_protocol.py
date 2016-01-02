@@ -90,4 +90,4 @@ def sendMap(id, data):
     data = json.dumps(data)       
     for x in clients:
         if (clients[x] == id):
-            x.send(bytes(data, 'utf-8'))                                            )
+            x.send(bytes(data, 'utf-8'))
