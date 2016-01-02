@@ -5,10 +5,10 @@ def draw_players(c, pos, ps):
     # c - Canvas, pos - (x0, y0), ps - players
     x0, y0 = int(pos[0]), int(pos[1])
     for i in range(800):
-        if 20 - i % 20 - 1 == x0 % 20:
+        if 40 - i % 40 - 1 == x0 % 40:
             c.create_line(i, 0, i, 450, fill='#D0D0D0')
     for i in range(450):
-        if 20 - i % 20 - 1 == y0 % 20:
+        if 40 - i % 40 - 1 == y0 % 40:
             c.create_line(0, i, 800, i, fill='#D0D0D0')
     q = []
     for p in ps:
