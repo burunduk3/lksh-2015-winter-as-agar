@@ -4,6 +4,12 @@ from math import sqrt
 def draw_players(c, pos, ps):
     # c - Canvas, pos - (x0, y0), ps - players
     x0, y0 = pos
+    for i in range(800):
+        if 20 - i % 20 - 1 == x0 % 20:
+            c.create_line(i, 0, i, 450, fill='#D0D0D0')
+    for i in range(450):
+        if 20 - i % 20 - 1 == y0 % 20:
+            c.create_line(0, i, 800, i, fill='#D0D0D0')
     q = []
     for p in ps:
         for b in p['balls']:
@@ -26,8 +32,8 @@ def draw_players(c, pos, ps):
                       ly + r,
                       fill=b['color'],
                       outline='')
-        if r > 20:
+        if len(b['name']) > 0 and r // len(b['name']) > 2:
             c.create_text(lx, ly,
-                          font=('Comic Sans MS', 5 * r // (3 * len(b['name']) + 1) + 1),
+                          font=('Comic Sans MS', 7 * r // (4 * len(b['name']) + 1) + 1),
                           text=b['name'])
     return c
