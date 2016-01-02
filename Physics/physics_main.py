@@ -12,7 +12,7 @@ class pnt:
 	def abs2(s):
 		return s.x * s.x + s.y * s.y
 	def abs(s):
-		return math.sqrt(s.d2())
+		return math.sqrt(s.abs2())
 	def __add__(a, b):
 		return pnt(a.x + b.x, a.y + b.y)
 	def __mul__(a, b):
@@ -21,8 +21,13 @@ class pnt:
 		return "pnt <" + str(s.x) + ", " + str(s.y) + ">"
 	def __sub__(a, b):
 		return pnt(a.x - b.x, a.y - b.y)
+	
+def distance(a, b):
+	return (b - a).abs()	
 
-ABSORB_REL = 1.2
+#Realation that must be satisfied in order to be absorbed
+ABSORB_REL = 1.25
+ABSORB_RAD = 0.97
 
 class circle:
 	def __init__(self, x, y, m, id):
@@ -36,7 +41,9 @@ class circle:
 	def __str__(s):
 		return "circle <" + str(s.center) + ", " + str(s.r) + ">"
 	def absorbable(self, other):
-		
+		if (self.mass / other.mass < ABSORB_REL): return False
+		if (dist(center, b.center) < r * ABSORB_RAD): return False
+		return True	
 
 def dict2circle (c):
 	return circle(c["x"], c["y"], c["m"], c["id"])
@@ -45,7 +52,6 @@ def circle2dict (c):
 	return {"x" : c.center.x, "y" : c.center.y, "m" : c.mass, "id" : c.id}
 
 #==================================================
-
 # cursors - list of dicts
 # circles - list of dicts
 # t_step - real number, time of update in seconds
@@ -88,7 +94,7 @@ def update_map1(in_cursors, in_circles, t_step):
 
 #Handles absorbtions
                                    
-def update_map1(in_cursors, in_circles, t_step):
+def update_map2(in_cursors, in_circles, t_step):
 	cursors = []
 	curs_dict = {}
 	for c in in_cursors: 
@@ -99,8 +105,9 @@ def update_map1(in_cursors, in_circles, t_step):
 
 	for i in range(len(circles)):
 		circ = circles[i]
+		print(curs_dict[circ.id])
 		if (circ.id == 0): 
-			continue
+			continue             
 		cursor = curs_dict[circ.id]                                                                                  
 		displacement_vec = cursor - circ.center
 		velocity = calc_velocity(circ.mass)
@@ -112,17 +119,23 @@ def update_map1(in_cursors, in_circles, t_step):
 			cur_c = circles[i]
 			prv = circles[j]
 			if (prv.absorbed): continue  
-			if (cur_c.absorbable(prv))
+			if (cur_c.absorbable(prv)):
 				prv.absorbed = 1
 				cur_c.mass += prv.mass
 
+	result = list(filter(lambda x: ~x.absorbed, circles))
 	return list(map(lambda x: circle2dict(x), result))
 
-a = [{"x" : 0, "y" : 0, "m" : 100, "id" : 1}]
-b = [{"x" : 200, "y" : 100, "id" : 1}]
+a = []
+b = []
+a.append({"x" : 0, "y" : 0, "m" : 100, "id" : 1})
+a.append({"x" : 9, "y" : 0, "m" : 1, "id" : 2})
+b.append({"x" : 0, "y" : 0, "id" : 1})
+b.append({"x" : 9, "y" : 0, "id" : 1})
 
 res = update_map1(b, a, 1)
 
-#for c in res :
-#	print(c)           
+for c in res :
+	print(c)
+	          
 
