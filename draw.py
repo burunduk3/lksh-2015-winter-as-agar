@@ -1,6 +1,6 @@
 from math import sqrt
 
-step = 40
+step = 25
 
 
 def draw_bg(c, pos):

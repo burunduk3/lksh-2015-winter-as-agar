@@ -25,7 +25,7 @@ def sending():
                 break
         sendMe({"id": player_id, "x": ourx - 400 + curx, "y": oury - 225 + cury, "s": 0})
         # {'x': 1, 'y': 1, 's': 0}
-        time.sleep(0.1)
+        time.sleep(0.01)
 
 
 def asking():
@@ -35,6 +35,7 @@ def asking():
         curList = getField()
         print('getField: '+str(curList))
         # print("abacaba")
+        time.sleep(0.01)
 
 
 def drawing():
