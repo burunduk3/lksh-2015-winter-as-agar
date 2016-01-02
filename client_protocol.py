@@ -22,16 +22,15 @@ def getField():
     global sock    
     data = sock.recv(1024)
     data = str(data, 'utf-8')
-    print(data)
+    print("data = ", data)
     return json.loads(data)
 
 def sendMe(p):
     global sock
     data = json.dumps(p)
-    print(data)   
     sock.send(bytes(data, 'utf-8'))
 
 def killMe():
     global sock
     #sock.send(bytes('killme', 'utf-8'))
-    sock.close()
+    sock.close()  
