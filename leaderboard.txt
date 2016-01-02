@@ -1,0 +1,2 @@
+canvas = draw_leaderboard(canvas, list(dict))
+canvas = draw_mass(canvas, (int)mass)
