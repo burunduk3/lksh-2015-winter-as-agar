@@ -40,7 +40,7 @@ def getField():
             else:
                 print([])
                 return ([]) 
-    else
+    else:
         print([]) 
         return([])       
 
