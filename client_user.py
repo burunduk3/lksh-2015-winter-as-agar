@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from tkinter import *
 from draw import *
 from client_protocol import *
@@ -54,10 +56,13 @@ root.wm_resizable(0, 0)
 root.geometry("800x450")
 root.title("agar.io_test")
 
+print ('enter your user name: ', end='', flush=True)
+
 userName = " ".join(sys.stdin.readline().split())
 print("OK. Your username is " + userName)
-#At first get name from keyboard
+# At first get name from keyboard
 player_id = registerMe(userName)
+print ("connected")
 
 curx, cury = 0, 0
 curList = getField()
