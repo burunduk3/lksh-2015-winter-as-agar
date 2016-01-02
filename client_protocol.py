@@ -25,7 +25,7 @@ def getField():
     data = str(data, 'utf-8')
 
     s = old_data+data            
-    l = s.split('\n')
+    l = s.strip().split('\n')
 
     if len(l) > 0:
         if data[-1] == '\n':
