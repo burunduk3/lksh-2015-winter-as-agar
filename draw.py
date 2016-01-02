@@ -35,5 +35,6 @@ def draw_players(c, pos, ps):
         if len(b['name']) > 0 and r // len(b['name']) > 3:
             c.create_text(lx, ly,
                           font=('Comic Sans MS', 2 * r // (len(b['name']) + 1)),
-                          text=b['name'])
+                          text=b['name'],
+                          fill='white')
     return c
