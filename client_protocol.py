@@ -21,7 +21,7 @@ def registerMe(name):
     return id
              
 def getField():
-    global sock, old_data    
+    global sock, old_data, old_json
     data = sock.recv(1024)
     data = str(data, 'utf-8')
 
@@ -42,7 +42,7 @@ def getField():
                 return json.loads(l[-2])
             else:
                 print("3 = ", [])
-                return (old_json) 
+                return (old_json)
     else:
         print("4 = ", []) 
         return(old_json)       

@@ -10,23 +10,30 @@
     - на чувак что-то послал
 """
 
+# исправить баг: когда съедают юзера происходит какая-то хрень - сервер вылетает
+
 import random
 import math
 import Physics.physics_main as physics
 from time import *
 from threading import *
 
-time_step = 0.05
+time_step = 0.03
 
 class AgarioPlayer:
-    def __init__(self, name, id, mass = 10):
+    def __init__(self, name, id, mass):
+        if (name == 'Food'):
+            assert mass == 1
         self.name = name
         self.id = id
-        self.circles = [(random.randint(0, 8000), random.randint(0, 4000), mass)]
+        # размеры поля были уменьшены для дебага и тестирования
+        # self.circles = [(random.randint(0, 8000), random.randint(0, 4000), mass)]
+        self.circles = [(random.randint(0, 200), random.randint(0, 100), mass)]
         self.cursor = self.circles[0][:2]
-
-    def addCircle(self, mass = 1):
-        self.circles.append((random.randint(0, 8000), random.randint(0, 4000), mass))
+    # теперь масса не задается автоматически(где-то дальше был баг в том, что кто-то вызывал функцию не от тех параметров(пофиксили))
+    def addCircle(self, mass):
+        # self.circles.append((random.randint(0, 8000), random.randint(0, 4000), mass))
+        self.circles.append((random.randint(0, 200), random.randint(0, 100), mass))
 
 
 def distLinePoint(p, u, v):
@@ -60,6 +67,8 @@ def doCircleAndRectIntersect(p, r, a, b, c, d):
         return True
     return min(distSegmentPoint(p, a, b), distSegmentPoint(p, b, c), distSegmentPoint(p, c, d), distSegmentPoint(p, d, a)) <= r
 
+# изначальная масса каждого юзера
+INIT_MASS = 10
 
 class AgarioServer:
     def __init__(self):
@@ -68,16 +77,17 @@ class AgarioServer:
         """
         self.playerLock = Lock()
         self.cursorLock = Lock()
-        food = AgarioPlayer('Food', 1)
+        food = AgarioPlayer('Food', 0, 1)
         food.id = 0
         self.players = {0 : food}
         self.pUpdates = []
         self.cUpdates = []
         self.eUpdates = []
+        self.playerColor = {}
 
     def addPlayer(self, name, id):
         self.playerLock.acquire()
-        player = AgarioPlayer(name, id)
+        player = AgarioPlayer(name, id, INIT_MASS)
         # self.player[player.id] = player
         self.pUpdates.append(player)
         # self.realPlayers.add(player.id)
@@ -126,6 +136,11 @@ class AgarioServer:
             self.players[plid].circles = []
         for circle in circles:
             self.players[circle['id']].circles.append((circle['x'], circle['y'], circle['m']))
+	
+    def find_color(self, id):
+        if not id in self.playerColor:
+            self.playerColor[id] = random.choice(['red', 'grey', 'blue'])
+        return self.playerColor[id]
 
     def makeFieldMessage(self, id):
         center = self.players[id].circles[0][:2]
@@ -137,6 +152,7 @@ class AgarioServer:
                                             (center[0] - 400, center[1] - 200), (center[0] - 400, center[1] + 200),
                                             (center[0] + 400, center[1] + 200), (center[0] + 400, center[1] - 200)):
                     player_balls.append({'x' : circle[0], 'y': circle[1], 'm': circle[2]})
-                ans.append({'name': player.name, 'color' : 'blue', 'id': player.id, 'balls': player_balls})
+                # теперь каждому юзеру выдается определенный цвет, который лежит возвращает ф-цияя find_color(id)
+                ans.append({'name': player.name, 'color' : self.find_color(player.id), 'id': player.id, 'balls': player_balls})
         # print(ans)
         return ans

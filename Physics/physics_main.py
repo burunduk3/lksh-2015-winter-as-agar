@@ -42,6 +42,7 @@ class circle:
 	def __str__(s):
 		return "circle <" + str(s.center) + ", " + str(s.r) + ", " + str(s.absorbed) + ">"
 	def absorbable(self, other):
+		if (other.id == 0) and (other.mass == 1): return True
 		if (self.mass / other.mass < ABSORB_REL): return False
 		if (self.r * ABSORB_RAD < distance(self.center, other.center)): return False
 		return True	
@@ -61,16 +62,31 @@ def circle2dict (c):
 def update_map0(cursors, circles, t_step):
 	return circles
 
-# Merely dislocates circles 
-MAX_VEL = 0.3
-MIN_VEL = 0.01
-VEL_CONST = 5
+# Merely dislocates circles     
+MAX_VEL = 0.4
+MIN_VEL = 0.03  
 MAX_MASS = 1000
+VEL_CONST = 1000
 
-def calc_velocity(mass):
+def calc_velocity1(mass):
 	ans = (MAX_MASS - mass) / MAX_MASS #VEL_CONST / mass
 	ans = min(ans, MAX_VEL)
 	ans = max(ans, MIN_VEL)
+	return ans
+                                       
+def calc_velocity2(mass):
+	alpha = (MAX_MASS - min(MAX_MASS, mass)) / MAX_MASS
+	ans = MIN_VEL + alpha * (MAX_VEL - MIN_VEL)
+	return ans
+                               
+def calc_velocity3(mass):
+	ans = min(1.0, VEL_CONST / mass)
+	return ans
+
+#Returns a real number in range[0, 1]
+def calc_velocity(mass):
+	ans = calc_velocity3(mass)
+	#print("result_vel =", ans)
 	return ans
 
 def update_map1(in_cursors, in_circles, t_step):

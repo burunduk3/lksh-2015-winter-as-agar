@@ -40,7 +40,9 @@ def initserver(ss):
         if (v == "quit"):   
             a = True
         
-cnt = random.randint(1, 10**40)
+# cnt = random.randint(1, 10**40)
+cnt = 1
+
 v = dict()
 def accept (server, mask):
     global poll, cnt
@@ -56,7 +58,8 @@ def accept (server, mask):
             conn.setblocking (False)
             poll.register (conn, selectors.EVENT_READ, read)
             clients[conn] = cnt
-            cnt = random.randint(1, 10**40) 
+            # cnt = random.randint(1, 10**40) 
+            cnt += 1
         mask &=~ selectors.EVENT_READ
     assert mask == 0
 
