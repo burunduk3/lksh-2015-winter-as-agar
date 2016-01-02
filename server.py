@@ -12,7 +12,7 @@
 
 import random
 import math
-import physics.physics_main as physics
+import Physics.physics_main as physics
 from time import *
 from threading import *
 
@@ -112,15 +112,15 @@ class AgarioServer:
         self.playerLock.release()
 
     def updateCirlces(self, circles):
-        for pl in self.players:
-            pl.circles = []
+        for plid in self.players:
+            self.players[plid].circles = []
         for circle in circles:
-            self.players[circle['id']].circles.append((circle['x'], circle['y'], circle['mass']))
+            self.players[circle['id']].circles.append((circle['x'], circle['y'], circle['m']))
 
     def makeFieldMessage(self, id):
         center = self.players[id].circles[0][:2]
         ans = []
-        for player in self.players:
+        for player in self.players.values():
             for circle in player.circles:
                 player_balls = []
                 if doCircleAndRectIntersect((circle[0], circle[1]), math.sqrt(circle[2]), \
