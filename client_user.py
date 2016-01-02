@@ -1,6 +1,6 @@
 from tkinter import *
 from draw import *
-from server import *
+from client_protocol import *
 
 import sys, json, threading, time	
                  
