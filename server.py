@@ -12,7 +12,7 @@
 
 import random
 import math
-import physics
+import physics.physics_main as physics
 from time import *
 from threading import *
 
@@ -71,14 +71,16 @@ class AgarioServer:
         food = AgarioPlayer('Food', 1)
         food.id = 0
         self.players = {0 : food}
+        self.pUpdates = []
+        self.cUpdates = []
 
     def addPlayer(self, name, id):
         self.playerLock.acquire()
         player = AgarioPlayer(name, id)
-        self.player[player.id] = player
+        # self.player[player.id] = player
+        self.pUpdates.append(player)
         self.realPlayers.add(player.id)
         self.playerLock.release()
-        return player.id
 
     def addFood(self, cnt):
         food = self.players[0]
@@ -92,8 +94,22 @@ class AgarioServer:
             cursor['id'] = id игрока
         """
         self.cursorLock.acquire()
-        self.player[cursor['id']].cursor = (cursor['x'], cursor['y'])
+        # self.player[cursor['id']].cursor = (cursor['x'], cursor['y'])
+        self.cUpdates.append(cursor)
         self.cursorLock.release()
+
+    def applUpdate(self, cnt):
+        self.cursorLock.acquire()
+        self.playerLock.acquire()
+        for player in self.pUpdates:
+            self.player[player.id] = player
+        self.pUpdates.clear()
+        for cursor in self.cUpdates:
+            self.player[cursor['id']].cursor = (cursor['x'], cursor['y'])
+        self.cUpdates.clear()
+        self.addFood(cnt)
+        self.cursorLock.release()
+        self.playerLock.release()
 
     def updateCirlces(self, circles):
         for pl in self.players:
@@ -113,40 +129,3 @@ class AgarioServer:
                     player_balls.append({'x' : circle[0], 'y': circle[1], 'm': circle[2]})
                 ans.append({'name': player.name, 'color' : 'blue', 'id': player.id, 'balls': player_balls})
         return ans
-
-
-server = AgarioServer()
-
-addPlayerCallback = lambda name, id: server.addPlayer(name, id)
-updateCursorCallback = lambda cursor: server.updateCursor(cursor)
-
-lastTime = time()
-
-while True:
-    now = time()
-    if (lastTime + time_step < now):
-        """
-            часть где всё обновляется
-        """
-        server.cursorLock.acquire()
-        server.playerLock.acquire()
-
-        server.addFood(1)
-        cursors = []
-        circles = []
-        for pl in server.players:
-            id = pl.id
-            cursors.append({'x' : pl.cursor[0], 'y' : pl.cursor[1], 'id' : id})
-            for circle in pl.circles:
-                circles.append({'x' : circles[0], 'y' : circle[1], 'm' : circle[2], 'id' : id})
-        server.updateCirlces(circles)
-        newcirlces = physics.updateMap0(cursors, circles, time_step)
-
-        server.cursorLock.release()
-        server.playerLock.release()
-        """
-            рассказать всем о новых полях
-        """
-        pass
-    else:
-        sleep(0.01)
