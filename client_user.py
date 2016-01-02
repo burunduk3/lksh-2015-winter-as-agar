@@ -1,17 +1,17 @@
 from tkinter import *
 from draw import *
-#from client_protocol import *
+from client_protocol import *
 
 import sys, json, threading, time	
 
-def registerMe(name):
-	return 1
+"""def registerMe(name):
+	return 1"""
 
-def SendMe(par):
-	return
+"""def SendMe(par):
+	return"""
 
-def getField():
-	return [{'name': userName, 'color': 'blue', "id" : 1, "balls" : [{"x" : curx, "y" : cury, "m" : 4000}]}]
+"""def getField():
+	return [{'name': userName, 'color': 'blue', "id" : 1, "balls" : [{"x" : curx, "y" : cury, "m" : 4000}]}]"""
          
 def onMotion(e):
 	global curx, cury, canvas
@@ -45,7 +45,7 @@ def drawing():
 
 		#[{'name': 'Vasya', 'color': 'blue', 'id': 1, 'balls': [{'x': 1, 'm': 1, 'y': 1}]}]
 	canvas.delete("all")
-	canvas = draw_players(canvas, (0, 0), curList)
+	canvas = draw_players(canvas, (ourx - 400, oury - 225), curList)
 	root.after(10, drawing)
 	
 
