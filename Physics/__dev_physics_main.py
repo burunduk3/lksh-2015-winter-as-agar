@@ -63,16 +63,18 @@ def update_map0(cursors, circles, t_step):
 	return circles
 
 # Merely dislocates circles 
-MAX_VEL = 0.3
-MIN_VEL = 0.01
-VEL_CONST = 5
+MAX_VEL = 0.4
+MIN_VEL = 0.1  
 MAX_MASS = 1000
 
+#Return a real number in range[0, 1]
 def calc_velocity(mass):
-	ans = (MAX_MASS - mass) / MAX_MASS #VEL_CONST / mass
-	print("vel =", ans)
-	ans = min(ans, MAX_VEL)
-	ans = max(ans, MIN_VEL)
+	#ans = (MAX_MASS - mass) / MAX_MASS #VEL_CONST / mass
+	#ans = min(ans, MAX_VEL)
+	#ans = max(ans, MIN_VEL)
+	alpha = (MAX_MASS - min(MAX_MASS, mass)) / MAX_MASS
+	ans = MIN_VEL + alpha * (MAX_VEL - MIN_VEL)
+	print("result_vel =", ans)
 	return ans
 
 def update_map1(in_cursors, in_circles, t_step):
@@ -86,8 +88,11 @@ def update_map1(in_cursors, in_circles, t_step):
 		print(circ.id)
 		if (circ.id == 0): continue
 		cursor = curs_dict[circ.id]
+		#displacemnt_vec - vector of (center -> cursor)
 		displacement_vec = cursor - circ.center
+	    #velocity - number in range [0, 1], denoting the the part of the dis_vec to be covered in 1 sec
 		velocity = calc_velocity(circ.mass)
+		#velocity_vec - acutal vector of move
 		velocity_vec = displacement_vec * velocity * t_step
 		circles[i].center = circ.center + velocity_vec
 	                          
@@ -125,11 +130,41 @@ def update_map2(in_cursors, in_circles, t_step):
 	result = list(filter(lambda x: x.absorbed == False, circles))
 	return list(map(lambda x: circle2dict(x), result))
 
+def update_map3(in_cursors, in_circles, t_step):
+	curs_dict = {}
+	for c in in_cursors: 
+		curs_dict[c["id"]] = pnt(c["x"], c["y"])
+	circles = list(map(lambda x: dict2circle(x), in_circles))
+	circles.sort();
+
+	for i in range(len(circles)):
+		circ = circles[i]        
+		if (circ.id == 0): 
+			continue             
+		cursor = curs_dict[circ.id]                                                                                  
+		displacement_vec = cursor - circ.center
+		velocity = calc_velocity(circ.mass)
+		velocity_vec = displacement_vec * velocity * t_step
+		circles[i].center = circ.center + velocity_vec
+	
+	for i in range(len(circles)):
+		for j in range(i):
+			cur_c = circles[i]
+			prv_c = circles[j]
+			if (prv_c.absorbed): continue
+			if (cur_c.absorbable(prv_c)):
+				prv_c.absorbed = True
+				cur_c.mass += prv_c.mass
+
+#	for c in circles: print(c)
+	result = list(filter(lambda x: x.absorbed == False, circles))
+	return list(map(lambda x: circle2dict(x), result))
+
 a = []
 b = []
 a.append({"x" : 0, "y" : 0, "m" : 100, "id" : 1})
-a.append({"x" : 9, "y" : 0, "m" : 1, "id" : 0})
-b.append({"x" : 0, "y" : 0, "id" : 1})
+#a.append({"x" : 9, "y" : 0, "m" : 1, "id" : 0})
+b.append({"x" : 500, "y" : 300, "id" : 1})
 #b.append({"x" : 9, "y" : 0, "id" : 2})
 
 res = update_map2(b, a, 1)
