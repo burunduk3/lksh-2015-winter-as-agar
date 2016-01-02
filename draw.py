@@ -1,21 +1,23 @@
 from math import sqrt
 
+step = 40
+
 
 def draw_bg(c, pos):
     # c - Canvas, pos - (x0, y0)
-    x0, y0 = int(pos[0]), int(pos[1])
-    for i in range(800):
-        if 40 - i % 40 - 1 == x0 % 40:
-            c.create_line(i, 0, i, 450, fill='#D0D0D0')
-    for i in range(450):
-        if 40 - i % 40 - 1 == y0 % 40:
-            c.create_line(0, i, 800, i, fill='#D0D0D0')
+    x0, y0 = pos
+    x0 = 20 - x0 % step
+    y0 = 20 - y0 % step
+    for i in range(int(800 / step) + 1):
+        c.create_line(i * step + x0, 0, i * step + x0, 450, fill='#D0D0D0')
+    for i in range(int(450 / step) + 1):
+        c.create_line(0, i * step + y0, 800, i * step + y0, fill='#D0D0D0')
     return c
 
 
 def draw_players(c, pos, ps):
     # c - Canvas, pos - (x0, y0), ps - players
-    x0, y0 = int(pos[0]), int(pos[1])
+    x0, y0 = pos
     q = []
     for p in ps:
         for b in p['balls']:
@@ -29,8 +31,8 @@ def draw_players(c, pos, ps):
             q.append(w)
     q.sort(key=lambda a: (a['m'], a['id']))
     for b in q:
-        lx = int(b['x']) - x0
-        ly = int(b['y']) - y0
+        lx = b['x'] - x0
+        ly = b['y'] - y0
         r = int(sqrt(b['m']))
         c.create_oval(lx - r,
                       ly - r,
