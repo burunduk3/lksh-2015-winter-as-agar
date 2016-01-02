@@ -5,6 +5,7 @@ from draw import *
 from client_protocol import *
 from leaderboard import *
 import threading
+import time
 
 
 def onMotion(e):
@@ -18,7 +19,7 @@ def sending():
     while True:
         ourx, oury = 0, 0
         for p in curList:
-            if (p["id"] == player_id):
+            if p["id"] == player_id:
                 ourx, oury = p["balls"][0]["x"], p["balls"][0]["y"]
                 break
         sendMe({"id": player_id, "x": ourx - 400 + curx, "y": oury - 225 + cury, "s": 0})
@@ -47,7 +48,7 @@ def drawing():
             # [{'name': 'Vasya', 'color': 'blue', 'id': 1, 'balls': [{'x': 1, 'm': 1, 'y': 1}]}]
     canvas.delete("all")
     canvas = draw_players(canvas, (ourx - 400, oury - 225), ll)
-    canvas = draw_mass(canvas, str(m) + ' ' + str(int(ourx)) + ' ' + str(int(oury)))
+    canvas = draw_mass(canvas, m)
     root.after(10, drawing)
 
 
