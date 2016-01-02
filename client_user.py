@@ -49,6 +49,7 @@ def drawing():
             break
             # [{'name': 'Vasya', 'color': 'blue', 'id': 1, 'balls': [{'x': 1, 'm': 1, 'y': 1}]}]
     canvas.delete("all")
+    canvas = draw_bg(canvas, (ourx - 400, oury - 225))
     canvas = draw_players(canvas, (ourx - 400, oury - 225), ll)
     canvas = draw_mass(canvas, m)
     root.after(10, drawing)
