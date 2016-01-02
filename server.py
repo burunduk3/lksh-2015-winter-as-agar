@@ -87,8 +87,10 @@ class AgarioServer:
         for i in range(cnt):
             food.addCircle(1)
 
-    def userExit(self, id):
+    def UserExit(self, id):
+        self.playerLock.acquire()
         del self.players[id]
+        self.playerLock.release()
 
     def updatecursor(self, cursor):
         """
@@ -105,10 +107,12 @@ class AgarioServer:
         self.cursorLock.acquire()
         self.playerLock.acquire()
         for player in self.pUpdates:
-            self.players[player.id] = player
+            if player.id in self.players:
+                self.players[player.id] = player
         self.pUpdates.clear()
         for cursor in self.cUpdates:
-            self.players[cursor['id']].cursor = (cursor['x'], cursor['y'])
+            if cursor['id'] in self.players:
+                self.players[cursor['id']].cursor = (cursor['x'], cursor['y'])
         self.cUpdates.clear()
         self.addFood(cnt)
         self.cursorLock.release()
