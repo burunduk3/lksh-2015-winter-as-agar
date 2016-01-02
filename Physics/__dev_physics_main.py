@@ -25,7 +25,7 @@ class pnt:
 def distance(a, b):
 	return (b - a).abs()	
 
-#Relation that must be satisfied in order to be absorbed
+#Realation that must be satisfied in order to be absorbed
 ABSORB_REL = 1.25
 ABSORB_RAD = 0.97
 
@@ -42,6 +42,7 @@ class circle:
 	def __str__(s):
 		return "circle <" + str(s.center) + ", " + str(s.r) + ", " + str(s.absorbed) + ">"
 	def absorbable(self, other):
+		#print ("vot", distance(self.center, other.center), self.r * ABSORB_RAD)
 		if (self.mass / other.mass < ABSORB_REL): return False
 		if (self.r * ABSORB_RAD < distance(self.center, other.center)): return False
 		return True	
@@ -69,6 +70,7 @@ MAX_MASS = 1000
 
 def calc_velocity(mass):
 	ans = (MAX_MASS - mass) / MAX_MASS #VEL_CONST / mass
+	print("vel =", ans)
 	ans = min(ans, MAX_VEL)
 	ans = max(ans, MIN_VEL)
 	return ans
@@ -93,7 +95,7 @@ def update_map1(in_cursors, in_circles, t_step):
 
 #Handles absorbtions
                                    
-def update_map(in_cursors, in_circles, t_step):
+def update_map2(in_cursors, in_circles, t_step):
 	curs_dict = {}
 	for c in in_cursors: 
 		curs_dict[c["id"]] = pnt(c["x"], c["y"])
@@ -119,7 +121,20 @@ def update_map(in_cursors, in_circles, t_step):
 				prv_c.absorbed = True
 				cur_c.mass += prv_c.mass
 
+#	for c in circles: print(c)
 	result = list(filter(lambda x: x.absorbed == False, circles))
 	return list(map(lambda x: circle2dict(x), result))
-       
+
+a = []
+b = []
+a.append({"x" : 0, "y" : 0, "m" : 100, "id" : 1})
+a.append({"x" : 9, "y" : 0, "m" : 1, "id" : 0})
+b.append({"x" : 0, "y" : 0, "id" : 1})
+#b.append({"x" : 9, "y" : 0, "id" : 2})
+
+res = update_map2(b, a, 1)
+
+for c in res :
+	print(c)
+	          
 
