@@ -65,7 +65,7 @@ MAX_MASS = 1000
 VEL_CONST = 1000
 
 def calc_velocity1(mass):
-	ans = (MAX_MAT- mass) / MAX_MASS #VEL_CONST / mass
+	ans = (MAX_MASS - mass) / MAX_MASS #VEL_CONST / mass
 	ans = min(ans, MAX_VEL)
 	ans = max(ans, MIN_VEL)
 	return ans
@@ -81,8 +81,8 @@ def calc_velocity3(mass):
 
 #Returns a real number in range[0, 1]
 def calc_velocity(mass):
-	ans = calc_velocity3(mass)
-   	return ans
+    ans = calc_velocity3(mass)
+    return ans
 
 # Returns the given map
 def update_map0(cursors, circles, t_step):
