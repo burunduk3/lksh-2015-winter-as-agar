@@ -40,7 +40,6 @@ def asking():
 		print("abacabadabacaba")
 		curList = getField()
 		print("abacaba")
-		time.sleep(0.12)
 
 
 def drawing():
@@ -64,29 +63,16 @@ root.wm_resizable(0, 0)
 root.geometry("800x450")
 root.title("agar.io_test")
 
-userName, ip, port = None, None, None
-if len (sys.argv) > 1:
-    userName = sys.argv[1]
-if len (sys.argv) > 2:
-    ip = sys.argv[2]
-if len (sys.argv) > 2:
-    port = sys.argv[3]
+print ('enter your user name: ', end='', flush=True)
 
-if userName is None:
-    print ('enter your user name: ', end='', flush=True)
-    userName = " ".join(sys.stdin.readline().split())
+userName = " ".join(sys.stdin.readline().split())
 print("OK. Your username is " + userName)
-
-if ip is None:
-    print ('enter server ip: ', end='', flush=True)
-    ip = sys.stdin.readline().split()[0]
+print ('enter server ip: ', end='', flush=True)
+ip = sys.stdin.readline().split()[0]
 print("OK. ip is " + ip)
-
-if port is None:
-    print ('enter port: ', end='', flush=True)
-    port = sys.stdin.readline().split()[0]
+print ('enter port: ', end='', flush=True)
+port = sys.stdin.readline().split()[0]
 print("OK. port is " + port)
-
 out = open("config.txt", "w")
 out.write(ip + " " + port)
 out.close()
