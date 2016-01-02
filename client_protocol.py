@@ -30,18 +30,18 @@ def getField():
     if len(l) > 0:
         if data[-1] == '\n':
             old_data = ""
-            print(l[-1])
+            print("1 = ", l[-1])
             return json.loads(l[-1])
         else:
             old_data = l[-1]
             if len(l) > 1:
-                print(l[-2])
+                print("2 = ", l[-2])
                 return json.loads(l[-2])
             else:
-                print([])
+                print("3 = ", [])
                 return ([]) 
     else:
-        print([]) 
+        print("4 = ", []) 
         return([])       
 
 def sendMe(p):
