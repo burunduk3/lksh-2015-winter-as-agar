@@ -34,11 +34,15 @@ def sending():
 		#{'x': 1, 'y': 1, 's': 0}
 		time.sleep(0.1)
 
+def asking():
+	while True:
+		curList = getField()
+		time.sleep(40)
+
 def drawing():
 	global canvas, player_id, curList
 
 	ourx, oury = 400, 225
-	curList = getField()
 		
 	for p in curList:
 		if (p["id"] == player_id):
@@ -82,9 +86,9 @@ canvas = Canvas(root, height=450, width=800)
 canvas.pack()
 
 root.after(0, drawing)
-#t1 = threading.Thread(target=drawing, daemon=True)
+t1 = threading.Thread(target=asking, daemon=True)
 t2 = threading.Thread(target=sending, daemon=True)
-#t1.start()
+t1.start()
 t2.start()
 
 root.mainloop()
