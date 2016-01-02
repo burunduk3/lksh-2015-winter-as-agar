@@ -1,8 +1,9 @@
 import json, socket, time
                     
 sock = socket.socket()
+old_data
 
-def registerMe(name):
+def registerMe(name):     
     global sock, tcp_ip, tcp_port
 
     inf = open('config.txt', 'r')
@@ -19,11 +20,22 @@ def registerMe(name):
     return id
              
 def getField():
-    global sock    
+    global sock, old_data    
     data = sock.recv(1024)
     data = str(data, 'utf-8')
-    print("data = ", data)
-    return json.loads(data)
+
+    s = old_data+data
+    l = s.split('\n')
+
+    if data[-1] == '\n':
+        old_data = ""
+        return json.loads[-1]
+    else:
+        old_data = json.loads[-1]
+        if len(l) > 1:
+            return json.loads[-2]
+        else:
+            return [0]         
 
 def sendMe(p):
     global sock
