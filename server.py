@@ -16,7 +16,7 @@ import physics.physics_main as physics
 from time import *
 from threading import *
 
-time_step = 0.03
+time_step = 0.05
 
 class AgarioPlayer:
     def __init__(self, name, id, mass = 10):

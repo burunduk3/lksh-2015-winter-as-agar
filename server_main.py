@@ -14,6 +14,8 @@ while True:
         """
             часть где всё обновляется
         """
+        dt = now - lastTime
+        lastTime = now
 
         server.applUpdate(1)
         cursors = []
@@ -23,13 +25,13 @@ while True:
             cursors.append({'x' : pl.cursor[0], 'y' : pl.cursor[1], 'id' : id})
             for circle in pl.circles:
                 circles.append({'x' : circles[0], 'y' : circle[1], 'm' : circle[2], 'id' : id})
-        newcirlces = physics.updateMap0(cursors, circles, time_step)
-        server.updateCirlces(newcircles)
+        newcirlces = physics.updateMap0(cursors, circles, dt)
+        server.updateCirlces(newcirlces)
         """
             рассказать всем о новых полях
         """
         for player in server.players:
-            protocol.sendMap(player.id, newcirlces)
-        
+            protocol.sendMap(player.id, server.makeFieldMessage(player.id))
+
     else:
         sleep(0.01)
