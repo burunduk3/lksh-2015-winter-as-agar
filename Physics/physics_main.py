@@ -58,22 +58,37 @@ def circle2dict (c):
 # circles - list of dicts
 # t_step - real number, time of update in seconds
 
-# Returns the given map
-def update_map0(cursors, circles, t_step):
-	return circles
-
-# Merely dislocates circles 
-MAX_VEL = 0.3
-MIN_VEL = 0.01
-VEL_CONST = 5
+#Various formulas for velocity
+MAX_VEL = 0.4
+MIN_VEL = 0.03  
 MAX_MASS = 1000
+VEL_CONST = 1000
 
-def calc_velocity(mass):
+def calc_velocity1(mass):
 	ans = (MAX_MASS - mass) / MAX_MASS #VEL_CONST / mass
 	ans = min(ans, MAX_VEL)
 	ans = max(ans, MIN_VEL)
 	return ans
+                                       
+def calc_velocity2(mass):
+	alpha = (MAX_MASS - min(MAX_MASS, mass)) / MAX_MASS
+	ans = MIN_VEL + alpha * (MAX_VEL - MIN_VEL)
+	return ans
+                               
+def calc_velocity3(mass):
+	ans = min(1.0, VEL_CONST / mass)
+	return ans
 
+#Returns a real number in range[0, 1]
+def calc_velocity(mass):
+    ans = calc_velocity3(mass)
+    return ans
+
+# Returns the given map
+def update_map0(cursors, circles, t_step):
+	return circles
+
+# Merely dislocates circles
 def update_map1(in_cursors, in_circles, t_step):
 	curs_dict = {}
 	for c in in_cursors:                              

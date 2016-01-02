@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-                                                      
 
 from server import *
 import server_protocol as protocol
 from threading import *
 
+FOOD_NUM = 322
+
 server = AgarioServer()
+server.addFood(FOOD_NUM) #added this line
 
 t1 = Thread(target=protocol.initserver, daemon=True, args=[server])
 
