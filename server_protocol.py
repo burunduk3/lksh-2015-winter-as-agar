@@ -97,7 +97,7 @@ def sendMap(id, data):
     for x in clients:
         try:
             if (clients[x] == id):
-                x.send(bytes(data, 'utf-8'))
+                x.send(bytes(data + '\n', 'utf-8'))
         except:
             print("deleting user " + str(clients[x]))
             poll.unregister(x)                

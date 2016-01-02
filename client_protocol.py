@@ -2,7 +2,7 @@ import json, socket, time
                     
 sock = socket.socket()
 
-def registerMe(name):     
+def registerMe(name):
     global sock, tcp_ip, tcp_port
 
     inf = open('config.txt', 'r')

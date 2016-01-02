@@ -1,6 +1,8 @@
 from tkinter import *
 
 def draw_leaderboard(c, p):
+    if len(p) == 0:
+        return c
     mx = c.winfo_reqwidth()
     szx = 140
     szy = 30 * len(p)
