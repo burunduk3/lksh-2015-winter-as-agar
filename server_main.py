@@ -5,6 +5,8 @@ import server_protocol as protocol
 
 server = AgarioServer()
 
+protocol.initserver(server)
+
 addPlayerCallback = lambda name, id: server.addPlayer(name, id)
 updateCursorCallback = lambda cursor: server.updateCursor(cursor)
 
