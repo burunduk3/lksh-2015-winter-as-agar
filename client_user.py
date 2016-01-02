@@ -32,6 +32,7 @@ def asking():
     while True:
         # print("abacabadabacaba")
         curList = getField()
+        print('getField: '+str(curList))
         # print("abacaba")
 
 

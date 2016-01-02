@@ -24,6 +24,7 @@ def registerMe(name):
 
 def getField():
     global sock, old_data, old_json
+
     data = sock.recv(1024)
     data = str(data, 'utf-8')
 
