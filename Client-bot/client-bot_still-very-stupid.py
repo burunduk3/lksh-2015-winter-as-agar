@@ -1,5 +1,5 @@
 import sys, time, json, threading, random
-from protocol import *
+from client_protocol import *
 
 killed = False
 
@@ -60,7 +60,7 @@ def getBestVictim():
 
 	if x == -1:
 		return randint(0, 10000), randint(0, 10000)
-	return vectim_x, victim_y
+	return victim_x, victim_y
 			 
 			
 		

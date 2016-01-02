@@ -26,7 +26,8 @@ def initserver(ss):
                 for key, mask in events:
                     callback = key.data
                     callback (key.fileobj, mask)
-            except:
+            except Exception as e:
+                print(e)
                 print("One of users died")
 
 
@@ -63,7 +64,6 @@ def read (conn, mask):
         while True:
             try:
                 data = conn.recv(1024)
-                print(data)   
             except BlockingIOError:
                 break
             if not data:
@@ -93,14 +93,14 @@ def read (conn, mask):
 
 def sendMap(id, data):
     global localServer
-        data = json.dumps(data)       
-        for x in clients:
-            try:
-                if (clients[x] == id):
-                    x.send(bytes(data, 'utf-8'))
-            except:
-                print("deleting user " + str(clients[x]))
-                poll.unregister(x)                
-                x.close()                                
-                del clients[x]
-                localServer.UserExit(id)       
+    data = json.dumps(data)       
+    for x in clients:
+        try:
+            if (clients[x] == id):
+                x.send(bytes(data, 'utf-8'))
+        except:
+            print("deleting user " + str(clients[x]))
+            poll.unregister(x)                
+            x.close()                                
+            del clients[x]
+            localServer.UserExit(id)       

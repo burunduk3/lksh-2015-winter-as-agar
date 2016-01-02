@@ -4,56 +4,60 @@ from tkinter import *
 from draw import *
 from client_protocol import *
 
-import sys, json, threading, time	
+import sys, json, threading, time    
 
 """def registerMe(name):
-	return 1"""
+    return 1"""
 
 """def SendMe(par):
-	return"""
+    return"""
 
 """def getField():
-	return [{'name': userName, 'color': 'blue', "id" : 1, "balls" : [{"x" : curx, "y" : cury, "m" : 4000}]}]"""
+    return [{'name': userName, 'color': 'blue', "id" : 1, "balls" : [{"x" : curx, "y" : cury, "m" : 4000}]}]"""
          
 def onMotion(e):
-	global curx, cury, canvas
-	curx = e.x
-	cury = e.y
+    global curx, cury, canvas
+    curx = e.x
+    cury = e.y
 
 def sending():
-	global curx, cury, player_id
-	
+    global curx, cury, player_id
+    
 
-	while True:
-		ourx, oury = 0, 0
-		for p in curList:
-			if (p["id"] == player_id):
-				ourx, oury = p["balls"][0]["x"], p["balls"][0]["y"]
-				break
-		sendMe({"id" : player_id, "x" : ourx - 400 + curx, "y" : oury - 225 + cury, "s" : 0})
-		#{'x': 1, 'y': 1, 's': 0}
-		time.sleep(0.1)
+    while True:
+        ourx, oury = 0, 0
+        for p in curList:
+            if (p["id"] == player_id):
+                ourx, oury = p["balls"][0]["x"], p["balls"][0]["y"]
+                break
+        sendMe({"id" : player_id, "x" : ourx - 400 + curx, "y" : oury - 225 + cury, "s" : 0})
+        #{'x': 1, 'y': 1, 's': 0}
+        time.sleep(0.1)
 
 def asking():
+	global curList
 	while True:
+		print("abacabadabacaba")
 		curList = getField()
-		time.sleep(40)
+		print("abacaba")
+		time.sleep(0.12)
+
 
 def drawing():
-	global canvas, player_id, curList
+    global canvas, player_id, curList
 
-	ourx, oury = 400, 225
-		
-	for p in curList:
-		if (p["id"] == player_id):
-			ourx, oury = p["balls"][0]["x"], p["balls"][0]["y"]
-			break 
+    ourx, oury = 400, 225
+        
+    for p in curList:
+        if (p["id"] == player_id):
+            ourx, oury = p["balls"][0]["x"], p["balls"][0]["y"]
+            break 
 
-		#[{'name': 'Vasya', 'color': 'blue', 'id': 1, 'balls': [{'x': 1, 'm': 1, 'y': 1}]}]
-	canvas.delete("all")
-	canvas = draw_players(canvas, (ourx - 400, oury - 225), curList)
-	root.after(10, drawing)
-	
+        #[{'name': 'Vasya', 'color': 'blue', 'id': 1, 'balls': [{'x': 1, 'm': 1, 'y': 1}]}]
+    canvas.delete("all")
+    canvas = draw_players(canvas, (ourx - 400, oury - 225), curList)
+    root.after(10, drawing)
+    
 
 root = Tk()
 root.wm_resizable(0, 0)
@@ -85,10 +89,10 @@ root.bind("<Motion>", onMotion)
 canvas = Canvas(root, height=450, width=800)
 canvas.pack()
 
-root.after(0, drawing)
 t1 = threading.Thread(target=asking, daemon=True)
 t2 = threading.Thread(target=sending, daemon=True)
 t1.start()
 t2.start()
+root.after(0, drawing)
 
 root.mainloop()
