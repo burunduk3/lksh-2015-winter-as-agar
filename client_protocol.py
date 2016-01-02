@@ -22,7 +22,7 @@ def getField():
     global sock    
     data = sock.recv(1024)
     data = str(data, 'utf-8')
-    print(data)
+    print("data = ", data)
     return json.loads(data)
 
 def sendMe(p):
@@ -33,4 +33,4 @@ def sendMe(p):
 def killMe():
     global sock
     #sock.send(bytes('killme', 'utf-8'))
-    sock.close()
+    sock.close()  
