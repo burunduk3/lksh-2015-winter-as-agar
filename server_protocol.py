@@ -63,7 +63,6 @@ def read (conn, mask):
         while True:
             try:
                 data = conn.recv(1024)
-                print(data)   
             except BlockingIOError:
                 break
             if not data:
