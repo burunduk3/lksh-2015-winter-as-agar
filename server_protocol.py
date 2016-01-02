@@ -2,12 +2,14 @@ import selectors, socket, threading, sys, json, random
 
 poll = selectors.DefaultSelector ()
 clients = dict()
+localServer = ""
 
 a = False
-sock = socket.socket()
 
-def initserver():
-    global a, sock, poll
+sock = socket.socket()
+def initserver(ss):
+    global a, sock, poll, localServer
+    localServer = ss
     sock = socket.socket()
     sock.bind (('0.0.0.0', 3030))
     sock.listen (10)
@@ -57,13 +59,12 @@ def read (conn, mask):
     if mask & selectors.EVENT_READ:
         while True:
             try:
-                data = conn.recv(1024)  
+                data = conn.recv(1024)
+                print(data)   
             except BlockingIOError:
-                poll.unregister (conn)
-                del clients[conn]
-                conn.close()
                 break
             if not data:
+                print("deleting user " + str(clients[conn]))
                 poll.unregister (conn)
                 del clients[conn]
                 conn.close()
@@ -71,13 +72,13 @@ def read (conn, mask):
             else:
                 data = data.decode()            
                 print(data)
-                try:
+                try:               
                     v = json.loads(data)                                                     
                     v["id"] = clients[conn]
-                    if ("x" in v):
-                        updatecursor((v["x"], v["y"])                                                                           
-                    elif ("name" in v):
-                        addPlayer(v["name"], clients[conn])
+                    if ("x" in v):      
+                        localServer.updatecursor(v)
+                    elif ("name" in v):                     
+                        localServer.addPlayer(v["name"], clients[conn])
                     else:
                         print("User specified no name and it isn't cursor")
                 except:
@@ -86,8 +87,7 @@ def read (conn, mask):
     assert mask == 0
 
 def sendMap(id, data):
+    data = json.dumps(data)       
     for x in clients:
         if (clients[x] == id):
-            x.send(bytes(data, 'utf-8'))                                            
- 
-
+            x.send(bytes(data, 'utf-8'))                                            )
