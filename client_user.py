@@ -1,9 +1,18 @@
 from tkinter import *
 from draw import *
-from client_protocol import *
+#from client_protocol import *
 
 import sys, json, threading, time	
-                 
+
+def registerMe(name):
+	return 1
+
+def SendMe(par):
+	return
+
+def getField():
+	return [{'name': userName, 'color': 'blue', "id" : 1, "balls" : [{"x" : 400, "y" : 225, "m" : 200}]}]
+         
 def onMotion(e):
 	global curx, cury, canvas
 	curx = e.x
@@ -37,10 +46,11 @@ def drawing():
 
 		#[{'name': 'Vasya', 'color': 'blue', 'id': 1, 'balls': [{'x': 1, 'm': 1, 'y': 1}]}]
 		canvas = draw_players(canvas, (ourx - 400, ourx - 225), curList)
-		time.sleep(0.1)
+		time.sleep(0.12)
 	
 
 root = Tk()
+root.wm_resizable(0, 0)
 root.geometry("800x450")
 root.title("agar.io_test")
 
@@ -50,7 +60,7 @@ print("OK. Your username is " + userName)
 player_id = registerMe(userName)
 
 curx, cury = 0, 0
-curList = []
+curList = getField()
 root.bind("<Motion>", onMotion)
 
 canvas = Canvas(root, height=450, width=800)
