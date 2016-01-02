@@ -1,5 +1,5 @@
 import sys, time, json, threading, random
-from client-protocol import *
+from client_protocol import *
 
 killed = False
 
