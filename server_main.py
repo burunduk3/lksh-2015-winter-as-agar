@@ -5,7 +5,11 @@ from server import *
 import server_protocol as protocol
 from threading import *
 
+# изначальное количество еды
+INIT_NUM_OF_FOOD = 30
+
 server = AgarioServer()
+server.addFood(INIT_NUM_OF_FOOD)
 
 t1 = Thread(target=protocol.initserver, daemon=True, args=[server])
 
