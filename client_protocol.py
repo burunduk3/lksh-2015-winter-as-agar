@@ -1,12 +1,15 @@
 import json, socket, time
 
-tcp_ip = '192.168.3.49'
-tcp_port = 3030
-
 sock = socket.socket()
 
 def registerMe(name):     
-    global sock, tcp_ip, tcp_port        
+    global sock, tcp_ip, tcp_port
+
+    inf = open('config.txt', 'r')
+    config = inf.readline()
+    tcp_ip, tcp_port = config.split(' ')
+    tcp_port = int(tcp_port)
+
     sock.connect((tcp_ip, tcp_port))             
     id = json.loads(str(sock.recv(1024), 'utf-8'))['id']
     jdata = dict()
