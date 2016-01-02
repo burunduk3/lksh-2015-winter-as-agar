@@ -1,5 +1,5 @@
 import sys, time, json, threading, random
-from protocol import *
+from client_protocol import *
 
 killed = False
 
@@ -38,7 +38,7 @@ def getPosition():
 
 def getDist(ball):
 	global x, y
-	dist = sqrt((data['x'] - x) ** 2 + (data['y'] - y) ** 2)
+	dist = sqrt((data['x'] - x) ** 2 + (data['y'] - y) ** 2)              
 
 def goodVictim(ball):
 	return m > 1.25 * ball['m']
@@ -60,16 +60,16 @@ def getBestVictim():
 
 	if x == -1:
 		return randint(0, 10000), randint(0, 10000)
-	return vectim_x, victim_y
+	return victim_x, victim_y
 			 
 			
 		
 
 
 def createMove():
-	global killed, data, id, x, y
+	global killed, data, id, x, y, m
 	while not killed:
-		x, y = getPosition()
+		x, y, m = getPosition()
 		
 		victim_x, victim_y = getBestVictim()
 		dx, dy = (victim_x - x) * 1000, (victim_y - y) * 1000

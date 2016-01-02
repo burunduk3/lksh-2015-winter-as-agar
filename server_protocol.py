@@ -21,8 +21,13 @@ def initserver(ss):
     def thr():            
         global a
         while not a:
-            events = poll.select()                                       
+            try:
+                events = poll.select()
+            except Exception as e:
+                print(e)
+                print("One of users died")
             for key, mask in events:
+                assert mask != 0
                 callback = key.data
                 callback (key.fileobj, mask)
 
@@ -60,9 +65,11 @@ def read (conn, mask):
         while True:
             try:
                 data = conn.recv(1024)
-                print(data)   
             except BlockingIOError:
                 break
+            except ConnectionResetError:
+                print ("user disconnected")
+                data = False
             if not data:
                 print("deleting user " + str(clients[conn]))
                 poll.unregister (conn)
@@ -81,15 +88,26 @@ def read (conn, mask):
                         localServer.addPlayer(v["name"], clients[conn])
                     else:
                         print("User specified no name and it isn't cursor")
-                except:
+                except TypeError:
                     print("user with id " + str(clients[conn]) + " tried something incorrect")
+                except :
+                    print("Server failed in to add player or update cursor")
         mask &=~ selectors.EVENT_READ
     assert mask == 0
 
 def sendMap(id, data):
+    global localServer
     data = json.dumps(data)       
-    for x in clients:
-        if (clients[x] == id):
-            x.send(bytes(data, 'utf-8'))
-
-
+    q = clients
+    for x in q:
+        try:
+            if (q[x] == id):
+                x.send(bytes(data + '\n', 'utf-8'))
+                break
+        except:
+            print("deleting user " + str(clients[x]))
+            poll.unregister(x)                
+            x.close()                                
+            del clients[x]
+            localServer.UserExit(id)   
+            break;    

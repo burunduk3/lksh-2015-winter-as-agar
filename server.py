@@ -73,13 +73,14 @@ class AgarioServer:
         self.players = {0 : food}
         self.pUpdates = []
         self.cUpdates = []
+        self.eUpdates = []
 
     def addPlayer(self, name, id):
         self.playerLock.acquire()
         player = AgarioPlayer(name, id)
         # self.player[player.id] = player
         self.pUpdates.append(player)
-        self.realPlayers.add(player.id)
+        # self.realPlayers.add(player.id)
         self.playerLock.release()
 
     def addFood(self, cnt):
@@ -87,7 +88,12 @@ class AgarioServer:
         for i in range(cnt):
             food.addCircle(1)
 
-    def updateCursor(self, cursor):
+    def UserExit(self, id):
+        self.playerLock.acquire()
+        self.eUpdates.append(id)
+        self.playerLock.release()
+
+    def updatecursor(self, cursor):
         """
             cursor['x'] = x курсора
             cursor['y'] = y курсора
@@ -102,10 +108,14 @@ class AgarioServer:
         self.cursorLock.acquire()
         self.playerLock.acquire()
         for player in self.pUpdates:
-            self.player[player.id] = player
+            self.players[player.id] = player
         self.pUpdates.clear()
+        for id in self.eUpdates:
+            del self.players[id]
+        self.eUpdates.clear()
         for cursor in self.cUpdates:
-            self.player[cursor['id']].cursor = (cursor['x'], cursor['y'])
+            if cursor['id'] in self.players:
+                self.players[cursor['id']].cursor = (cursor['x'], cursor['y'])
         self.cUpdates.clear()
         self.addFood(cnt)
         self.cursorLock.release()
@@ -123,9 +133,10 @@ class AgarioServer:
         for player in self.players.values():
             for circle in player.circles:
                 player_balls = []
-                if doCircleAndRectIntersect((circle[0], circle[1]), math.sqrt(circle[2]), \
-                                            (center[0] - 400, center[1] - 200), (center[0] - 400, center[1] + 200), \
+                if doCircleAndRectIntersect((circle[0], circle[1]), math.sqrt(circle[2]),
+                                            (center[0] - 400, center[1] - 200), (center[0] - 400, center[1] + 200),
                                             (center[0] + 400, center[1] + 200), (center[0] + 400, center[1] - 200)):
                     player_balls.append({'x' : circle[0], 'y': circle[1], 'm': circle[2]})
                 ans.append({'name': player.name, 'color' : 'blue', 'id': player.id, 'balls': player_balls})
+        # print(ans)
         return ans
