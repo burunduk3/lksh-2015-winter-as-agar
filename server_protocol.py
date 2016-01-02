@@ -98,10 +98,12 @@ def read (conn, mask):
 def sendMap(id, data):
     global localServer
     data = json.dumps(data)       
-    for x in clients:
+    q = clients
+    for x in q:
         try:
-            if (clients[x] == id):
+            if (q[x] == id):
                 x.send(bytes(data + '\n', 'utf-8'))
+                break
         except:
             print("deleting user " + str(clients[x]))
             poll.unregister(x)                
