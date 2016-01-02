@@ -60,6 +60,15 @@ print ('enter your user name: ', end='', flush=True)
 
 userName = " ".join(sys.stdin.readline().split())
 print("OK. Your username is " + userName)
+print ('enter server ip: ', end='', flush=True)
+ip = sys.stdin.readline().split()[0]
+print("OK. ip is " + ip)
+print ('enter port: ', end='', flush=True)
+port = sys.stdin.readline().split()[0]
+print("OK. port is " + port)
+out = open("config.txt", "w")
+out.write(ip + " " + port)
+out.close()
 # At first get name from keyboard
 player_id = registerMe(userName)
 print ("connected")
