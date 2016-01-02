@@ -73,8 +73,9 @@ def read (conn, mask):
                 try:
                     v = json.loads(data)
                     print(v)  
+                    v["id"] = clients[conn]
                     if ("x" in v):
-                        updatecursor((v["x"], v["y"])                                                                           
+                        updatecursor(v)
                     elif ("name" in v):
                         addPlayer(v["name"], clients[conn])
                     else:
@@ -90,6 +91,3 @@ def sendMap(id, data):
     for x in clients:
         if (clients[x] == id):
             x.send(bytes(data, 'utf-8'))                                            
- 
-initserver()
-
