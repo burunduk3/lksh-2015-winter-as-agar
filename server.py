@@ -12,7 +12,7 @@
 
 import random
 import math
-import physics.physics_main as physics
+import Physics.physics_main as physics
 from time import *
 from threading import *
 
@@ -79,7 +79,7 @@ class AgarioServer:
         player = AgarioPlayer(name, id)
         # self.player[player.id] = player
         self.pUpdates.append(player)
-        self.realPlayers.add(player.id)
+        # self.realPlayers.add(player.id)
         self.playerLock.release()
 
     def addFood(self, cnt):
@@ -87,7 +87,7 @@ class AgarioServer:
         for i in range(cnt):
             food.addCircle(1)
 
-    def updateCursor(self, cursor):
+    def updatecursor(self, cursor):
         """
             cursor['x'] = x курсора
             cursor['y'] = y курсора
@@ -102,25 +102,25 @@ class AgarioServer:
         self.cursorLock.acquire()
         self.playerLock.acquire()
         for player in self.pUpdates:
-            self.player[player.id] = player
+            self.players[player.id] = player
         self.pUpdates.clear()
         for cursor in self.cUpdates:
-            self.player[cursor['id']].cursor = (cursor['x'], cursor['y'])
+            self.players[cursor['id']].cursor = (cursor['x'], cursor['y'])
         self.cUpdates.clear()
         self.addFood(cnt)
         self.cursorLock.release()
         self.playerLock.release()
 
     def updateCirlces(self, circles):
-        for pl in self.players:
-            pl.circles = []
+        for plid in self.players:
+            self.players[plid].circles = []
         for circle in circles:
-            self.players[circle['id']].circles.append((circle['x'], circle['y'], circle['mass']))
+            self.players[circle['id']].circles.append((circle['x'], circle['y'], circle['m']))
 
     def makeFieldMessage(self, id):
         center = self.players[id].circles[0][:2]
         ans = []
-        for player in self.players:
+        for player in self.players.values():
             for circle in player.circles:
                 player_balls = []
                 if doCircleAndRectIntersect((circle[0], circle[1]), math.sqrt(circle[2]), \

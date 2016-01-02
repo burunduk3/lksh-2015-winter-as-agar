@@ -21,10 +21,13 @@ def initserver(ss):
     def thr():            
         global a
         while not a:
-            events = poll.select()                                       
-            for key, mask in events:
-                callback = key.data
-                callback (key.fileobj, mask)
+            try:
+                events = poll.select()                                       
+                for key, mask in events:
+                    callback = key.data
+                    callback (key.fileobj, mask)
+            except:
+                print("One of users died")
 
 
     threading.Thread(target = thr, daemon=True).start() 
@@ -81,8 +84,10 @@ def read (conn, mask):
                         localServer.addPlayer(v["name"], clients[conn])
                     else:
                         print("User specified no name and it isn't cursor")
-                except:
+                except TypeError:
                     print("user with id " + str(clients[conn]) + " tried something incorrect")
+                except :
+                    print("Server failed in to add player or update cursor")
         mask &=~ selectors.EVENT_READ
     assert mask == 0
 
@@ -90,4 +95,4 @@ def sendMap(id, data):
     data = json.dumps(data)       
     for x in clients:
         if (clients[x] == id):
-            x.send(bytes(data, 'utf-8'))                                            )
+            x.send(bytes(data, 'utf-8'))

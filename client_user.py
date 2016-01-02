@@ -30,14 +30,14 @@ def sending():
 			if (p["id"] == player_id):
 				ourx, oury = p["balls"][0]["x"], p["balls"][0]["y"]
 				break
-		SendMe({"id" : player_id, "x" : ourx - 400 + curx, "y" : oury - 225 + cury, "s" : 0})
+		sendMe({"id" : player_id, "x" : ourx - 400 + curx, "y" : oury - 225 + cury, "s" : 0})
 		#{'x': 1, 'y': 1, 's': 0}
 		time.sleep(0.1)
 
 def drawing():
 	global canvas, player_id, curList
 
-	ourx, oury = 0, 0
+	ourx, oury = 400, 225
 	curList = getField()
 		
 	for p in curList:
@@ -60,12 +60,22 @@ print ('enter your user name: ', end='', flush=True)
 
 userName = " ".join(sys.stdin.readline().split())
 print("OK. Your username is " + userName)
+print ('enter server ip: ', end='', flush=True)
+ip = sys.stdin.readline().split()[0]
+print("OK. ip is " + ip)
+print ('enter port: ', end='', flush=True)
+port = sys.stdin.readline().split()[0]
+print("OK. port is " + port)
+out = open("config.txt", "w")
+out.write(ip + " " + port)
+out.close()
 # At first get name from keyboard
 player_id = registerMe(userName)
 print ("connected")
 
 curx, cury = 0, 0
-curList = getField()
+#curList = getField()
+curList = []
 root.bind("<Motion>", onMotion)
 
 canvas = Canvas(root, height=450, width=800)
