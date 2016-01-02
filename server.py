@@ -111,7 +111,7 @@ class AgarioServer:
             self.players[player.id] = player
         self.pUpdates.clear()
         for id in self.eUpdates:
-            self.players[id]
+            del self.players[id]
         self.eUpdates.clear()
         for cursor in self.cUpdates:
             if cursor['id'] in self.players:
