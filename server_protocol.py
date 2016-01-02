@@ -103,4 +103,5 @@ def sendMap(id, data):
             poll.unregister(x)                
             x.close()                                
             del clients[x]
-            localServer.UserExit(id)       
+            localServer.UserExit(id)   
+            break;    
