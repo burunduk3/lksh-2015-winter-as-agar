@@ -35,7 +35,7 @@ def getField():
         if len(l) > 1:
             return l[-2]
         else:
-            return [0]         
+            return []         
 
 def sendMe(p):
     global sock
