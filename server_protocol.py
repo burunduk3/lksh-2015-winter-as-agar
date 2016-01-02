@@ -21,10 +21,13 @@ def initserver(ss):
     def thr():            
         global a
         while not a:
-            events = poll.select()                                       
-            for key, mask in events:
-                callback = key.data
-                callback (key.fileobj, mask)
+            try:
+                events = poll.select()                                       
+                for key, mask in events:
+                    callback = key.data
+                    callback (key.fileobj, mask)
+            except:
+                print("One of users died")
 
 
     threading.Thread(target = thr, daemon=True).start() 
