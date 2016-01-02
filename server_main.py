@@ -32,7 +32,7 @@ while True:
             cursors.append({'x' : pl.cursor[0], 'y' : pl.cursor[1], 'id' : id})
             for circle in pl.circles:
                 circles.append({'x' : circle[0], 'y' : circle[1], 'm' : circle[2], 'id' : id})
-        newcirlces = physics.update_map1(cursors, circles, dt)
+        newcirlces = physics.update_map(cursors, circles, dt)
         server.updateCirlces(newcirlces)
         """
             рассказать всем о новых полях
