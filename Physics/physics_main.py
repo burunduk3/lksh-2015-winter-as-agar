@@ -63,6 +63,7 @@ MAX_VEL = 0.4
 MIN_VEL = 0.03  
 MAX_MASS = 1000
 VEL_CONST = 1000
+LOG_CONST = 1
 
 def calc_velocity1(mass):
 	ans = (MAX_MASS - mass) / MAX_MASS #VEL_CONST / mass
@@ -83,6 +84,10 @@ def calc_velocity3(mass):
 def calc_velocity(mass):
     ans = calc_velocity3(mass)
     return ans
+
+def calc_log_velocity(vec_len, mass):
+	ans = LOG_CONST * math.log(vec_len) / mass	
+	return ans
 
 # Returns the given map
 def update_map0(cursors, circles, t_step):
@@ -122,7 +127,7 @@ def update_map(in_cursors, in_circles, t_step):
 			continue             
 		cursor = curs_dict[circ.id]                                                                                  
 		displacement_vec = cursor - circ.center
-		velocity = calc_velocity(circ.mass)
+		velocity = calc_log_velocity(circ.mass)
 		velocity_vec = displacement_vec * velocity * t_step
 		circles[i].center = circ.center + velocity_vec
 	

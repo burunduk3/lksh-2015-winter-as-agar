@@ -17,6 +17,8 @@ class pnt:
 		return pnt(a.x + b.x, a.y + b.y)
 	def __mul__(a, b):
 		return pnt(a.x * b, a.y * b)
+	def __div__(a, b):
+		return pnt(a.x / b, a.y / b)
 	def __str__(s):
 		return "pnt <" + str(s.x) + ", " + str(s.y) + ">"
 	def __sub__(a, b):
@@ -67,6 +69,7 @@ MAX_VEL = 0.4
 MIN_VEL = 0.03  
 MAX_MASS = 1000
 VEL_CONST = 1000
+LOG_CONST = 1
 
 def calc_velocity1(mass):
 	ans = (MAX_MAT- mass) / MAX_MASS #VEL_CONST / mass
@@ -82,11 +85,15 @@ def calc_velocity2(mass):
 def calc_velocity3(mass):
 	ans = min(1.0, VEL_CONST / mass)
 	return ans
-
+                  
 #Returns a real number in range[0, 1]
 def calc_velocity(mass):
 	ans = calc_velocity2(mass)
 	print("result_vel =", ans)
+	return ans
+
+def calc_log_velocity(vec_len, mass):
+	ans = LOG_CONST * math.log(vec_len) / mass	
 	return ans
 
 def update_map1(in_cursors, in_circles, t_step):
@@ -155,7 +162,7 @@ def update_map3(in_cursors, in_circles, t_step):
 			continue             
 		cursor = curs_dict[circ.id]                                                                                  
 		displacement_vec = cursor - circ.center
-		velocity = calc_velocity(circ.mass)
+		velocity = calc_log_velocity(circ.mass)
 		velocity_vec = displacement_vec * velocity * t_step
 		circles[i].center = circ.center + velocity_vec
 	
