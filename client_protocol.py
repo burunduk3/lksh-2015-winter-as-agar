@@ -1,7 +1,7 @@
 import json, socket, time
                     
 sock = socket.socket()
-old_data
+old_data = ""
 
 def registerMe(name):     
     global sock, tcp_ip, tcp_port
