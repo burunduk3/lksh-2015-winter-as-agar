@@ -87,6 +87,7 @@ def calc_velocity(mass):
 
 def calc_log_velocity(vec_len, mass):
 	ans = LOG_CONST * math.log(vec_len) / mass	
+	ans = min(ans, 1.0)
 	return ans
 
 # Returns the given map
@@ -127,7 +128,7 @@ def update_map(in_cursors, in_circles, t_step):
 			continue             
 		cursor = curs_dict[circ.id]                                                                                  
 		displacement_vec = cursor - circ.center
-		velocity = calc_log_velocity(circ.mass)
+		velocity = calc_log_velocity(displacement_vec.abs(), circ.mass)
 		velocity_vec = displacement_vec * velocity * t_step
 		circles[i].center = circ.center + velocity_vec
 	
