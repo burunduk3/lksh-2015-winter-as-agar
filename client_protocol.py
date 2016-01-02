@@ -29,11 +29,11 @@ def getField():
 
     if data[-1] == '\n':
         old_data = ""
-        return json.loads[-1]
+        return l[-1]
     else:
-        old_data = json.loads[-1]
+        old_data = l[-1]
         if len(l) > 1:
-            return json.loads[-2]
+            return l[-2]
         else:
             return [0]         
 
