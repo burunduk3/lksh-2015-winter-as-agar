@@ -36,8 +36,10 @@ def sending():
 
 def asking():
 	while True:
+	    print("abacabadabacaba")
 		curList = getField()
-		time.sleep(40)
+		print("abacaba")
+		time.sleep(0.12)
 
 def drawing():
 	global canvas, player_id, curList
@@ -85,10 +87,10 @@ root.bind("<Motion>", onMotion)
 canvas = Canvas(root, height=450, width=800)
 canvas.pack()
 
-root.after(0, drawing)
 t1 = threading.Thread(target=asking, daemon=True)
 t2 = threading.Thread(target=sending, daemon=True)
 t1.start()
 t2.start()
+root.after(0, drawing)
 
 root.mainloop()
