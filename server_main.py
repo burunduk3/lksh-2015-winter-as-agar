@@ -38,7 +38,9 @@ while True:
             рассказать всем о новых полях
         """
         for player in server.players.values():
-            protocol.sendMap(player.id, server.makeFieldMessage(player.id))
-        print(now, newcirlces)
+            if (player.id is not 0):
+                protocol.sendMap(player.id, server.makeFieldMessage(player.id))
+        # print(now, newcirlces)
+        print(server.players.keys())
     else:
         sleep(0.01)

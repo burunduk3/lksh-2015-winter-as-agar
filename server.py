@@ -107,8 +107,7 @@ class AgarioServer:
         self.cursorLock.acquire()
         self.playerLock.acquire()
         for player in self.pUpdates:
-            if player.id in self.players:
-                self.players[player.id] = player
+            self.players[player.id] = player
         self.pUpdates.clear()
         for cursor in self.cUpdates:
             if cursor['id'] in self.players:
