@@ -52,7 +52,7 @@ def drawing():
     canvas.delete("all")
     canvas = draw_bg(canvas, (ourx - 400, oury - 225))
     canvas = draw_players(canvas, (ourx - 400, oury - 225), ll)
-    canvas = draw_mass(canvas, str(m) + ' x:' + str(int(round(ourx))) + ' y:' + str(int(round(oury))))
+    canvas = draw_mass(canvas, 'm:' + str(m) + ' x:' + str(int(round(ourx))) + ' y:' + str(int(round(oury))))
     root.after(10, drawing)
 
 
