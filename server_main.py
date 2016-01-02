@@ -2,10 +2,13 @@
 
 from server import *
 import server_protocol as protocol
+from threading import *
 
 server = AgarioServer()
 
-protocol.initserver(server)
+t1 = Thread(target=protocol.initserver, daemon=True, args=[server])
+
+t1.start()
 
 addPlayerCallback = lambda name, id: server.addPlayer(name, id)
 updateCursorCallback = lambda cursor: server.updateCursor(cursor)
@@ -28,13 +31,13 @@ while True:
             cursors.append({'x' : pl.cursor[0], 'y' : pl.cursor[1], 'id' : id})
             for circle in pl.circles:
                 circles.append({'x' : circle[0], 'y' : circle[1], 'm' : circle[2], 'id' : id})
-        newcirlces = physics.updateMap1(cursors, circles, dt)
+        newcirlces = physics.update_map1(cursors, circles, dt)
         server.updateCirlces(newcirlces)
         """
             рассказать всем о новых полях
         """
         for player in server.players.values():
             protocol.sendMap(player.id, server.makeFieldMessage(player.id))
-        # print(now, )
+        print(now, newcirlces)
     else:
         sleep(0.01)
