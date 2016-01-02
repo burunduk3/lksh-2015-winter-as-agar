@@ -30,9 +30,9 @@ def sending():
 def asking():
     global curList
     while True:
-        print("abacabadabacaba")
+        # print("abacabadabacaba")
         curList = getField()
-        print("abacaba")
+        # print("abacaba")
 
 
 def drawing():
