@@ -172,7 +172,7 @@ def update_map3(in_cursors, in_circles, t_step):
 	result = list(filter(lambda x: x.absorbed == False, circles))
 	return list(map(lambda x: circle2dict(x), result))
 
-a = []
+"""a = []
 b = []
 a.append({"x" : 0, "y" : 0, "m" : 100, "id" : 1})
 a.append({"x" : 184, "y" : 110, "m" : 1, "id" : 0})
@@ -182,6 +182,5 @@ b.append({"x" : 500, "y" : 300, "id" : 1})
 res = update_map2(b, a, 1)
 
 for c in res :
-	print(c)
-	          
+	print(c) """      
 
