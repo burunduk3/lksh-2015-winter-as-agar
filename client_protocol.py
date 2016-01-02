@@ -29,12 +29,15 @@ def getField():
 
     if data[-1] == '\n':
         old_data = ""
+        print(l[-1])
         return json.loads(l[-1])
     else:
         old_data = l[-1]
         if len(l) > 1:
+            print(l[-2])
             return json.loads(l[-2])
         else:
+            print([])
             return ([])         
 
 def sendMe(p):
