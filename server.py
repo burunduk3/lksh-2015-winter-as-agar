@@ -71,14 +71,16 @@ class AgarioServer:
         food = AgarioPlayer('Food', 1)
         food.id = 0
         self.players = {0 : food}
+        self.pUpdates = []
+        self.cUpdates = []
 
     def addPlayer(self, name, id):
         self.playerLock.acquire()
         player = AgarioPlayer(name, id)
-        self.player[player.id] = player
+        # self.player[player.id] = player
+        self.pUpdates.append(player)
         self.realPlayers.add(player.id)
         self.playerLock.release()
-        return player.id
 
     def addFood(self, cnt):
         food = self.players[0]
@@ -92,8 +94,22 @@ class AgarioServer:
             cursor['id'] = id игрока
         """
         self.cursorLock.acquire()
-        self.player[cursor['id']].cursor = (cursor['x'], cursor['y'])
+        # self.player[cursor['id']].cursor = (cursor['x'], cursor['y'])
+        self.cUpdates.append(cursor)
         self.cursorLock.release()
+
+    def applUpdate(self, cnt):
+        self.cursorLock.acquire()
+        self.playerLock.acquire()
+        for player in self.pUpdates:
+            self.player[player.id] = player
+        self.pUpdates.clear()
+        for cursor in self.cUpdates:
+            self.player[cursor['id']].cursor = (cursor['x'], cursor['y'])
+        self.cUpdates.clear()
+        self.addFood(cnt)
+        self.cursorLock.release()
+        self.playerLock.release()
 
     def updateCirlces(self, circles):
         for pl in self.players:
