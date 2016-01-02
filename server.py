@@ -87,7 +87,7 @@ class AgarioServer:
         for i in range(cnt):
             food.addCircle(1)
 
-    def updateCursor(self, cursor):
+    def updatecursor(self, cursor):
         """
             cursor['x'] = x курсора
             cursor['y'] = y курсора
