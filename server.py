@@ -136,8 +136,8 @@ class AgarioServer:
     def findColor(self, id):
     	#FIX this: 'red' -> #FF0000
     	if not id in self.playersColors:
-    		self.playerColor[id] = random.choice(['red', 'blue', 'green', 'black', 'yellow', 'grey']);
-    	return self.playerColor[id]
+    		self.playersColors[id] = random.choice(['red', 'blue', 'grey']);
+    	return self.playersColors[id]
 
     def makeFieldMessage(self, id):
         center = self.players[id].circles[0][:2]
