@@ -63,16 +63,29 @@ root.wm_resizable(0, 0)
 root.geometry("800x450")
 root.title("agar.io_test")
 
-print ('enter your user name: ', end='', flush=True)
+userName, ip, port = None, None, None
+if len (sys.argv) > 1:
+    userName = sys.argv[1]
+if len (sys.argv) > 2:
+    ip = sys.argv[2]
+if len (sys.argv) > 2:
+    port = sys.argv[3]
 
-userName = " ".join(sys.stdin.readline().split())
+if userName is None:
+    print ('enter your user name: ', end='', flush=True)
+    userName = " ".join(sys.stdin.readline().split())
 print("OK. Your username is " + userName)
-print ('enter server ip: ', end='', flush=True)
-ip = sys.stdin.readline().split()[0]
+ 
+if ip is None:
+    print ('enter server ip: ', end='', flush=True)
+    ip = sys.stdin.readline().split()[0]
 print("OK. ip is " + ip)
-print ('enter port: ', end='', flush=True)
-port = sys.stdin.readline().split()[0]
+
+if port is None:
+    print ('enter port: ', end='', flush=True)
+    port = sys.stdin.readline().split()[0]
 print("OK. port is " + port)
+
 out = open("config.txt", "w")
 out.write(ip + " " + port)
 out.close()
