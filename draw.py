@@ -6,8 +6,8 @@ step = 25
 def draw_bg(c, pos):
     # c - Canvas, pos - (x0, y0)
     x0, y0 = pos
-    x0 = 20 - x0 % step
-    y0 = 20 - y0 % step
+    x0 = step - x0 % step
+    y0 = step - y0 % step
     for i in range(int(800 / step) + 1):
         c.create_line(i * step + x0, 0, i * step + x0, 450, fill='#D0D0D0')
     for i in range(int(450 / step) + 1):
