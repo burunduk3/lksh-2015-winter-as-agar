@@ -27,8 +27,8 @@ def initserver(ss):
                     callback = key.data
                     callback (key.fileobj, mask)
             except Exception as e:
+                print(e)
                 print("One of users died")
-                print (e)
 
 
     threading.Thread(target = thr, daemon=True).start() 
@@ -64,7 +64,6 @@ def read (conn, mask):
         while True:
             try:
                 data = conn.recv(1024)
-                print('data from socket:', data)
             except BlockingIOError:
                 break
             if not data:
@@ -105,4 +104,3 @@ def sendMap(id, data):
             x.close()                                
             del clients[x]
             localServer.UserExit(id)       
-
