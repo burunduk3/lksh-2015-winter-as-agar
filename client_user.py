@@ -6,6 +6,7 @@ from client_protocol import *
 from leaderboard import *
 import threading
 import time
+import sys
 
 
 def onMotion(e):
