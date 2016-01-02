@@ -24,18 +24,19 @@ def getField():
     data = sock.recv(1024)
     data = str(data, 'utf-8')
 
-    s = old_data+data
+    s = old_data+data            
     l = s.split('\n')
+    l = s.split('\r')
 
-    if data[-1] == '\n':
+    if data[-1] == '\n' or data[-1] == '\r':
         old_data = ""
-        return l[-1]
+        return json.loads(l[-1])
     else:
         old_data = l[-1]
         if len(l) > 1:
-            return l[-2]
+            return json.loads(l[-2])
         else:
-            return []         
+            return ([])         
 
 def sendMe(p):
     global sock
