@@ -73,6 +73,7 @@ class AgarioServer:
         self.players = {0 : food}
         self.pUpdates = []
         self.cUpdates = []
+        self.eUpdates = []
 
     def addPlayer(self, name, id):
         self.playerLock.acquire()
@@ -89,7 +90,7 @@ class AgarioServer:
 
     def UserExit(self, id):
         self.playerLock.acquire()
-        del self.players[id]
+        self.eUpdates.append(id)
         self.playerLock.release()
 
     def updatecursor(self, cursor):
@@ -109,6 +110,9 @@ class AgarioServer:
         for player in self.pUpdates:
             self.players[player.id] = player
         self.pUpdates.clear()
+        for id in self.eUpdates:
+            self.players[id]
+        self.eUpdates.clear()
         for cursor in self.cUpdates:
             if cursor['id'] in self.players:
                 self.players[cursor['id']].cursor = (cursor['x'], cursor['y'])
@@ -134,4 +138,5 @@ class AgarioServer:
                                             (center[0] + 400, center[1] + 200), (center[0] + 400, center[1] - 200)):
                     player_balls.append({'x' : circle[0], 'y': circle[1], 'm': circle[2]})
                 ans.append({'name': player.name, 'color' : 'blue', 'id': player.id, 'balls': player_balls})
+        # print(ans)
         return ans
