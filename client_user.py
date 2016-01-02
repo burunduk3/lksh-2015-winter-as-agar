@@ -45,7 +45,7 @@ def drawing():
 				break 
 
 		#[{'name': 'Vasya', 'color': 'blue', 'id': 1, 'balls': [{'x': 1, 'm': 1, 'y': 1}]}]
-		canvas = draw_players(canvas, (ourx - 400, ourx - 225), curList)
+		canvas = draw_players(canvas, (ourx - 400, oury - 225), curList)
 		time.sleep(0.12)
 	
 
@@ -54,7 +54,7 @@ root.wm_resizable(0, 0)
 root.geometry("800x450")
 root.title("agar.io_test")
 
-userName = sys.stdin.readline()
+userName = " ".join(sys.stdin.readline().split())
 print("OK. Your username is " + userName)
 #At first get name from keyboard
 player_id = registerMe(userName)
