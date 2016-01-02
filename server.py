@@ -87,6 +87,9 @@ class AgarioServer:
         for i in range(cnt):
             food.addCircle(1)
 
+    def userExit(self, id):
+        del self.players[id]
+
     def updatecursor(self, cursor):
         """
             cursor['x'] = x курсора

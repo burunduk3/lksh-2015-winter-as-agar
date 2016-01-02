@@ -92,7 +92,13 @@ def read (conn, mask):
     assert mask == 0
 
 def sendMap(id, data):
-    data = json.dumps(data)       
-    for x in clients:
-        if (clients[x] == id):
-            x.send(bytes(data, 'utf-8'))
+    global localServer
+        data = json.dumps(data)       
+        for x in clients:
+            try:
+            if (clients[x] == id):
+                x.send(bytes(data, 'utf-8'))
+            except:        
+                del clients[x]
+                localServer.UserExit(id)
+        
