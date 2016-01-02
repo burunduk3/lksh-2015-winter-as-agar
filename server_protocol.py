@@ -5,6 +5,7 @@ clients = dict()
 
 a = False
 sock = socket.socket()
+
 def initserver():
     global a, sock, poll
     sock = socket.socket()
@@ -74,7 +75,7 @@ def read (conn, mask):
                     v = json.loads(data)                                                     
                     v["id"] = clients[conn]
                     if ("x" in v):
-                        updatecursor(v)
+                        updatecursor((v["x"], v["y"])                                                                           
                     elif ("name" in v):
                         addPlayer(v["name"], clients[conn])
                     else:
@@ -88,3 +89,5 @@ def sendMap(id, data):
     for x in clients:
         if (clients[x] == id):
             x.send(bytes(data, 'utf-8'))                                            
+ 
+
