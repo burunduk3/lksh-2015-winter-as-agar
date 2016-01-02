@@ -2,6 +2,7 @@ import json, socket, time
                     
 sock = socket.socket()
 old_data = ""
+old_json = []
 
 def registerMe(name):     
     global sock, tcp_ip, tcp_port
@@ -31,18 +32,20 @@ def getField():
         if data[-1] == '\n':
             old_data = ""
             print("1 = ", l[-1])
+            old_json = json.loads(l[-1])
             return json.loads(l[-1])
         else:
             old_data = l[-1]
             if len(l) > 1:
                 print("2 = ", l[-2])
+                old_json = json.loads(l[-2])
                 return json.loads(l[-2])
             else:
                 print("3 = ", [])
-                return ([]) 
+                return (old_json) 
     else:
         print("4 = ", []) 
-        return([])       
+        return(old_json)       
 
 def sendMe(p):
     global sock
