@@ -34,15 +34,17 @@ class circle:
 		self.center = pnt(x, y)
 		self.mass = m
 		self.r = math.sqrt(m)
-		self.id = id              
+		self.id = id
+		self.absorbed = False             
 	def __lt__(a, b):
 		if (a.id == 0) or (b.id == 0): return (a.id < b.id)
 		return (a.mass < b.mass)
 	def __str__(s):
-		return "circle <" + str(s.center) + ", " + str(s.r) + ">"
+		return "circle <" + str(s.center) + ", " + str(s.r) + ", " + str(s.absorbed) + ">"
 	def absorbable(self, other):
+		#print ("vot", distance(self.center, other.center), self.r * ABSORB_RAD)
 		if (self.mass / other.mass < ABSORB_REL): return False
-		if (dist(center, b.center) < r * ABSORB_RAD): return False
+		if (self.r * ABSORB_RAD < distance(self.center, other.center)): return False
 		return True	
 
 def dict2circle (c):
@@ -74,38 +76,34 @@ def calc_velocity(mass):
 	return ans
 
 def update_map1(in_cursors, in_circles, t_step):
-	cursors = []
 	curs_dict = {}
-	for c in in_cursors: 
-		cursors[len(cursors):] = [pnt(c["x"], c["y"])]
+	for c in in_cursors:                              
 		curs_dict[c["id"]] = pnt(c["x"], c["y"])
 	circles = list(map(lambda x: dict2circle(x), in_circles))
 	
 	for i in range(len(circles)):
 		circ = circles[i]
+		print(circ.id)
 		if (circ.id == 0): continue
 		cursor = curs_dict[circ.id]
 		displacement_vec = cursor - circ.center
 		velocity = calc_velocity(circ.mass)
 		velocity_vec = displacement_vec * velocity * t_step
 		circles[i].center = circ.center + velocity_vec
-
+	                          
 	return list(map(lambda x: circle2dict(x), circles))
 
 #Handles absorbtions
                                    
 def update_map2(in_cursors, in_circles, t_step):
-	cursors = []
 	curs_dict = {}
 	for c in in_cursors: 
-		cursors[len(cursors):] = [pnt(c["x"], c["y"])]
 		curs_dict[c["id"]] = pnt(c["x"], c["y"])
 	circles = list(map(lambda x: dict2circle(x), in_circles))
 	circles.sort();
 
 	for i in range(len(circles)):
-		circ = circles[i]
-		print(curs_dict[circ.id])
+		circ = circles[i]        
 		if (circ.id == 0): 
 			continue             
 		cursor = curs_dict[circ.id]                                                                                  
@@ -117,23 +115,24 @@ def update_map2(in_cursors, in_circles, t_step):
 	for i in range(len(circles)):
 		for j in range(i):
 			cur_c = circles[i]
-			prv = circles[j]
-			if (prv.absorbed): continue  
-			if (cur_c.absorbable(prv)):
-				prv.absorbed = 1
-				cur_c.mass += prv.mass
+			prv_c = circles[j]
+			if (prv_c.absorbed): continue
+			if (cur_c.absorbable(prv_c)):
+				prv_c.absorbed = True
+				cur_c.mass += prv_c.mass
 
-	result = list(filter(lambda x: ~x.absorbed, circles))
+#	for c in circles: print(c)
+	result = list(filter(lambda x: x.absorbed == False, circles))
 	return list(map(lambda x: circle2dict(x), result))
 
 a = []
 b = []
 a.append({"x" : 0, "y" : 0, "m" : 100, "id" : 1})
-a.append({"x" : 9, "y" : 0, "m" : 1, "id" : 2})
+a.append({"x" : 9, "y" : 0, "m" : 1, "id" : 0})
 b.append({"x" : 0, "y" : 0, "id" : 1})
-b.append({"x" : 9, "y" : 0, "id" : 1})
+#b.append({"x" : 9, "y" : 0, "id" : 2})
 
-res = update_map1(b, a, 1)
+res = update_map2(b, a, 1)
 
 for c in res :
 	print(c)
