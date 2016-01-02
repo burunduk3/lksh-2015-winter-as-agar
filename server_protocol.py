@@ -22,13 +22,14 @@ def initserver(ss):
         global a
         while not a:
             try:
-                events = poll.select()                                       
-                for key, mask in events:
-                    callback = key.data
-                    callback (key.fileobj, mask)
+                events = poll.select()
             except Exception as e:
                 print(e)
                 print("One of users died")
+            for key, mask in events:
+                assert mask != 0
+                callback = key.data
+                callback (key.fileobj, mask)
 
 
     threading.Thread(target = thr, daemon=True).start() 
@@ -66,6 +67,9 @@ def read (conn, mask):
                 data = conn.recv(1024)
             except BlockingIOError:
                 break
+            except ConnectionResetError:
+                print ("user disconnected")
+                data = False
             if not data:
                 print("deleting user " + str(clients[conn]))
                 poll.unregister (conn)
