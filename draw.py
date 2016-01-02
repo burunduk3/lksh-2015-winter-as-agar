@@ -3,7 +3,7 @@ from math import sqrt
 
 def draw_players(c, pos, ps):
     # c - Canvas, pos - (x0, y0), ps - players
-    x0, y0 = pos
+    x0, y0 = int(pos[0]), int(pos[1])
     for i in range(800):
         if 20 - i % 20 - 1 == x0 % 20:
             c.create_line(i, 0, i, 450, fill='#D0D0D0')
@@ -23,8 +23,8 @@ def draw_players(c, pos, ps):
             q.append(w)
     q.sort(key=lambda a: (a['m'], a['id']))
     for b in q:
-        lx = b['x'] - x0
-        ly = b['y'] - y0
+        lx = int(b['x']) - x0
+        ly = int(b['y']) - y0
         r = int(sqrt(b['m']))
         c.create_oval(lx - r,
                       ly - r,
