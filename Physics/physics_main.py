@@ -35,13 +35,17 @@ class circle:
 		self.mass = m
 		self.r = math.sqrt(m)
 		self.id = id
-		self.absorbed = False             
+		self.absorbed = False
+		self.canAbsorb = True
+		if id == 0:
+			self.canAbsorb = False
 	def __lt__(a, b):
 		if (a.id == 0) or (b.id == 0): return (a.id < b.id)
 		return (a.mass < b.mass)
 	def __str__(s):
 		return "circle <" + str(s.center) + ", " + str(s.r) + ", " + str(s.absorbed) + ">"
 	def absorbable(self, other):
+		if (self.canAbsorb == False): return False
 		if (other.id == 0) and (other.mass == 1): return True
 		if (self.mass / other.mass < ABSORB_REL): return False
 		if (self.r * ABSORB_RAD < distance(self.center, other.center)): return False
@@ -63,7 +67,7 @@ MAX_VEL = 0.4
 MIN_VEL = 0.03  
 MAX_MASS = 1000
 VEL_CONST = 1000
-LOG_CONST = 2
+LOG_CONST = 1
 
 def calc_velocity1(mass):
 	ans = (MAX_MASS - mass) / MAX_MASS #VEL_CONST / mass
@@ -86,7 +90,7 @@ def calc_velocity(mass):
     return ans
 
 def calc_log_velocity(vec_len, mass):
-	ans = LOG_CONST * math.log(max(vec_len, 1)) / mass
+	ans = LOG_CONST * math.log(max(vec_len, 1)) / math.sqrt(mass)
 	ans = min(ans, 1.0)
 	return ans
 
@@ -133,8 +137,11 @@ def update_map(in_cursors, in_circles, t_step):
 		circles[i].center = circ.center + velocity_vec
 	
 	for i in range(len(circles)):
+		if not circles[i].id in curs_dict:
+			circles[i].canAbsorb = False
+		cur_c = circles[i]
+		if cur_c.canAbsorb == False: continue
 		for j in range(i):
-			cur_c = circles[i]
 			prv_c = circles[j]
 			if (prv_c.absorbed): continue
 			if (cur_c.absorbable(prv_c)):

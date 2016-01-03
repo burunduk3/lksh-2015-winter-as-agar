@@ -27,13 +27,14 @@ while True:
         """
         dt = now - lastTime
         lastTime = now
-        if (server.getFood() < 100):
-            server.applUpdate(1)
+        # if (server.getFood() < 10):
+        server.applUpdate(1)
         cursors = []
         circles = []
         for pl in server.players.values():
             id = pl.id
-            cursors.append({'x' : pl.cursor[0], 'y' : pl.cursor[1], 'id' : id})
+            if len(pl.circles) > 0:
+                cursors.append({'x' : pl.cursor[0], 'y' : pl.cursor[1], 'id' : id})
             for circle in pl.circles:
                 circles.append({'x' : circle[0], 'y' : circle[1], 'm' : circle[2], 'id' : id})
         newcirlces = physics.update_map(cursors, circles, dt)

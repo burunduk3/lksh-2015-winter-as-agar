@@ -19,21 +19,24 @@ from threading import *
 time_step = 0.05
 INITIAL_MASS = 30
 
+FIELD_X = 100
+FIELD_Y = 200
+
 class AgarioPlayer:
     def __init__(self, name, id, mass = INITIAL_MASS):
         self.name = name
         self.id = id
         #FIXED THIS
-        self.circles = [(random.randint(0, 200), random.randint(0, 100), mass)]    
+        self.circles = [(random.randint(0, FIELD_X), random.randint(0, FIELD_Y), mass)]
         #self.circles = [(random.randint(0, 8000), random.randint(0, 4000), mass)]
         self.cursor = self.circles[0][:2]
-        r = lambda: random.randint(0,255)
+        r = lambda: random.randint(0, 150)
         self.color = ('#%02X%02X%02X' % (r(),r(),r()))
 
 
     def addCircle(self, mass = INITIAL_MASS):
         #FIXED THIS
-        self.circles.append((random.randint(0, 200), random.randint(0, 100), mass))       
+        self.circles.append((random.randint(0, FIELD_X), random.randint(0, FIELD_Y), mass))
         #self.circles.append((random.randint(0, 8000), random.randint(0, 4000), mass))
 
 
