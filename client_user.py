@@ -87,8 +87,7 @@ if len(sys.argv) > 2:
 if len(sys.argv) > 2:
     port = sys.argv[3]
 
-userName = '1'
-ip = 'localhost'
+ip = '192.168.3.83'
 port = '3030'
 
 if userName is None:
