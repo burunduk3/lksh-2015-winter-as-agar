@@ -121,9 +121,10 @@ def sendMap(id, data):
                 x.send(bytes(data + '\n', 'utf-8'))
                 break
         except:
-            print("deleting user " + str(clients[x]))
-            poll.unregister(x)                
-            x.close()                                
-            del clients[x]
-            localServer.UserExit(id)   
+            if x in clients:
+                print("deleting user " + str(clients[x]))
+                poll.unregister(x)
+                x.close()
+                del clients[x]
+                localServer.UserExit(id)
             break
