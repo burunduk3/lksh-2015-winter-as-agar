@@ -100,18 +100,19 @@ def read (conn, mask):
                         print("User specified no name and it isn't cursor")
                 except (json.decoder.JSONDecodeError, TypeError):
                     print("user with id " + str(clients[conn]) + " tried something incorrect")
-                    if DEBUG:
+                    if DEBUG_PROTOCOL:
                         raise
                 except :
                     print("Server failed in to add player or update cursor")
-                    if DEBUG:
+                    if DEBUG_PROTOCOL:
                         raise
         mask &=~ selectors.EVENT_READ
     assert mask == 0
 
 def sendMap(id, data):
     global localServer
-    data = json.dumps(data)       
+    if DEBUG_PROTOCOL_PRINT:
+        data = json.dumps(data)
     q = clients
     for x in q:
         try:
