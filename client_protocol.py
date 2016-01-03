@@ -24,7 +24,6 @@ def registerMe(name):
 def dearch(data):
     for pl in data:
         buf = []
-        print(pl)
         for b in pl['balls']:
             buf.append({'x' : b[0], 'y' : b[1], 'm' : b[2]})
         pl['balls'] = buf
