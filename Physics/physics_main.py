@@ -130,6 +130,7 @@ def update_map(in_cursors, in_circles, t_step):
 	for i in range(len(circles)):
 		if not circles[i].id in curs_dict:
 			circles[i].canAbsorb = False
+			continue
 		circ = circles[i]                     
 		cursor = curs_dict[circ.id]                                                                                  
 		displacement_vec = cursor - circ.center
