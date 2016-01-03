@@ -119,6 +119,8 @@ def update_map1(in_cursors, in_circles, t_step):
 	return list(map(lambda x: circle2dict(x), circles))
 
 #Handles absorbtions
+
+MAX_DIST = 666
                                    
 def update_map(in_cursors, in_circles, t_step):
 	curs_dict = {}
@@ -134,6 +136,8 @@ def update_map(in_cursors, in_circles, t_step):
 		circ = circles[i]                     
 		cursor = curs_dict[circ.id]                                                                                  
 		displacement_vec = cursor - circ.center
+		if displacement_vec.abs() > MAX_DIST:
+			displacement_vec *= MAX_DIST / displacement_vec.abs()
 		velocity = calc_log_velocity(displacement_vec.abs(), circ.mass)
 		velocity_vec = displacement_vec * velocity * t_step
 		circles[i].center = circ.center + velocity_vec
