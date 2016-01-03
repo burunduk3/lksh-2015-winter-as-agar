@@ -111,8 +111,9 @@ def read (conn, mask):
 
 def sendMap(id, data):
     global localServer
+    data = json.dumps(data)
     if DEBUG_PROTOCOL_PRINT:
-        data = json.dumps(data)
+        print(data)
     q = clients
     for x in q:
         try:
