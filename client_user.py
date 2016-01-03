@@ -25,7 +25,7 @@ def sending():
             if p["id"] == player_id:
                 ourx, oury = p["balls"][0]["x"], p["balls"][0]["y"]
                 break
-        sendMe({"id": player_id, "x": ourx - 400 + curx, "y": oury - 225 + cury, "s": 0})
+        sendMe({"id": player_id, "x": ourx - WINDOW_WIDTH // 2 + curx, "y": oury - WINDOW_HEIGHT // 2 + cury, "s": 0})
         # {'x': 1, 'y': 1, 's': 0}
         time.sleep(0.01)
 
@@ -59,7 +59,7 @@ def asking():
 
 def drawing():
     global canvas, player_id, curList
-    ourx, oury, m = 400, 225, 0
+    ourx, oury, m = WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2, 0
     ll = curList
     for p in ll:
         if p["id"] == player_id:
