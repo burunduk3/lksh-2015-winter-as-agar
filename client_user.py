@@ -30,7 +30,7 @@ def sending():
         time.sleep(0.01)
 
 
-def dearch(data):
+#def dearch(data):
 
 
 
