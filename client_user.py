@@ -7,8 +7,7 @@ from leaderboard import *
 import threading
 import time
 import sys
-
-FAIL_COUNT = 100
+from constants import *
 
 def onMotion(e):
     global curx, cury, canvas

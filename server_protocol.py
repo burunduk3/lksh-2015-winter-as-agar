@@ -1,6 +1,6 @@
 import selectors, socket, threading, sys, json, random
 
-MAX_LENGTH = 4096
+from constants import *
 
 poll = selectors.DefaultSelector ()
 clients = dict()
@@ -79,15 +79,16 @@ def read (conn, mask):
                 print ("user disconnected")
                 data = False
             if not data:
-                print("deleting user " + str(clients[conn]))
-                poll.unregister (conn)
-                localServer.UserExit(clients[conn])
-                del clients[conn]
-                conn.close()
+                if conn in clients:
+                    print("deleting user " + str(clients[conn]))
+                    poll.unregister (conn)
+                    localServer.UserExit(clients[conn])
+                    del clients[conn]
+                    conn.close()
                 break
             else:
                 data = data.decode().split(sep = '\n')
-                # print(data)
+                print(data)
                 try:               
                     v = json.loads(data[0])
                     v["id"] = clients[conn]

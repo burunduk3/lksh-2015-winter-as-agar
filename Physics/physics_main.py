@@ -91,7 +91,8 @@ def calc_velocity(mass):
 
 def calc_log_velocity(vec_len, mass):
 	ans = LOG_CONST * math.log(max(vec_len, 1)) / math.sqrt(mass)
-	ans = min(ans, 1.0)
+	ans = min(ans, MAX_VEL)
+	ans = max(ans, MIN_VEL)
 	return ans
 
 # Returns the given map

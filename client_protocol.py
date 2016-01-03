@@ -1,7 +1,6 @@
 import json, socket, time
 
-MAX_LENGTH = 4096
-                    
+from constants import *
 sock = socket.socket()
 old_data = ""
 old_json = []

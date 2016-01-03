@@ -5,8 +5,7 @@ from server import *
 import server_protocol as protocol
 from threading import *
 
-FOOD_NUM = 200
-FOOD_MASS = 5
+from constants import *
 
 server = AgarioServer()
 server.addFood(FOOD_NUM, FOOD_MASS) #added this line
@@ -53,5 +52,5 @@ while True:
                 protocol.sendMap(player.id, server.makeFieldMessage(player.id))
         # print(now, newcirlces)
         # print(server.players.keys())
-    else:
-        sleep(0.01)
+    # else:
+    #     sleep(0.01)

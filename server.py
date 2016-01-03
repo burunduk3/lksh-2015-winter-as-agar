@@ -15,12 +15,7 @@ import math
 import Physics.physics_main as physics
 from time import *
 from threading import *
-
-time_step = 0.05
-INITIAL_MASS = 30
-
-FIELD_X = 500
-FIELD_Y = 500
+from constants import *
 
 class AgarioPlayer:
     def __init__(self, name, id, mass = INITIAL_MASS):
@@ -130,7 +125,8 @@ class AgarioServer:
             self.players[player.id] = player
         self.pUpdates.clear()
         for id in self.eUpdates:
-            del self.players[id]
+            if id in self.players:
+                del self.players[id]
         self.eUpdates.clear()
         for cursor in self.cUpdates:
             if cursor['id'] in self.players:
