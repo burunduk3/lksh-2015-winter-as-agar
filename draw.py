@@ -1,4 +1,5 @@
 from math import sqrt
+from constants import *
 
 step = 25
 
@@ -8,10 +9,10 @@ def draw_bg(c, pos):
     x0, y0 = pos
     x0 = step - x0 % step
     y0 = step - y0 % step
-    for i in range(int(800 / step) + 1):
-        c.create_line(i * step + x0, 0, i * step + x0, 450, fill='#D0D0D0')
-    for i in range(int(450 / step) + 1):
-        c.create_line(0, i * step + y0, 800, i * step + y0, fill='#D0D0D0')
+    for i in range(int(WINDOW_WIDTH / step) + 1):
+        c.create_line(i * step + x0, 0, i * step + x0, WINDOW_HEIGHT, fill='#D0D0D0')
+    for i in range(int(WINDOW_HEIGHT / step) + 1):
+        c.create_line(0, i * step + y0, WINDOW_WIDTH, i * step + y0, fill='#D0D0D0')
     return c
 
 

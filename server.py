@@ -156,8 +156,8 @@ class AgarioServer:
             for circle in player.circles:
                 player_balls = []
                 if doCircleAndRectIntersect((circle[0], circle[1]), math.sqrt(circle[2]),
-                                            (center[0] - 400, center[1] - 200), (center[0] - 400, center[1] + 200),
-                                            (center[0] + 400, center[1] + 200), (center[0] + 400, center[1] - 200)):
+                                            (center[0] - WINDOW_WIDTH // 2, center[1] - WINDOW_WIDTH // 2), (center[0] - WINDOW_WIDTH // 2, center[1] + WINDOW_WIDTH // 2),
+                                            (center[0] + WINDOW_WIDTH // 2, center[1] + WINDOW_WIDTH // 2), (center[0] + WINDOW_WIDTH // 2, center[1] - WINDOW_WIDTH // 2)):
                     player_balls.append({'x' : circle[0], 'y': circle[1], 'm': circle[2]})
                 ans.append({'name': player.name, 'color' : self.findColor(player.id), 'id': player.id, 'balls': player_balls})
         # print(ans)

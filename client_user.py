@@ -9,6 +9,8 @@ import time
 import sys
 from constants import *
 
+
+
 def onMotion(e):
     global curx, cury, canvas
     curx = e.x
@@ -67,15 +69,15 @@ def drawing():
             break
             # [{'name': 'Vasya', 'color': 'blue', 'id': 1, 'balls': [{'x': 1, 'm': 1, 'y': 1}]}]
     canvas.delete("all")
-    canvas = draw_bg(canvas, (ourx - 400, oury - 225))
-    canvas = draw_players(canvas, (ourx - 400, oury - 225), ll)
+    canvas = draw_bg(canvas, (ourx - WINDOW_WIDTH // 2, oury - WINDOW_HEIGHT // 2))
+    canvas = draw_players(canvas, (ourx - WINDOW_WIDTH // 2, oury - WINDOW_HEIGHT // 2), ll)
     canvas = draw_mass(canvas, 'm:' + str(m) + ' x:' + str(int(round(ourx))) + ' y:' + str(int(round(oury))))
     root.after(10, drawing)
 
 
 root = Tk()
 root.wm_resizable(0, 0)
-root.geometry("800x450")
+root.geometry(str(WINDOW_WIDTH) + 'x' + str(WINDOW_HEIGHT))
 root.title("agar.io_test")
 
 userName, ip, port = None, None, None
@@ -116,7 +118,7 @@ curx, cury = 0, 0
 curList = []
 root.bind("<Motion>", onMotion)
 
-canvas = Canvas(root, height=450, width=800)
+canvas = Canvas(root, height=WINDOW_HEIGHT, width=WINDOW_WIDTH)
 canvas.pack()
 
 t1 = threading.Thread(target=asking, daemon=True)

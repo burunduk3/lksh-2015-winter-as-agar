@@ -5,7 +5,7 @@ from constants import *
 poll = selectors.DefaultSelector ()
 clients = dict()
 localServer = ""
-
+clientsLock = threading.Lock()
 
 a = False
 
@@ -79,16 +79,19 @@ def read (conn, mask):
                 print ("user disconnected")
                 data = False
             if not data:
+                clientsLock.acquire()
                 if conn in clients:
                     print("deleting user " + str(clients[conn]))
                     poll.unregister (conn)
                     localServer.UserExit(clients[conn])
                     del clients[conn]
                     conn.close()
+                clientsLock.release()
                 break
             else:
                 data = data.decode().split(sep = '\n')
-                print(data)
+                if DEBUG_PROTOCOL_PRINT:
+                    print(data)
                 try:               
                     v = json.loads(data[0])
                     v["id"] = clients[conn]
@@ -121,10 +124,12 @@ def sendMap(id, data):
                 x.send(bytes(data + '\n', 'utf-8'))
                 break
         except:
+            clientsLock.acquire()
             if x in clients:
                 print("deleting user " + str(clients[x]))
                 poll.unregister(x)
                 x.close()
                 del clients[x]
             localServer.UserExit(id)
+            clientsLock.release()
             break
