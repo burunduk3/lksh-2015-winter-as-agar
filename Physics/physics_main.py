@@ -63,7 +63,7 @@ MAX_VEL = 0.4
 MIN_VEL = 0.03  
 MAX_MASS = 1000
 VEL_CONST = 1000
-LOG_CONST = 1
+LOG_CONST = 2
 
 def calc_velocity1(mass):
 	ans = (MAX_MASS - mass) / MAX_MASS #VEL_CONST / mass
@@ -86,7 +86,7 @@ def calc_velocity(mass):
     return ans
 
 def calc_log_velocity(vec_len, mass):
-	ans = LOG_CONST * math.log(vec_len) / mass	
+	ans = LOG_CONST * math.log(max(vec_len, 1)) / mass
 	ans = min(ans, 1.0)
 	return ans
 

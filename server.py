@@ -27,6 +27,9 @@ class AgarioPlayer:
         self.circles = [(random.randint(0, 200), random.randint(0, 100), mass)]    
         #self.circles = [(random.randint(0, 8000), random.randint(0, 4000), mass)]
         self.cursor = self.circles[0][:2]
+        r = lambda: random.randint(0,255)
+        self.color = ('#%02X%02X%02X' % (r(),r(),r()))
+
 
     def addCircle(self, mass = INITIAL_MASS):
         #FIXED THIS
@@ -79,6 +82,7 @@ class AgarioServer:
         self.pUpdates = []
         self.cUpdates = []
         self.eUpdates = []
+        self.playersColors = {}
 
     def addPlayer(self, name, id):
         self.playerLock.acquire()
@@ -87,12 +91,14 @@ class AgarioServer:
         self.pUpdates.append(player)
         # self.realPlayers.add(player.id)
         self.playerLock.release()
-        self.playersColors = {}
 
     def addFood(self, cnt):
         food = self.players[0]
         for i in range(cnt):
             food.addCircle(1)
+
+    def getFood(self):
+        return len(self.players[0].circles)
 
     def UserExit(self, id):
         self.playerLock.acquire()
@@ -135,9 +141,7 @@ class AgarioServer:
     
     def findColor(self, id):
     	#FIX this: 'red' -> #FF0000
-    	if not id in self.playersColors:
-    		self.playersColors[id] = random.choice(['red', 'blue', 'grey']);
-    	return self.playersColors[id]
+    	return self.players[id].color
 
     def makeFieldMessage(self, id):
         try:
