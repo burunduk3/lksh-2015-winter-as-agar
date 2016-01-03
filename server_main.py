@@ -27,8 +27,8 @@ while True:
         """
         dt = now - lastTime
         lastTime = now
-        # if (server.getFood() < 10):
         server.applUpdate(1)
+        # print('upd', now)
         cursors = []
         circles = []
         for pl in server.players.values():

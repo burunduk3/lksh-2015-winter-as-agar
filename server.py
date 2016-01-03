@@ -101,7 +101,10 @@ class AgarioServer:
             food.addCircle(1)
 
     def getFood(self):
-        return len(self.players[0].circles)
+        # print('getting')
+        ans = len(self.players[0].circles)
+        # print('get', ans)
+        return ans
 
     def UserExit(self, id):
         self.playerLock.acquire()
@@ -132,7 +135,10 @@ class AgarioServer:
             if cursor['id'] in self.players:
                 self.players[cursor['id']].cursor = (cursor['x'], cursor['y'])
         self.cUpdates.clear()
-        self.addFood(cnt)
+        cnt = self.getFood()
+        if (cnt < 10):
+            print(cnt)
+            self.addFood(cnt)
         self.cursorLock.release()
         self.playerLock.release()
 
