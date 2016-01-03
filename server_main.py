@@ -28,7 +28,7 @@ while True:
         dt = now - lastTime
         lastTime = now
         if (server.getFood() < FOOD_NUM):
-            server.addFood(1, FOOD_MASS)
+            server.addFood(FOOD_GROWTH, FOOD_MASS)
         server.applUpdate()
         # print('upd', now)
         cursors = []

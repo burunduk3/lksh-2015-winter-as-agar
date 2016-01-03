@@ -48,10 +48,11 @@ def asking():
             fail = 0
             now = time.time()
             cnt += 1
-            if (now - tm > 3):
-                print(cnt, cnt  / (now - tm))
-                cnt = 0
-                tm = now
+            if DEBUG_PROTOCOL_PRINT:
+                if (now - tm > 3):
+                    print(cnt, cnt  / (now - tm))
+                    cnt = 0
+                    tm = now
         # print('getField: '+str(curList))
         # print("abacaba")
         time.sleep(0.01)
