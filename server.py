@@ -162,12 +162,4 @@ class AgarioServer:
             ans.append({'name': player.name, 'color' : self.findColor(player.id), 'id': player.id, 'balls': player_balls})
 
         # print(ans)
-        return self.arch(ans)
-
-    def arch(self, data):
-        for pl in data:
-            buf = []
-            for b in pl['balls']:
-                buf.append([b['x'], b['y'], b['m']])
-            pl['balls'] = buf
-        return data
+        return ans

@@ -36,7 +36,7 @@ def asking():
     cnt = 0
     while True:
         # print("abacabadabacaba")
-        curList = dearch(getField())
+        curList = getField()
 
         if curList == []:
             fail += 1
