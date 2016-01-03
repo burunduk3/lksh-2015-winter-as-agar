@@ -82,10 +82,10 @@ def read (conn, mask):
                 conn.close()
                 break
             else:
-                data = data.decode()            
-                print(data)
+                data = data.decode().split(sep = '\n')
+                # print(data)
                 try:               
-                    v = json.loads(data)                                                     
+                    v = json.loads(data[0])
                     v["id"] = clients[conn]
                     if ("x" in v):      
                         localServer.updatecursor(v)
@@ -97,6 +97,7 @@ def read (conn, mask):
                     print("user with id " + str(clients[conn]) + " tried something incorrect")
                 except :
                     print("Server failed in to add player or update cursor")
+                    raise
         mask &=~ selectors.EVENT_READ
     assert mask == 0
 

@@ -96,9 +96,9 @@ class AgarioServer:
         self.playerLock.release()
 
     def addFood(self, cnt):
-        food = self.players[0]
+        # food = self.players[0]
         for i in range(cnt):
-            food.addCircle(1)
+            self.players[0].addCircle(1)
 
     def getFood(self):
         # print('getting')
@@ -122,9 +122,10 @@ class AgarioServer:
         self.cUpdates.append(cursor)
         self.cursorLock.release()
 
-    def applUpdate(self, cnt):
+    def applUpdate(self):
         self.cursorLock.acquire()
         self.playerLock.acquire()
+
         for player in self.pUpdates:
             self.players[player.id] = player
         self.pUpdates.clear()
@@ -135,10 +136,7 @@ class AgarioServer:
             if cursor['id'] in self.players:
                 self.players[cursor['id']].cursor = (cursor['x'], cursor['y'])
         self.cUpdates.clear()
-        cnt = self.getFood()
-        if (cnt < 10):
-            print(cnt)
-            self.addFood(cnt)
+
         self.cursorLock.release()
         self.playerLock.release()
 

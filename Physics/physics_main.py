@@ -46,7 +46,7 @@ class circle:
 		return "circle <" + str(s.center) + ", " + str(s.r) + ", " + str(s.absorbed) + ">"
 	def absorbable(self, other):
 		if (self.canAbsorb == False): return False
-		if (other.id == 0) and (other.mass == 1): return True
+		# if (other.id == 0) and (other.mass == 1): return True MM : жрал всю еду на карте
 		if (self.mass / other.mass < ABSORB_REL): return False
 		if (self.r * ABSORB_RAD < distance(self.center, other.center)): return False
 		return True	

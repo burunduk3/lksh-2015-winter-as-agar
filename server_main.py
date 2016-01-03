@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-                                                      
+# -*- coding: utf-8 -*-
 
 from server import *
 import server_protocol as protocol
 from threading import *
 
-FOOD_NUM = 100
+FOOD_NUM = 50
 
 server = AgarioServer()
 server.addFood(FOOD_NUM) #added this line
@@ -27,10 +27,13 @@ while True:
         """
         dt = now - lastTime
         lastTime = now
-        server.applUpdate(1)
+        if (server.getFood() < FOOD_NUM):
+            server.addFood(1)
+        server.applUpdate()
         # print('upd', now)
         cursors = []
         circles = []
+        # print(server.players[0].circles, end=' ')
         for pl in server.players.values():
             id = pl.id
             if len(pl.circles) > 0:
@@ -39,6 +42,8 @@ while True:
                 circles.append({'x' : circle[0], 'y' : circle[1], 'm' : circle[2], 'id' : id})
         newcirlces = physics.update_map(cursors, circles, dt)
         server.updateCirlces(newcirlces)
+        # print(server.players[0].circles)
+        # print(len(newcirlces), len(circles))
         """
             рассказать всем о новых полях
         """

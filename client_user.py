@@ -31,6 +31,8 @@ def sending():
 def asking():
     global curList
     fail = 0
+    tm = time.time()
+    cnt = 0
     while True:
         # print("abacabadabacaba")
         curList = getField()
@@ -41,7 +43,13 @@ def asking():
                 exit(0)
         else:
             fail = 0
-        print('getField: '+str(curList))
+            now = time.time()
+            cnt += 1
+            if (now - tm > 3):
+                print(cnt, cnt  / (now - tm))
+                cnt = 0
+                tm = now
+        # print('getField: '+str(curList))
         # print("abacaba")
         time.sleep(0.01)
 
@@ -76,6 +84,10 @@ if len(sys.argv) > 2:
     ip = sys.argv[2]
 if len(sys.argv) > 2:
     port = sys.argv[3]
+
+userName = '1'
+ip = 'localhost'
+port = '3030'
 
 if userName is None:
     print('enter your user name: ', end='', flush=True)
