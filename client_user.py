@@ -30,6 +30,10 @@ def sending():
         time.sleep(0.01)
 
 
+def dearch(data):
+
+
+
 def asking():
     global curList
     fail = 0
@@ -38,6 +42,7 @@ def asking():
     while True:
         # print("abacabadabacaba")
         curList = getField()
+
         if curList == []:
             fail += 1
             if fail > FAIL_COUNT:

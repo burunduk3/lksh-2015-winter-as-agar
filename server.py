@@ -160,5 +160,14 @@ class AgarioServer:
                                             (center[0] + WINDOW_WIDTH // 2, center[1] + WINDOW_WIDTH // 2), (center[0] + WINDOW_WIDTH // 2, center[1] - WINDOW_WIDTH // 2)):
                     player_balls.append({'x' : circle[0], 'y': circle[1], 'm': circle[2]})
             ans.append({'name': player.name, 'color' : self.findColor(player.id), 'id': player.id, 'balls': player_balls})
+
         # print(ans)
         return ans
+
+    def arch(self, data):
+        for pl in data:
+            buf = []
+            for b in pl['balls']:
+                buf.append([b['x'], b['y'], b['m']])
+            pl['balls'] = buf
+        return data

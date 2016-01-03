@@ -1,8 +1,8 @@
 time_step = 0.05
 INITIAL_MASS = 30
 
-FIELD_X = 200
-FIELD_Y = 200
+FIELD_X = 1000
+FIELD_Y = 1000
 
 WINDOW_HEIGHT = 600
 WINDOW_WIDTH = 1000
@@ -20,5 +20,5 @@ DEBUG_OFF = False
 def debug(D):
     return (D | DEBUG_ON) & (not DEBUG_OFF)
 
-DEBUG_PROTOCOL = debug(True)
+DEBUG_PROTOCOL = debug(False)
 DEBUG_PROTOCOL_PRINT = debug(False)
