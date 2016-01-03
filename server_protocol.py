@@ -98,11 +98,14 @@ def read (conn, mask):
                         localServer.addPlayer(v["name"], clients[conn])
                     else:
                         print("User specified no name and it isn't cursor")
-                except TypeError:
+                except (json.decoder.JSONDecodeError, TypeError):
                     print("user with id " + str(clients[conn]) + " tried something incorrect")
+                    if DEBUG:
+                        raise
                 except :
                     print("Server failed in to add player or update cursor")
-                    raise
+                    if DEBUG:
+                        raise
         mask &=~ selectors.EVENT_READ
     assert mask == 0
 
