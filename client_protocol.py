@@ -17,7 +17,7 @@ def registerMe(name):
     jdata = dict()
     jdata['name'] = name
     s = json.dumps(jdata) 
-    sock.send(bytes(s, 'utf-8'))
+    sock.send(bytes(s + '\n', 'utf-8'))
     return id
              
 def getField():
