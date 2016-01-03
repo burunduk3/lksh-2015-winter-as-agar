@@ -37,7 +37,7 @@ def getField():
 def sendMe(p):
     global sock
     data = json.dumps(p)
-    sock.send(bytes(data, 'utf-8'))
+    sock.send(bytes(data + '\n', 'utf-8'))
 
 def killMe():
     global sock
