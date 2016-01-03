@@ -29,11 +29,6 @@ def sending():
         # {'x': 1, 'y': 1, 's': 0}
         time.sleep(0.01)
 
-
-def dearch(data):
-
-
-
 def asking():
     global curList
     fail = 0
@@ -41,7 +36,7 @@ def asking():
     cnt = 0
     while True:
         # print("abacabadabacaba")
-        curList = getField()
+        curList = dearch(getField())
 
         if curList == []:
             fail += 1
