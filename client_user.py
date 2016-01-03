@@ -28,15 +28,7 @@ def sending():
         sendMe({"id": player_id, "x": ourx - WINDOW_WIDTH // 2 + curx, "y": oury - WINDOW_HEIGHT // 2 + cury, "s": 0})
         # {'x': 1, 'y': 1, 's': 0}
         time.sleep(0.01)
-
-<<<<<<< HEAD
-
-#def dearch(data):
-
-
-
-=======
->>>>>>> 8e824b10f4e037653c68ae04ead09175178d6e5e
+                                                
 def asking():
     global curList
     fail = 0
