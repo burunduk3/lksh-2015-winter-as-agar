@@ -1,8 +1,11 @@
 import selectors, socket, threading, sys, json, random
 
+MAX_LENGTH = 4096
+
 poll = selectors.DefaultSelector ()
 clients = dict()
 localServer = ""
+
 
 a = False
 
@@ -69,7 +72,7 @@ def read (conn, mask):
     if mask & selectors.EVENT_READ:
         while True:
             try:
-                data = conn.recv(1024)
+                data = conn.recv(MAX_LENGTH)
             except BlockingIOError:
                 break
             except ConnectionResetError:
@@ -78,6 +81,7 @@ def read (conn, mask):
             if not data:
                 print("deleting user " + str(clients[conn]))
                 poll.unregister (conn)
+                localServer.UserExit(clients[conn])
                 del clients[conn]
                 conn.close()
                 break
@@ -116,4 +120,4 @@ def sendMap(id, data):
             x.close()                                
             del clients[x]
             localServer.UserExit(id)   
-            break;    
+            break

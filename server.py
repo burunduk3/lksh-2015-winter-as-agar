@@ -19,8 +19,8 @@ from threading import *
 time_step = 0.05
 INITIAL_MASS = 30
 
-FIELD_X = 100
-FIELD_Y = 200
+FIELD_X = 500
+FIELD_Y = 500
 
 class AgarioPlayer:
     def __init__(self, name, id, mass = INITIAL_MASS):
@@ -95,10 +95,10 @@ class AgarioServer:
         # self.realPlayers.add(player.id)
         self.playerLock.release()
 
-    def addFood(self, cnt):
+    def addFood(self, cnt, mass):
         # food = self.players[0]
         for i in range(cnt):
-            self.players[0].addCircle(1)
+            self.players[0].addCircle(mass)
 
     def getFood(self):
         # print('getting')

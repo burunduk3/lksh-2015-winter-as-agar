@@ -1,4 +1,6 @@
 import json, socket, time
+
+MAX_LENGTH = 4096
                     
 sock = socket.socket()
 old_data = ""
@@ -13,7 +15,7 @@ def registerMe(name):
     tcp_port = int(tcp_port)
                                   
     sock.connect((tcp_ip, tcp_port))
-    id = json.loads(str(sock.recv(1024), 'utf-8'))['id']
+    id = json.loads(str(sock.recv(MAX_LENGTH), 'utf-8'))['id']
     jdata = dict()
     jdata['name'] = name
     s = json.dumps(jdata) 
@@ -22,7 +24,7 @@ def registerMe(name):
              
 def getField():
     global sock, old_data, old_json    
-    data = sock.recv(1024)
+    data = sock.recv(MAX_LENGTH)
     data = str(data, 'utf-8')
 
     s = old_data+data            

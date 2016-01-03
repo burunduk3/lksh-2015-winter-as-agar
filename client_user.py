@@ -8,6 +8,7 @@ import threading
 import time
 import sys
 
+FAIL_COUNT = 100
 
 def onMotion(e):
     global curx, cury, canvas
@@ -38,7 +39,8 @@ def asking():
         curList = getField()
         if curList == []:
             fail += 1
-            if fail > 10:
+            if fail > FAIL_COUNT:
+                print(fail)
                 root.quit()
                 exit(0)
         else:

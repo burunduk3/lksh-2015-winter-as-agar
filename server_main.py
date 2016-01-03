@@ -5,10 +5,11 @@ from server import *
 import server_protocol as protocol
 from threading import *
 
-FOOD_NUM = 50
+FOOD_NUM = 200
+FOOD_MASS = 5
 
 server = AgarioServer()
-server.addFood(FOOD_NUM) #added this line
+server.addFood(FOOD_NUM, FOOD_MASS) #added this line
 
 t1 = Thread(target=protocol.initserver, daemon=True, args=[server])
 
@@ -28,7 +29,7 @@ while True:
         dt = now - lastTime
         lastTime = now
         if (server.getFood() < FOOD_NUM):
-            server.addFood(1)
+            server.addFood(1, FOOD_MASS)
         server.applUpdate()
         # print('upd', now)
         cursors = []
