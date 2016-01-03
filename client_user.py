@@ -30,12 +30,17 @@ def sending():
 
 def asking():
     global curList
+    fail = 0
     while True:
         # print("abacabadabacaba")
         curList = getField()
-        """if curList == []:
-            root.quit()
-            exit(0)"""
+        if curList == []:
+            fail += 1
+            if fail > 10:
+                root.quit()
+                exit(0)
+        else:
+            fail = 0
         print('getField: '+str(curList))
         # print("abacaba")
         time.sleep(0.01)
