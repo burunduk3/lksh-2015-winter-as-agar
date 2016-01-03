@@ -163,11 +163,3 @@ class AgarioServer:
 
         # print(ans)
         return ans
-
-    def arch(self, data):
-        for pl in data:
-            buf = []
-            for b in pl['balls']:
-                buf.append([b['x'], b['y'], b['m']])
-            pl['balls'] = buf
-        return data

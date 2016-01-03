@@ -29,11 +29,14 @@ def sending():
         # {'x': 1, 'y': 1, 's': 0}
         time.sleep(0.01)
 
+<<<<<<< HEAD
 
 #def dearch(data):
 
 
 
+=======
+>>>>>>> 8e824b10f4e037653c68ae04ead09175178d6e5e
 def asking():
     global curList
     fail = 0
@@ -53,10 +56,11 @@ def asking():
             fail = 0
             now = time.time()
             cnt += 1
-            if (now - tm > 3):
-                print(cnt, cnt  / (now - tm))
-                cnt = 0
-                tm = now
+            if DEBUG_PROTOCOL_PRINT:
+                if (now - tm > 3):
+                    print(cnt, cnt  / (now - tm))
+                    cnt = 0
+                    tm = now
         # print('getField: '+str(curList))
         # print("abacaba")
         time.sleep(0.01)
