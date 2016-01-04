@@ -1,19 +1,19 @@
 from math import sqrt
 from constants import *
 
-STEP = 25
+LATTICE_STEP = 25
 OUTLINE_WIDTH = 2
 
 
 def draw_bg(c, pos):
     # c - Canvas, pos - (x0, y0)
     x0, y0 = pos
-    x0 = STEP - x0 % STEP
-    y0 = STEP - y0 % STEP
-    for i in range(int(WINDOW_WIDTH / STEP) + 1):
-        c.create_line(i * STEP + x0, 0, i * STEP + x0, WINDOW_HEIGHT, fill='#D0D0D0')
-    for i in range(int(WINDOW_HEIGHT / STEP) + 1):
-        c.create_line(0, i * STEP + y0, WINDOW_WIDTH, i * STEP + y0, fill='#D0D0D0')
+    x0 = LATTICE_STEP - x0 % LATTICE_STEP
+    y0 = LATTICE_STEP - y0 % LATTICE_STEP
+    for i in range(int(WINDOW_WIDTH / LATTICE_STEP) + 1):
+        c.create_line(i * LATTICE_STEP + x0, 0, i * LATTICE_STEP + x0, WINDOW_HEIGHT, fill='#D0D0D0')
+    for i in range(int(WINDOW_HEIGHT / LATTICE_STEP) + 1):
+        c.create_line(0, i * LATTICE_STEP + y0, WINDOW_WIDTH, i * LATTICE_STEP + y0, fill='#D0D0D0')
     return c
 
 
