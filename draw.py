@@ -27,7 +27,12 @@ def draw_players(c, pos, ps):
             w['x'] = ball['x']
             w['y'] = ball['y']
             w['m'] = ball['m']
-            w['color'] = p['color']
+            if p['id'] == 0:
+                w['color'] = ('#%02X%02X%02X' % (random.randint(0, 150),
+                                                 random.randint(0, 150),
+                                                 random.randint(0, 150)))
+            else:
+                w['color'] = p['color']
             w['name'] = p['name']
             w['id'] = p['id']
             q.append(w)
@@ -42,9 +47,6 @@ def draw_players(c, pos, ps):
         r = max(0, r - 20)
         g = max(0, g - 20)
         b = max(0, b - 20)
-        randColor = lambda: random.randint(0, 150) 
-        if ball['id'] == 0:
-             ball['color'] = ('#%02X%02X%02X' % (randColor(),randColor(),randColor()))
         c.create_oval(lx - radius - OUTLINE_WIDTH,
                       ly - radius - OUTLINE_WIDTH,
                       lx + radius + OUTLINE_WIDTH,
