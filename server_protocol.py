@@ -1,11 +1,11 @@
 import selectors, socket, threading, sys, json, random
 
-MAX_LENGTH = 4096
+from constants import *
 
 poll = selectors.DefaultSelector ()
 clients = dict()
 localServer = ""
-
+clientsLock = threading.Lock()
 
 a = False
 
@@ -79,15 +79,19 @@ def read (conn, mask):
                 print ("user disconnected")
                 data = False
             if not data:
-                print("deleting user " + str(clients[conn]))
-                poll.unregister (conn)
-                localServer.UserExit(clients[conn])
-                del clients[conn]
-                conn.close()
+                clientsLock.acquire()
+                if conn in clients:
+                    print("deleting user " + str(clients[conn]))
+                    poll.unregister (conn)
+                    localServer.UserExit(clients[conn])
+                    del clients[conn]
+                    conn.close()
+                clientsLock.release()
                 break
             else:
                 data = data.decode().split(sep = '\n')
-                # print(data)
+                if DEBUG_PROTOCOL_PRINT:
+                    print(data)
                 try:               
                     v = json.loads(data[0])
                     v["id"] = clients[conn]
@@ -97,17 +101,30 @@ def read (conn, mask):
                         localServer.addPlayer(v["name"], clients[conn])
                     else:
                         print("User specified no name and it isn't cursor")
-                except TypeError:
+                except (json.decoder.JSONDecodeError, TypeError):
                     print("user with id " + str(clients[conn]) + " tried something incorrect")
+                    if DEBUG_PROTOCOL:
+                        raise
                 except :
                     print("Server failed in to add player or update cursor")
-                    raise
+                    if DEBUG_PROTOCOL:
+                        raise
         mask &=~ selectors.EVENT_READ
     assert mask == 0
 
+def arch(data):
+    for pl in data:
+        buf = []
+        for b in pl['balls']:
+            buf.append([b['x'], b['y'], b['m']])
+        pl['balls'] = buf
+    return data
+
 def sendMap(id, data):
     global localServer
-    data = json.dumps(data)       
+    data = json.dumps(arch(data))
+    if DEBUG_PROTOCOL_PRINT:
+        print(data)
     q = clients
     for x in q:
         try:
@@ -115,9 +132,12 @@ def sendMap(id, data):
                 x.send(bytes(data + '\n', 'utf-8'))
                 break
         except:
-            print("deleting user " + str(clients[x]))
-            poll.unregister(x)                
-            x.close()                                
-            del clients[x]
-            localServer.UserExit(id)   
+            clientsLock.acquire()
+            if x in clients:
+                print("deleting user " + str(clients[x]))
+                poll.unregister(x)
+                x.close()
+                del clients[x]
+            localServer.UserExit(id)
+            clientsLock.release()
             break

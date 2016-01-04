@@ -7,28 +7,32 @@ from leaderboard import *
 import threading
 import time
 import sys
+from constants import *
 
-FAIL_COUNT = 100
+splitLock = threading.Lock()
+splitted = 0
 
 def onMotion(e):
     global curx, cury, canvas
     curx = e.x
     cury = e.y
 
-
 def sending():
-    global curx, cury, player_id
+    global curx, cury, player_id, splitLock, splitted
     while True:
         ourx, oury = 0, 0
         for p in curList:
             if p["id"] == player_id:
                 ourx, oury = p["balls"][0]["x"], p["balls"][0]["y"]
                 break
-        sendMe({"id": player_id, "x": ourx - 400 + curx, "y": oury - 225 + cury, "s": 0})
+        splitLock.acquire()
+        s = splitted
+        splitted = 0
+        splitLock.release()
+        sendMe({"id": player_id, "x": ourx - WINDOW_WIDTH // 2 + curx, "y": oury - WINDOW_HEIGHT // 2 + cury, "s": s})
         # {'x': 1, 'y': 1, 's': 0}
         time.sleep(0.01)
-
-
+                                                
 def asking():
     global curList
     fail = 0
@@ -37,6 +41,7 @@ def asking():
     while True:
         # print("abacabadabacaba")
         curList = getField()
+
         if curList == []:
             fail += 1
             if fail > FAIL_COUNT:
@@ -47,18 +52,25 @@ def asking():
             fail = 0
             now = time.time()
             cnt += 1
-            if (now - tm > 3):
-                print(cnt, cnt  / (now - tm))
-                cnt = 0
-                tm = now
+            if DEBUG_PROTOCOL_PRINT:
+                if (now - tm > 3):
+                    print(cnt, cnt  / (now - tm))
+                    cnt = 0
+                    tm = now
         # print('getField: '+str(curList))
         # print("abacaba")
         time.sleep(0.01)
 
+def splitMe(event):
+    global splitLock, splitted
+    # print('splitting')
+    splitLock.acquire()
+    splitted = 1
+    splitLock.release()
 
 def drawing():
     global canvas, player_id, curList
-    ourx, oury, m = 400, 225, 0
+    ourx, oury, m = WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2, 0
     ll = curList
     for p in ll:
         if p["id"] == player_id:
@@ -68,15 +80,15 @@ def drawing():
             break
             # [{'name': 'Vasya', 'color': 'blue', 'id': 1, 'balls': [{'x': 1, 'm': 1, 'y': 1}]}]
     canvas.delete("all")
-    canvas = draw_bg(canvas, (ourx - 400, oury - 225))
-    canvas = draw_players(canvas, (ourx - 400, oury - 225), ll)
+    canvas = draw_bg(canvas, (ourx - WINDOW_WIDTH // 2, oury - WINDOW_HEIGHT // 2))
+    canvas = draw_players(canvas, (ourx - WINDOW_WIDTH // 2, oury - WINDOW_HEIGHT // 2), ll)
     canvas = draw_mass(canvas, 'm:' + str(m) + ' x:' + str(int(round(ourx))) + ' y:' + str(int(round(oury))))
     root.after(10, drawing)
 
 
 root = Tk()
 root.wm_resizable(0, 0)
-root.geometry("800x450")
+root.geometry(str(WINDOW_WIDTH) + 'x' + str(WINDOW_HEIGHT))
 root.title("agar.io_test")
 
 userName = None
@@ -112,18 +124,19 @@ out.close()
 player_id = registerMe(userName)
 print("connected")
 
-curx, cury = 0, 0
+curx, cury = 400, 225
 # curList = getField()
 curList = []
 root.bind("<Motion>", onMotion)
 
-canvas = Canvas(root, height=450, width=800)
+canvas = Canvas(root, height=WINDOW_HEIGHT, width=WINDOW_WIDTH)
 canvas.pack()
 
 t1 = threading.Thread(target=asking, daemon=True)
 t2 = threading.Thread(target=sending, daemon=True)
 t1.start()
 t2.start()
+root.bind('<Button-1>', splitMe)
 root.after(0, drawing)
 
 root.mainloop()

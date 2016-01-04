@@ -12,15 +12,10 @@
 
 import random
 import math
-import Physics.physics_main as physics
+import physics_main as physics
 from time import *
 from threading import *
-
-time_step = 0.05
-INITIAL_MASS = 30
-
-FIELD_X = 500
-FIELD_Y = 500
+from constants import *
 
 class AgarioPlayer:
     def __init__(self, name, id, mass = INITIAL_MASS):
@@ -38,6 +33,12 @@ class AgarioPlayer:
         #FIXED THIS
         self.circles.append((random.randint(0, FIELD_X), random.randint(0, FIELD_Y), mass))
         #self.circles.append((random.randint(0, 8000), random.randint(0, 4000), mass))
+
+    def circleSplit(self):
+        for i in range(len(self.circles)):
+            circle = self.circles[i]
+            if circle[2] > INITIAL_MASS:
+                self.circles[i] = (circle[0], circle[1], circle[2] // 2)
 
 
 def distLinePoint(p, u, v):
@@ -95,10 +96,10 @@ class AgarioServer:
         # self.realPlayers.add(player.id)
         self.playerLock.release()
 
-    def addFood(self, cnt, mass):
+    def addFood(self, cnt):
         # food = self.players[0]
         for i in range(cnt):
-            self.players[0].addCircle(mass)
+            self.players[0].addCircle(random.randint(FOOD_MASS, 3 * FOOD_MASS))
 
     def getFood(self):
         # print('getting')
@@ -116,6 +117,7 @@ class AgarioServer:
             cursor['x'] = x курсора
             cursor['y'] = y курсора
             cursor['id'] = id игрока
+            cursor['s'] = заспличено?
         """
         self.cursorLock.acquire()
         # self.player[cursor['id']].cursor = (cursor['x'], cursor['y'])
@@ -130,11 +132,14 @@ class AgarioServer:
             self.players[player.id] = player
         self.pUpdates.clear()
         for id in self.eUpdates:
-            del self.players[id]
+            if id in self.players:
+                del self.players[id]
         self.eUpdates.clear()
         for cursor in self.cUpdates:
             if cursor['id'] in self.players:
                 self.players[cursor['id']].cursor = (cursor['x'], cursor['y'])
+                if cursor['s'] > 0:
+                    self.players[cursor['id']].circleSplit()
         self.cUpdates.clear()
 
         self.cursorLock.release()
@@ -144,7 +149,7 @@ class AgarioServer:
         for plid in self.players:
             self.players[plid].circles = []
         for circle in circles:
-            self.players[circle['id']].circles.append((circle['x'], circle['y'], circle['m']))
+            self.players[circle['id']].circles.append((max(min(circle['x'], FIELD_X), 0), max(min(circle['y'], FIELD_Y), 0), circle['m']))
     
     def findColor(self, id):
     	#FIX this: 'red' -> #FF0000
@@ -157,12 +162,13 @@ class AgarioServer:
             return []
         ans = []
         for player in self.players.values():
+            player_balls = []
             for circle in player.circles:
-                player_balls = []
                 if doCircleAndRectIntersect((circle[0], circle[1]), math.sqrt(circle[2]),
-                                            (center[0] - 400, center[1] - 200), (center[0] - 400, center[1] + 200),
-                                            (center[0] + 400, center[1] + 200), (center[0] + 400, center[1] - 200)):
-                    player_balls.append({'x' : circle[0], 'y': circle[1], 'm': circle[2]})
-                ans.append({'name': player.name, 'color' : self.findColor(player.id), 'id': player.id, 'balls': player_balls})
+                                            (center[0] - WINDOW_WIDTH // 2, center[1] - WINDOW_WIDTH // 2), (center[0] - WINDOW_WIDTH // 2, center[1] + WINDOW_WIDTH // 2),
+                                            (center[0] + WINDOW_WIDTH // 2, center[1] + WINDOW_WIDTH // 2), (center[0] + WINDOW_WIDTH // 2, center[1] - WINDOW_WIDTH // 2)):
+                    player_balls.append({'x' : int(circle[0]), 'y': int(circle[1]), 'm': circle[2]})
+            ans.append({'name': player.name, 'color' : self.findColor(player.id), 'id': player.id, 'balls': player_balls})
+
         # print(ans)
         return ans

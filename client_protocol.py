@@ -1,7 +1,6 @@
 import json, socket, time
 
-MAX_LENGTH = 4096
-                    
+from constants import *
 sock = socket.socket()
 old_data = ""
 old_json = []
@@ -21,6 +20,14 @@ def registerMe(name):
     s = json.dumps(jdata) 
     sock.send(bytes(s + '\n', 'utf-8'))
     return id
+
+def dearch(data):
+    for pl in data:
+        buf = []
+        for b in pl['balls']:
+            buf.append({'x' : b[0], 'y' : b[1], 'm' : b[2]})
+        pl['balls'] = buf
+    return data
              
 def getField():
     global sock, old_data, old_json    
@@ -32,9 +39,10 @@ def getField():
 
     old_data = l[-1]
     if len(l) > 1:
-        old_json = json.loads(l[-2])
-    
-    return old_json               
+        old_json = dearch(json.loads(l[-2]))
+    if DEBUG_PROTOCOL_PRINT:
+        print(old_json)
+    return old_json
 
 def sendMe(p):
     global sock
