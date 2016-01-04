@@ -2,7 +2,7 @@ from math import sqrt
 from constants import *
 
 STEP = 25
-OUTLINE_WIDTH = 3
+OUTLINE_WIDTH = 2
 
 
 def draw_bg(c, pos):
