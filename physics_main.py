@@ -29,7 +29,7 @@ def distance(a, b):
 
 #Relation that must be satisfied in order to be absorbed
 ABSORB_REL = 1.25
-ABSORB_RAD = 0.97
+ABSORB_RAD = 0.90
 
 class circle:
 	def __init__(self, x, y, m, id):
@@ -126,7 +126,7 @@ def update_map1(in_cursors, in_circles, t_step):
 
 #Handles absorbtions
 
-MAX_DIST = 666
+MAX_DIST = min(WINDOW_WIDTH, WINDOW_HEIGHT) / 2 - 50
                                    
 def update_map(in_cursors, in_circles, t_step):
 	curs_dict = {}
