@@ -68,11 +68,11 @@ def circle2dict (c):
 # t_step - real number, time of update in seconds
 
 #Various formulas for velocity
-MAX_VEL = 0.5
+MAX_VEL = 0.7
 MIN_VEL = 0.03  
 MAX_MASS = 1000
 VEL_CONST = 1000
-LOG_CONST = 0.8
+LOG_CONST = 1
 
 def calc_velocity1(mass):
 	ans = (MAX_MASS - mass) / MAX_MASS #VEL_CONST / mass
