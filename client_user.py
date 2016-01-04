@@ -124,7 +124,7 @@ out.close()
 player_id = registerMe(userName)
 print("connected")
 
-curx, cury = 0, 0
+curx, cury = 400, 225
 # curList = getField()
 curList = []
 root.bind("<Motion>", onMotion)
