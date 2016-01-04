@@ -140,7 +140,7 @@ class AgarioServer:
         for plid in self.players:
             self.players[plid].circles = []
         for circle in circles:
-            self.players[circle['id']].circles.append((circle['x'], circle['y'], circle['m']))
+            self.players[circle['id']].circles.append((max(min(circle['x'], FIELD_X), 0), max(min(circle['y'], FIELD_Y), 0), circle['m']))
     
     def findColor(self, id):
     	#FIX this: 'red' -> #FF0000
@@ -158,7 +158,7 @@ class AgarioServer:
                 if doCircleAndRectIntersect((circle[0], circle[1]), math.sqrt(circle[2]),
                                             (center[0] - WINDOW_WIDTH // 2, center[1] - WINDOW_WIDTH // 2), (center[0] - WINDOW_WIDTH // 2, center[1] + WINDOW_WIDTH // 2),
                                             (center[0] + WINDOW_WIDTH // 2, center[1] + WINDOW_WIDTH // 2), (center[0] + WINDOW_WIDTH // 2, center[1] - WINDOW_WIDTH // 2)):
-                    player_balls.append({'x' : circle[0], 'y': circle[1], 'm': circle[2]})
+                    player_balls.append({'x' : int(circle[0]), 'y': int(circle[1]), 'm': circle[2]})
             ans.append({'name': player.name, 'color' : self.findColor(player.id), 'id': player.id, 'balls': player_balls})
 
         # print(ans)
