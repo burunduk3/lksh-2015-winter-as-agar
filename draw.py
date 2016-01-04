@@ -1,4 +1,3 @@
-from math import sqrt
 from constants import *
 
 STEP = 25
@@ -35,7 +34,7 @@ def draw_players(c, pos, ps):
     for ball in q:
         lx = ball['x'] - x0
         ly = ball['y'] - y0
-        radius = int(sqrt(ball['m']))
+        radius = int(calculateRadius(ball['m']))
         r = int(ball['color'][1:3], 16)
         g = int(ball['color'][3:5], 16)
         b = int(ball['color'][5:7], 16)

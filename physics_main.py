@@ -1,4 +1,6 @@
 import sys, threading, time, math
+from constants import *
+
 #==================================================
 # Classes definition
 class pnt:
@@ -33,7 +35,7 @@ class circle:
 	def __init__(self, x, y, m, id):
 		self.center = pnt(x, y)
 		self.mass = m
-		self.r = math.sqrt(m)
+		self.r = calculateRadius(m)
 		self.id = id
 		self.absorbed = False
 		self.canAbsorb = True
@@ -105,10 +107,10 @@ def update_map0(cursors, circles, t_step):
 # Merely dislocates circles
 def update_map1(in_cursors, in_circles, t_step):
 	curs_dict = {}
-	for c in in_cursors:                              
+	for c in in_cursors:
 		curs_dict[c["id"]] = pnt(c["x"], c["y"])
 	circles = list(map(lambda x: dict2circle(x), in_circles))
-	
+
 	for i in range(len(circles)):
 		circ = circles[i]
 		print(circ.id)
@@ -118,7 +120,7 @@ def update_map1(in_cursors, in_circles, t_step):
 		velocity = calc_velocity(circ.mass)
 		velocity_vec = displacement_vec * velocity * t_step
 		circles[i].center = circ.center + velocity_vec
-	                          
+
 	return list(map(lambda x: circle2dict(x), circles))
 
 #Handles absorbtions
