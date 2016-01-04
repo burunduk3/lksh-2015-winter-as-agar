@@ -35,6 +35,9 @@ def draw_players(c, pos, ps):
         lx = ball['x'] - x0
         ly = ball['y'] - y0
         radius = calculateRadius(ball['m'])
+        randColor = lambda: random.randint(0, 150)
+        if ball['id'] == 0:
+        	ball['color'] = ('#%02X%02X%02X' % (randColor(),randColor(),randColor()))
         r = int(ball['color'][1:3], 16)
         g = int(ball['color'][3:5], 16)
         b = int(ball['color'][5:7], 16)
