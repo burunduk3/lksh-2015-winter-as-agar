@@ -8,7 +8,7 @@ from threading import *
 from constants import *
 
 server = AgarioServer()
-server.addFood(FOOD_NUM, FOOD_MASS) #added this line
+server.addFood(FOOD_NUM) #added this line
 
 t1 = Thread(target=protocol.initserver, daemon=True, args=[server])
 
@@ -28,7 +28,7 @@ while True:
         dt = now - lastTime
         lastTime = now
         if (server.getFood() < FOOD_NUM):
-            server.addFood(FOOD_GROWTH, FOOD_MASS)
+            server.addFood(FOOD_GROWTH)
         server.applUpdate()
         # print('upd', now)
         cursors = []

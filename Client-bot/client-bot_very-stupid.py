@@ -2,8 +2,8 @@ import sys, time, json, threading, random
 from client_protocol import *
 
 killed = False
-
-name = 'Stupid Bot'
+                       
+name = random.choice(open("bot_names.txt", "r", encoding = "utf-8").readlines())
 
 id = registerMe(name)
 data = {}

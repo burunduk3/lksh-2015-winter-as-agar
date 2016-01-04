@@ -32,7 +32,7 @@ def sending():
         sendMe({"id": player_id, "x": ourx - WINDOW_WIDTH // 2 + curx, "y": oury - WINDOW_HEIGHT // 2 + cury, "s": s})
         # {'x': 1, 'y': 1, 's': 0}
         time.sleep(0.01)
-
+                                                
 def asking():
     global curList
     fail = 0
@@ -124,7 +124,7 @@ out.close()
 player_id = registerMe(userName)
 print("connected")
 
-curx, cury = 0, 0
+curx, cury = 400, 225
 # curList = getField()
 curList = []
 root.bind("<Motion>", onMotion)

@@ -1,18 +1,18 @@
 from constants import *
 
-STEP = 25
+LATTICE_STEP = 25
 OUTLINE_WIDTH = 2
 
 
 def draw_bg(c, pos):
     # c - Canvas, pos - (x0, y0)
     x0, y0 = pos
-    x0 = STEP - x0 % STEP
-    y0 = STEP - y0 % STEP
-    for i in range(int(WINDOW_WIDTH / STEP) + 1):
-        c.create_line(i * STEP + x0, 0, i * STEP + x0, WINDOW_HEIGHT, fill='#D0D0D0')
-    for i in range(int(WINDOW_HEIGHT / STEP) + 1):
-        c.create_line(0, i * STEP + y0, WINDOW_WIDTH, i * STEP + y0, fill='#D0D0D0')
+    x0 = LATTICE_STEP - x0 % LATTICE_STEP
+    y0 = LATTICE_STEP - y0 % LATTICE_STEP
+    for i in range(int(WINDOW_WIDTH / LATTICE_STEP) + 1):
+        c.create_line(i * LATTICE_STEP + x0, 0, i * LATTICE_STEP + x0, WINDOW_HEIGHT, fill='#D0D0D0')
+    for i in range(int(WINDOW_HEIGHT / LATTICE_STEP) + 1):
+        c.create_line(0, i * LATTICE_STEP + y0, WINDOW_WIDTH, i * LATTICE_STEP + y0, fill='#D0D0D0')
     return c
 
 
@@ -34,7 +34,7 @@ def draw_players(c, pos, ps):
     for ball in q:
         lx = ball['x'] - x0
         ly = ball['y'] - y0
-        radius = int(calculateRadius(ball['m']))
+        radius = calculateRadius(ball['m'])
         r = int(ball['color'][1:3], 16)
         g = int(ball['color'][3:5], 16)
         b = int(ball['color'][5:7], 16)
@@ -53,9 +53,16 @@ def draw_players(c, pos, ps):
                       ly + radius,
                       fill=ball['color'],
                       outline='')
-        if len(ball['name']) > 0 and radius // len(ball['name']) > 3:
+        if len(ball['name']) == 0:
+            continue
+        if radius // len(ball['name']) > 3:
             c.create_text(lx, ly,
-                          font=('Comic Sans MS', 2 * radius // (len(ball['name']) + 1)),
+                          font=('Comic Sans MS', int(2.3 * radius // (len(ball['name']) + 1))),
                           text=ball['name'],
                           fill='white')
+        else:
+            c.create_text(lx, ly-radius-10,
+                          font=('Comic Sans MS', 10),
+                          text=ball['name'],
+                          fill='black')
     return c

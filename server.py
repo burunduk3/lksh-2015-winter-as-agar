@@ -96,10 +96,10 @@ class AgarioServer:
         # self.realPlayers.add(player.id)
         self.playerLock.release()
 
-    def addFood(self, cnt, mass):
+    def addFood(self, cnt):
         # food = self.players[0]
         for i in range(cnt):
-            self.players[0].addCircle(mass)
+            self.players[0].addCircle(random.randint(FOOD_MASS, 3 * FOOD_MASS))
 
     def getFood(self):
         # print('getting')
