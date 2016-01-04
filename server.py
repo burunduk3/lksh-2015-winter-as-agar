@@ -22,24 +22,26 @@ class AgarioPlayer:
         self.name = name
         self.id = id
         #FIXED THIS
-        self.circles = [(random.randint(0, FIELD_X), random.randint(0, FIELD_Y), mass)]
+        x = random.randint(0, FIELD_X)
+        y = random.randint(0, FIELD_Y)
+        self.circles = [physics.circle(x, y, mass, id, 0, 0)]
         #self.circles = [(random.randint(0, 8000), random.randint(0, 4000), mass)]
-        self.cursor = self.circles[0][:2]
+        self.cursor = (x, y)
         r = lambda: random.randint(0, 150)
         self.color = ('#%02X%02X%02X' % (r(),r(),r()))
 
 
     def addCircle(self, mass = INITIAL_MASS):
-        #FIXED THIS
-        self.circles.append((random.randint(0, FIELD_X), random.randint(0, FIELD_Y), mass))
-        #self.circles.append((random.randint(0, 8000), random.randint(0, 4000), mass))
+        x = random.randint(0, FIELD_X)
+        y = random.randint(0, FIELD_Y)
+        circ = physics.circle(x, y, mass, self.id, 0, 0)
+        self.circles.append(circ)
 
     def circleSplit(self):
         for i in range(len(self.circles)):
-            circle = self.circles[i]
-            if circle[2] > INITIAL_MASS:
-                self.circles[i] = (circle[0], circle[1], circle[2] // 2)
-
+            circ = self.circles[i]
+            if circ.mass > INITIAL_MASS:
+            	self.circles[i].mass //= 2
 
 def distLinePoint(p, u, v):
     a = v[1] - u[1]
@@ -148,26 +150,29 @@ class AgarioServer:
     def updateCirlces(self, circles):
         for plid in self.players:
             self.players[plid].circles = []
-        for circle in circles:
-            self.players[circle['id']].circles.append((max(min(circle['x'], FIELD_X), 0), max(min(circle['y'], FIELD_Y), 0), circle['m']))
+        for circ in circles:                     	
+            circ.x = max(min(circ.center.x, FIELD_X), 0)
+            circ.y = max(min(circ.center.y, FIELD_Y), 0)
+            self.players[circ.id].circles.append(circ)
     
-    def findColor(self, id):
-    	#FIX this: 'red' -> #FF0000
+    def findColor(self, id):       
     	return self.players[id].color
 
     def makeFieldMessage(self, id):
         try:
-            center = self.players[id].circles[0][:2]
+            center = self.players[id].circles[0].center
         except IndexError:
             return []
         ans = []
         for player in self.players.values():
             player_balls = []
-            for circle in player.circles:
-                if doCircleAndRectIntersect((circle[0], circle[1]), math.sqrt(circle[2]),
-                                            (center[0] - WINDOW_WIDTH // 2, center[1] - WINDOW_WIDTH // 2), (center[0] - WINDOW_WIDTH // 2, center[1] + WINDOW_WIDTH // 2),
-                                            (center[0] + WINDOW_WIDTH // 2, center[1] + WINDOW_WIDTH // 2), (center[0] + WINDOW_WIDTH // 2, center[1] - WINDOW_WIDTH // 2)):
-                    player_balls.append({'x' : int(circle[0]), 'y': int(circle[1]), 'm': circle[2]})
+            for circ in player.circles:
+                if doCircleAndRectIntersect((circ.x, circ.y), calculateRadius(circ.mass),
+                                            (center.x - WINDOW_WIDTH // 2, center.y - WINDOW_HEIGHT // 2),
+                                            (center.x - WINDOW_WIDTH // 2, center.y + WINDOW_HEIGHT // 2),
+                                            (center.x + WINDOW_WIDTH // 2, center.y + WINDOW_HEIGHT // 2),
+                                            (center.x + WINDOW_WIDTH // 2, center.y - WINDOW_HEIGHT // 2)):
+                    player_balls.append({'x' : int(circ.x), 'y': int(circ.y), 'm': circ.mass})
             ans.append({'name': player.name, 'color' : self.findColor(player.id), 'id': player.id, 'balls': player_balls})
 
         # print(ans)
