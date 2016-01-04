@@ -1,4 +1,3 @@
-from math import sqrt
 from constants import *
 
 LATTICE_STEP = 25
@@ -35,7 +34,7 @@ def draw_players(c, pos, ps):
     for ball in q:
         lx = ball['x'] - x0
         ly = ball['y'] - y0
-        radius = int(calculateRadius(ball['m']))
+        radius = calculateRadius(ball['m'])
         r = int(ball['color'][1:3], 16)
         g = int(ball['color'][3:5], 16)
         b = int(ball['color'][5:7], 16)
@@ -54,9 +53,16 @@ def draw_players(c, pos, ps):
                       ly + radius,
                       fill=ball['color'],
                       outline='')
-        if len(ball['name']) > 0 and radius // len(ball['name']) > 3:
+        if len(ball['name']) == 0:
+            continue
+        if radius // len(ball['name']) > 3:
             c.create_text(lx, ly,
-                          font=('Comic Sans MS', 2 * radius // (len(ball['name']) + 1)),
+                          font=('Comic Sans MS', int(2.3 * radius // (len(ball['name']) + 1))),
                           text=ball['name'],
                           fill='white')
+        else:
+            c.create_text(lx, ly-radius-10,
+                          font=('Comic Sans MS', 10),
+                          text=ball['name'],
+                          fill='black')
     return c
