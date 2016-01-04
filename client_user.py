@@ -99,14 +99,14 @@ if len(sys.argv) > 2:
 if len(sys.argv) > 2:
     port = sys.argv[3]
 
-ip = '192.168.3.83'
+ip = 'localhost'
 port = '3030'
 
 if userName is None:
     print('enter your user name: ', end='', flush=True)
     userName = " ".join(sys.stdin.readline().split())
 print("OK. Your username is " + userName)
-
+player_id = registerMe(userName)
 if ip is None:
     print('enter server ip: ', end='', flush=True)
     ip = sys.stdin.readline().split()[0]
@@ -121,7 +121,6 @@ out = open("config.txt", "w")
 out.write(ip + " " + port)
 out.close()
 # At first get name from keyboard
-player_id = registerMe(userName)
 print("connected")
 
 curx, cury = 400, 225
