@@ -79,16 +79,16 @@ root.wm_resizable(0, 0)
 root.geometry("800x450")
 root.title("agar.io_test")
 
-userName, ip, port = None, None, None
+userName = None
+ip = '192.168.3.83'
+port = '3030'
+
 if len(sys.argv) > 1:
     userName = sys.argv[1]
 if len(sys.argv) > 2:
     ip = sys.argv[2]
 if len(sys.argv) > 2:
     port = sys.argv[3]
-
-ip = '192.168.3.83'
-port = '3030'
 
 if userName is None:
     print('enter your user name: ', end='', flush=True)
