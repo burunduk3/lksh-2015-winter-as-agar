@@ -1,7 +1,7 @@
 import selectors, socket, threading, sys, json, random
 
 from constants import *
-
+    
 poll = selectors.DefaultSelector ()
 clients = dict()
 localServer = ""
@@ -14,7 +14,13 @@ def initserver(ss):
     global a, sock, poll, localServer
     localServer = ss
     sock = socket.socket()
-    sock.bind (('0.0.0.0', 3030))
+
+    # PATCHED BY BURUNDUK1 
+    config_file = open("config.txt", "r")
+    ip, port = open("config.txt", "r").readline().split()
+    sock.bind (('0.0.0.0', int(port)))
+    # END OF PATCH
+
     sock.listen (10)
     sock.setblocking (False)
     poll.register (sock, selectors.EVENT_READ, accept)

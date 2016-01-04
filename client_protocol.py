@@ -33,7 +33,6 @@ def getField():
     global sock, old_data, old_json    
     data = sock.recv(MAX_LENGTH)
     data = str(data, 'utf-8')
-
     s = old_data+data            
     l = s.split('\n')
 
