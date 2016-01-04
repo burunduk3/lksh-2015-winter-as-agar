@@ -12,7 +12,7 @@
 
 import random
 import math
-import Physics.physics_main as physics
+import physics_main as physics
 from time import *
 from threading import *
 from constants import *
