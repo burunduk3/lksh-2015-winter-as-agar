@@ -12,7 +12,7 @@
 
 import random
 import math
-import Physics.physics_main as physics
+import physics_main as physics
 from time import *
 from threading import *
 from constants import *
@@ -33,6 +33,12 @@ class AgarioPlayer:
         #FIXED THIS
         self.circles.append((random.randint(0, FIELD_X), random.randint(0, FIELD_Y), mass))
         #self.circles.append((random.randint(0, 8000), random.randint(0, 4000), mass))
+
+    def circleSplit(self):
+        for i in range(len(self.circles)):
+            circle = self.circles[i]
+            if circle[2] > INITIAL_MASS:
+                self.circles[i] = (circle[0], circle[1], circle[2] // 2)
 
 
 def distLinePoint(p, u, v):
@@ -111,6 +117,7 @@ class AgarioServer:
             cursor['x'] = x курсора
             cursor['y'] = y курсора
             cursor['id'] = id игрока
+            cursor['s'] = заспличено?
         """
         self.cursorLock.acquire()
         # self.player[cursor['id']].cursor = (cursor['x'], cursor['y'])
@@ -131,6 +138,8 @@ class AgarioServer:
         for cursor in self.cUpdates:
             if cursor['id'] in self.players:
                 self.players[cursor['id']].cursor = (cursor['x'], cursor['y'])
+                if cursor['s'] > 0:
+                    self.players[cursor['id']].circleSplit()
         self.cUpdates.clear()
 
         self.cursorLock.release()
@@ -140,7 +149,7 @@ class AgarioServer:
         for plid in self.players:
             self.players[plid].circles = []
         for circle in circles:
-            self.players[circle['id']].circles.append((circle['x'], circle['y'], circle['m']))
+            self.players[circle['id']].circles.append((max(min(circle['x'], FIELD_X), 0), max(min(circle['y'], FIELD_Y), 0), circle['m']))
     
     def findColor(self, id):
     	#FIX this: 'red' -> #FF0000
@@ -158,7 +167,7 @@ class AgarioServer:
                 if doCircleAndRectIntersect((circle[0], circle[1]), math.sqrt(circle[2]),
                                             (center[0] - WINDOW_WIDTH // 2, center[1] - WINDOW_WIDTH // 2), (center[0] - WINDOW_WIDTH // 2, center[1] + WINDOW_WIDTH // 2),
                                             (center[0] + WINDOW_WIDTH // 2, center[1] + WINDOW_WIDTH // 2), (center[0] + WINDOW_WIDTH // 2, center[1] - WINDOW_WIDTH // 2)):
-                    player_balls.append({'x' : circle[0], 'y': circle[1], 'm': circle[2]})
+                    player_balls.append({'x' : int(circle[0]), 'y': int(circle[1]), 'm': circle[2]})
             ans.append({'name': player.name, 'color' : self.findColor(player.id), 'id': player.id, 'balls': player_balls})
 
         # print(ans)

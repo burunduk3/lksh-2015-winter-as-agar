@@ -9,23 +9,27 @@ import time
 import sys
 from constants import *
 
-
+splitLock = threading.Lock()
+splitted = 0
 
 def onMotion(e):
     global curx, cury, canvas
     curx = e.x
     cury = e.y
 
-
 def sending():
-    global curx, cury, player_id
+    global curx, cury, player_id, splitLock, splitted
     while True:
         ourx, oury = 0, 0
         for p in curList:
             if p["id"] == player_id:
                 ourx, oury = p["balls"][0]["x"], p["balls"][0]["y"]
                 break
-        sendMe({"id": player_id, "x": ourx - WINDOW_WIDTH // 2 + curx, "y": oury - WINDOW_HEIGHT // 2 + cury, "s": 0})
+        splitLock.acquire()
+        s = splitted
+        splitted = 0
+        splitLock.release()
+        sendMe({"id": player_id, "x": ourx - WINDOW_WIDTH // 2 + curx, "y": oury - WINDOW_HEIGHT // 2 + cury, "s": s})
         # {'x': 1, 'y': 1, 's': 0}
         time.sleep(0.01)
                                                 
@@ -57,6 +61,12 @@ def asking():
         # print("abacaba")
         time.sleep(0.01)
 
+def splitMe(event):
+    global splitLock, splitted
+    # print('splitting')
+    splitLock.acquire()
+    splitted = 1
+    splitLock.release()
 
 def drawing():
     global canvas, player_id, curList
@@ -126,6 +136,7 @@ t1 = threading.Thread(target=asking, daemon=True)
 t2 = threading.Thread(target=sending, daemon=True)
 t1.start()
 t2.start()
+root.bind('<Button-1>', splitMe)
 root.after(0, drawing)
 
 root.mainloop()

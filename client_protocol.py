@@ -40,7 +40,8 @@ def getField():
     old_data = l[-1]
     if len(l) > 1:
         old_json = dearch(json.loads(l[-2]))
-    # print(old_json)
+    if DEBUG_PROTOCOL_PRINT:
+        print(old_json)
     return old_json
 
 def sendMe(p):

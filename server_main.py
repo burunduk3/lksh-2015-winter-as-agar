@@ -50,7 +50,8 @@ while True:
         for player in server.players.values():
             if (player.id is not 0):
                 protocol.sendMap(player.id, server.makeFieldMessage(player.id))
-        # print(now, newcirlces)
+        if DEBUG_SERVER_PRINT:
+            print(now, newcirlces)
         # print(server.players.keys())
     # else:
     #     sleep(0.01)

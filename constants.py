@@ -1,16 +1,18 @@
+from math import sqrt
+
 time_step = 0.05
-INITIAL_MASS = 60
+INITIAL_MASS = 20
 
-FIELD_X = 1000
-FIELD_Y = 1000
+FIELD_X = 7000
+FIELD_Y = 7000
 
-WINDOW_HEIGHT = 600
-WINDOW_WIDTH = 1000
+WINDOW_HEIGHT = 650
+WINDOW_WIDTH = 1300
 
 MAX_LENGTH = 4096
 
-FOOD_NUM = 700
-FOOD_MASS = 5
+FOOD_NUM = 1000
+FOOD_MASS = 1
 FOOD_GROWTH = 10
 
 FAIL_COUNT = 50
@@ -23,3 +25,7 @@ def debug(D):
 
 DEBUG_PROTOCOL = debug(False)
 DEBUG_PROTOCOL_PRINT = debug(False)
+DEBUG_SERVER_PRINT = debug(False)
+
+def calculateRadius(mass):
+    return 4 * sqrt(mass)
