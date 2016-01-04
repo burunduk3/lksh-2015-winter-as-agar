@@ -3,8 +3,8 @@ from math import sqrt
 time_step = 0.05
 INITIAL_MASS = 20
 
-FIELD_X = 10000
-FIELD_Y = 10000
+FIELD_X = 7000
+FIELD_Y = 7000
 
 WINDOW_HEIGHT = 650
 WINDOW_WIDTH = 1300
