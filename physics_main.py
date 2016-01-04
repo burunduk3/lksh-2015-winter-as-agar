@@ -68,11 +68,11 @@ def circle2dict (c):
 # t_step - real number, time of update in seconds
 
 #Various formulas for velocity
-MAX_VEL = 1
+MAX_VEL = 0.5
 MIN_VEL = 0.03  
 MAX_MASS = 1000
 VEL_CONST = 1000
-LOG_CONST = 1.5
+LOG_CONST = 0.8
 
 def calc_velocity1(mass):
 	ans = (MAX_MASS - mass) / MAX_MASS #VEL_CONST / mass
@@ -95,7 +95,8 @@ def calc_velocity(mass):
     return ans
 
 def calc_log_velocity(vec_len, mass):
-	ans = LOG_CONST * math.log(max(vec_len, 1)) / math.sqrt(mass)
+	vec_len = max(vec_len, 1)
+	ans = LOG_CONST * math.log(vec_len) / math.sqrt(mass)
 	ans = min(ans, MAX_VEL)
 	ans = max(ans, MIN_VEL)
 	return ans
@@ -132,7 +133,7 @@ def update_map(in_cursors, in_circles, t_step):
 	for c in in_cursors: 
 		curs_dict[c["id"]] = pnt(c["x"], c["y"])
 	circles = list(map(lambda x: dict2circle(x), in_circles))
-	circles.sort();
+	# circles.sort();
 
 	for i in range(len(circles)):
 		if not circles[i].id in curs_dict or circles[i].id is 0:
@@ -146,17 +147,17 @@ def update_map(in_cursors, in_circles, t_step):
 		velocity = calc_log_velocity(displacement_vec.abs(), circ.mass)
 		velocity_vec = displacement_vec * velocity * t_step
 		circles[i].center = circ.center + velocity_vec
-	
-	for i in range(len(circles)):                         
-		cur_c = circles[i]         
+	for i in range(len(circles)):
+		cur_c = circles[i]
 		if not cur_c.canAbsorb: continue
-		for j in range(i):
+		for j in range(len(circles)):
+			if i == j:
+				continue
 			prv_c = circles[j]
 			if (prv_c.absorbed): continue
 			if (cur_c.absorbable(prv_c)):
 				prv_c.absorbed = True
 				cur_c.mass += prv_c.mass
-
 	result = list(filter(lambda x: x.absorbed == False, circles))
 	return list(map(lambda x: circle2dict(x), result))
        
