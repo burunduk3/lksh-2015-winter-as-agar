@@ -1,3 +1,4 @@
+from math import sqrt
 from constants import *
 
 LATTICE_STEP = 25

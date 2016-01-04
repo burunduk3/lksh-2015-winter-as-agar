@@ -29,7 +29,7 @@ def distance(a, b):
 
 #Relation that must be satisfied in order to be absorbed
 ABSORB_REL = 1.25
-ABSORB_RAD = 0.97
+ABSORB_RAD = 0.90
 
 class circle:
 	def __init__(self, x, y, m, id):
@@ -68,11 +68,11 @@ def circle2dict (c):
 # t_step - real number, time of update in seconds
 
 #Various formulas for velocity
-MAX_VEL = 0.5
+MAX_VEL = 0.7
 MIN_VEL = 0.03  
 MAX_MASS = 1000
 VEL_CONST = 1000
-LOG_CONST = 0.8
+LOG_CONST = 1
 
 def calc_velocity1(mass):
 	ans = (MAX_MASS - mass) / MAX_MASS #VEL_CONST / mass
@@ -126,7 +126,7 @@ def update_map1(in_cursors, in_circles, t_step):
 
 #Handles absorbtions
 
-MAX_DIST = 666
+MAX_DIST = min(WINDOW_WIDTH, WINDOW_HEIGHT) / 2 - 50
                                    
 def update_map(in_cursors, in_circles, t_step):
 	curs_dict = {}
