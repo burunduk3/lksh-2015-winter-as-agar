@@ -41,7 +41,7 @@ class circle:
 			self.canAbsorb = False
 
 	def __lt__(a, b):
-		if a.canAbsorb or b.canAbsorb: return not a.canAbsorb
+		if (a.canAbsorb ^ b.canAbsorb): return not a.canAbsorb
 		return (a.mass < b.mass)
 
 	def __str__(s):
@@ -133,12 +133,10 @@ def update_map(in_cursors, in_circles, t_step):
 	circles.sort();
 
 	for i in range(len(circles)):
-		if not circles[i].id in curs_dict:
+		if not circles[i].id in curs_dict or circles[i].id is 0:
 			circles[i].canAbsorb = False
 			continue
-		if circles[i].id == 0:
-			continue
-		circ = circles[i]                     
+		circ = circles[i]
 		cursor = curs_dict[circ.id]                                                                                  
 		displacement_vec = cursor - circ.center
 		if displacement_vec.abs() > MAX_DIST:
