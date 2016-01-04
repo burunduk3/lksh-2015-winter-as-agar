@@ -99,8 +99,18 @@ if len(sys.argv) > 2:
 if len(sys.argv) > 2:
     port = sys.argv[3]
 
+<<<<<<< HEAD
 ip = 'localhost'
 port = '3030'
+=======
+# PATCHED BY BURUNDUK1 
+config_file = open("config.txt", "r")
+ip, port = open("config.txt", "r").readline().split()
+# END OF PATCH
+
+#ip = '192.168.3.83'
+#port = '3030'
+>>>>>>> 50dfee8e1fbd7d932dd12c86853d441fac5e29a9
 
 if userName is None:
     print('enter your user name: ', end='', flush=True)
