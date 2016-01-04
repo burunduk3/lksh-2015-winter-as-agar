@@ -62,15 +62,15 @@ def goodVictim(ball):
 def getBestVictim():
 	global table, my_id, x, y
 
-	dist = 10000
+	meow = 100000000
 	victim_x, victim_y = -1, -1
 
 	for player in table:
 		if player['id'] == my_id:
 			continue
 		for ball in player['balls']:
-			if goodVictim(ball) and getDist(ball) < dist:
-				dist = getDist(ball)
+			if goodVictim(ball) and getDist(ball) / ball['m'] < meow:
+				meow = getDist(ball) / ball['m']
 				victim_x, victim_y = ball['x'], ball['y']
 
 	
@@ -91,7 +91,7 @@ def createMove():
 	while not killed:
 		x, y, m = getPosition()
 		victim_x, victim_y = getBestVictim()
-		dx, dy = (victim_x - x), (victim_y - y)
+		dx, dy = (victim_x - x) * 10000000, (victim_y - y) * 10000000
 		arr = {'id': my_id,'x': x + dx, 'y': y + dy, 's': 0}
 		sendMe(arr)
 		print(m)
@@ -99,3 +99,6 @@ def createMove():
 	
 threading.Thread(target = getData).start()
 threading.Thread(target = createMove).start() 	
+sys.stdin.readline()
+killMe()
+killed = True
