@@ -26,7 +26,7 @@ def sending():
     global curx, cury, player_id, splitLock, splitted
     while True:
         ourx, oury = 0, 0
-        if (curList != []):
+        if curList != []:
             for p in curList['players']:
                 if p["id"] == player_id:
                     ourx, oury = p["balls"][0]["x"], p["balls"][0]["y"]
@@ -46,10 +46,9 @@ def asking():
     tm = time.time()
     cnt = 0
     while True:
-        # print("abacabadabacaba")
         curList = getField()
 
-        if curList == []:
+        if not curList:
             fail += 1
             if fail > FAIL_COUNT:
                 print(fail)
@@ -63,29 +62,25 @@ def asking():
                     print(cnt, cnt / (now - tm))
                     cnt = 0
                     tm = now
-        # print('getField: '+str(curList))
-        # print("abacaba")
         time.sleep(0.01)
 
 
 def splitMe(event):
     global splitLock, splitted
-    # print('splitting')
     splitLock.acquire()
     splitted = 1
     splitLock.release()
 
 
-def draw_circle(x, y, r, c, prec):
+def draw_circle(x, y, r, c, prec, rot=0):
     glColor3f(c[0], c[1], c[2])
     glBegin(GL_POLYGON)
     for i in range(prec):
-        glVertex2f(x + cos(2 * pi / prec * i) * r, y + sin(2 * pi / prec * i) * r)
+        glVertex2f(x + cos(rot + 2 * pi / prec * i) * r, y + sin(rot + 2 * pi / prec * i) * r)
     glEnd()
 
 
 def draw_players(pos, ps):
-    # c - Canvas, pos - (x0, y0), ps - players
     x0, y0 = pos
     q = []
     for p in ps:
@@ -99,9 +94,9 @@ def draw_players(pos, ps):
                               random.random(),
                               random.random())
             else:
-                w['color'] = (int(p['color'][1:3], 16)/255,
-                              int(p['color'][3:5], 16)/255,
-                              int(p['color'][5:7], 16)/255)
+                w['color'] = (int(p['color'][1:3], 16) / 255,
+                              int(p['color'][3:5], 16) / 255,
+                              int(p['color'][5:7], 16) / 255)
             w['id'] = p['id']
             q.append(w)
     q.sort(key=lambda a: (a['m'], a['id']))
@@ -115,13 +110,14 @@ def draw_players(pos, ps):
         r = max(0, r - 0.02)
         g = max(0, g - 0.02)
         b = max(0, b - 0.02)
-        prec = 0
         if ball['id'] == 0:
             prec = 5
+            rot = ball['x'] + ball['y']
         else:
-            prec = int(radius)+3
-        draw_circle(lx, ly, radius + OUTLINE_WIDTH, (r, g, b), prec)
-        draw_circle(lx, ly, radius, ball['color'], prec)
+            prec = int(radius) + 3
+            rot = 0
+        draw_circle(lx, ly, radius + OUTLINE_WIDTH, (r, g, b), prec, rot=rot)
+        draw_circle(lx, ly, radius, ball['color'], prec, rot=rot)
 
 
 def draw_lattice(x0, y0):
@@ -143,7 +139,7 @@ def draw_lattice(x0, y0):
 def draw():
     global player_id, curList
     ourx, oury, = WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2
-    if (curList != []):
+    if curList:
         ll = curList['players']
         for p in ll:
             if p["id"] == player_id:
@@ -179,7 +175,7 @@ if not window:
     exit(0)
 
 glfw.make_context_current(window)
-# glfw.swap_interval(1)
+glfw.swap_interval(1)
 
 glEnable(GL_BLEND)
 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
