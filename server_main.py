@@ -38,10 +38,10 @@ while True:
             id = pl.id
             if len(pl.circles) > 0:
                 cursors.append({'x' : pl.cursor[0], 'y' : pl.cursor[1], 'id' : id})
-            for circle in pl.circles:
-                circles.append({'x' : circle[0], 'y' : circle[1], 'm' : circle[2], 'id' : id})
-        newcirlces = physics.update_map(cursors, circles, dt)
-        server.updateCirlces(newcirlces)
+            for circ in pl.circles:
+                circles.append(circ)
+        newcircles = physics.update_map3(cursors, circles, dt)
+        server.updateCirlces(newcircles)
         # print(server.players[0].circles)
         # print(len(newcirlces), len(circles))
         """
@@ -51,7 +51,7 @@ while True:
             if (player.id is not 0):
                 protocol.sendMap(player.id, server.makeFieldMessage(player.id))
         if DEBUG_SERVER_PRINT:
-            print(now, newcirlces)
+            print(now, newcircles)
         # print(server.players.keys())
     # else:
     #     sleep(0.01)

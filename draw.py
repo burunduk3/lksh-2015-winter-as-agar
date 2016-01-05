@@ -1,3 +1,4 @@
+import random
 from constants import *
 
 LATTICE_STEP = 25
@@ -26,7 +27,12 @@ def draw_players(c, pos, ps):
             w['x'] = ball['x']
             w['y'] = ball['y']
             w['m'] = ball['m']
-            w['color'] = p['color']
+            if p['id'] == 0:
+                w['color'] = ('#%02X%02X%02X' % (random.randint(0, 150),
+                                                 random.randint(0, 150),
+                                                 random.randint(0, 150)))
+            else:
+                w['color'] = p['color']
             w['name'] = p['name']
             w['id'] = p['id']
             q.append(w)
