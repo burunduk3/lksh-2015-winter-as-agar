@@ -53,4 +53,4 @@ def calculateRadius(mass):
     return 4 * sqrt(mass)
 
 def massFactor(mass):
-    return min(max(sqrt(mass) / sqrt(INITIAL_MASS) * (log(INITIAL_MASS) / log(mass)) - 1, 1), 2)
+    return min(max(sqrt(mass) / sqrt(INITIAL_MASS) * (log(INITIAL_MASS) / log(mass)) * 0.1, 1), 2)

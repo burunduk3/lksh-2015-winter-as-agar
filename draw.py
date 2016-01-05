@@ -39,9 +39,10 @@ def draw_players(c, pos, ps, mf):
             w['y'] = ball['y']
             w['m'] = ball['m']
             if p['id'] == 0:
-                w['color'] = ('#%02X%02X%02X' % (random.randint(0, 150),
-                                                 random.randint(0, 150),
-                                                 random.randint(0, 150)))
+                rand = random.Random(w['x'] * w['y'])
+                w['color'] = ('#%02X%02X%02X' % (rand.randint(0, 150),
+                                                 rand.randint(0, 150),
+                                                 rand.randint(0, 150)))
             else:
                 w['color'] = p['color']
             w['name'] = p['name']
