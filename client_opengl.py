@@ -133,7 +133,7 @@ def draw_players(pos, ps):
 
 
 def draw_lattice(x0, y0):
-    glColor3f(0.5, 0.5, 0.5)
+    glColor3f(0.8, 0.8, 0.8)
     x0 = LATTICE_STEP - x0 % LATTICE_STEP
     y0 = LATTICE_STEP - y0 % LATTICE_STEP
     for i in range(int(WINDOW_WIDTH / LATTICE_STEP) + 1):
@@ -174,7 +174,7 @@ if not glfw.init():
     exit(0)
 
 glfw.window_hint(glfw.RESIZABLE, GL_FALSE)
-# glfw.window_hint(glfw.SAMPLES, 8)
+glfw.window_hint(glfw.SAMPLES, 8)
 window = glfw.create_window(WINDOW_WIDTH, WINDOW_HEIGHT, 'agar.io', None, None)
 w, h = glfw.get_video_mode(glfw.get_primary_monitor())[0]
 glfw.set_window_pos(window, (w - WINDOW_WIDTH) // 2, (h - WINDOW_HEIGHT) // 2)
@@ -186,12 +186,6 @@ if not window:
 
 glfw.make_context_current(window)
 glfw.swap_interval(1)
-
-glEnable(GL_BLEND)
-glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-glEnable(GL_LINE_SMOOTH)
-glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
-glLineWidth(1.)
 
 glClearColor(1., 1., 1., 1.)
 glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
