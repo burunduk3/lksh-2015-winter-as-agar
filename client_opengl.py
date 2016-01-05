@@ -106,7 +106,7 @@ def draw_players(pos, ps):
         radius = calculateRadius(ball['m'])
         r = ball['color'][0]
         g = ball['color'][1]
-        b = ball['color'][1]
+        b = ball['color'][2]
         r = max(0, r - 0.02)
         g = max(0, g - 0.02)
         b = max(0, b - 0.02)
