@@ -13,7 +13,7 @@ WINDOW_WIDTH = 1300
 
 MAX_LENGTH = 4096
 
-FOOD_NUM = 600
+FOOD_NUM = 300
 FOOD_MASS = 1
 FOOD_GROWTH = 10
 
@@ -44,7 +44,7 @@ def debug(D):
     return (D | DEBUG_ON) & (not DEBUG_OFF)
 
 DEBUG_PROTOCOL = debug(False)
-DEBUG_PROTOCOL_PRINT = debug(False)
+DEBUG_PROTOCOL_PRINT = debug(True)
 DEBUG_SERVER_PRINT = debug(False)
 
 def calculateRadius(mass):

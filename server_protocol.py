@@ -96,8 +96,6 @@ def read (conn, mask):
                 break
             else:
                 data = data.decode().split(sep = '\n')
-                if DEBUG_PROTOCOL_PRINT:
-                    print(data)
                 try:               
                     v = json.loads(data[0])
                     v["id"] = clients[conn]
@@ -109,6 +107,8 @@ def read (conn, mask):
                         print("User specified no name and it isn't cursor")
                 except (json.decoder.JSONDecodeError, TypeError):
                     print("user with id " + str(clients[conn]) + " tried something incorrect")
+                    if DEBUG_PROTOCOL_PRINT:
+                        print(data)
                     if DEBUG_PROTOCOL:
                         raise
                 except :
@@ -129,8 +129,8 @@ def arch(data):
 def sendMap(id, data):
     global localServer
     data = json.dumps(arch(data))
-    if DEBUG_PROTOCOL_PRINT:
-        print(data)
+    # if DEBUG_PROTOCOL_PRINT:
+    #     print(data)
     q = clients
     for x in q:
         try:

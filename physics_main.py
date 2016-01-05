@@ -111,6 +111,7 @@ def update_map(in_cursors, in_circles, t_step):
 		velocity = calc_log_velocity(displacement_vec.abs(), circ.mass)
 		velocity_vec = displacement_vec * velocity * t_step
 		circles[i].center = circ.center + velocity_vec
+
 	for i in range(len(circles)):
 		cur_c = circles[i]
 		if not cur_c.canAbsorb: continue
