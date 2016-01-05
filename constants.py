@@ -5,15 +5,15 @@ from math import *
 time_step = 0.05
 INITIAL_MASS = 20
 
-FIELD_X = 5000
-FIELD_Y = 5000
+FIELD_X = 2000
+FIELD_Y = 2000
 
 WINDOW_HEIGHT = 650
 WINDOW_WIDTH = 1300
 
 MAX_LENGTH = 4096
 
-FOOD_NUM = 800
+FOOD_NUM = 600
 FOOD_MASS = 1
 FOOD_GROWTH = 30
 
@@ -53,4 +53,4 @@ def calculateRadius(mass):
     return 4 * sqrt(mass)
 
 def massFactor(mass):
-    return max(sqrt(mass) / sqrt(INITIAL_MASS) * (log(INITIAL_MASS) / log(mass)) - 1, 1)
+    return min(max(sqrt(mass) / sqrt(INITIAL_MASS) * (log(INITIAL_MASS) / log(mass)) - 1, 1), 2)
