@@ -120,17 +120,9 @@ def read (conn, mask):
         mask &=~ selectors.EVENT_READ
     assert mask == 0
 
-def arch(data):
-    for pl in data:
-        buf = []
-        for b in pl['balls']:
-            buf.append([b['x'], b['y'], b['m']])
-        pl['balls'] = buf
-    return data
-
 def sendMap(id, data):
     global localServer
-    data = json.dumps(arch(data))
+    data = json.dumps(data)
     # if DEBUG_PROTOCOL_PRINT:
     #     print(data)
     q = clients

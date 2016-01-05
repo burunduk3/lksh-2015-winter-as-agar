@@ -23,7 +23,7 @@ FAIL_COUNT = 50
 
 #Relation that must be satisfied in order to be absorbed
 ABSORB_REL = 1.25
-ABSORB_RAD = 0.99
+ABSORB_RAD = 1
 
 #Various formulas for velocity
 MAX_VEL = 0.7
