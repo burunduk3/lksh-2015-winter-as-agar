@@ -79,11 +79,20 @@ def split_me(event):
     splitLock.release()
 
 
-def draw_circle(x, y, r, fill=(0, 0, 0), prec=30, rot=0):
+def draw_ball(x, y, r, fill=(0, 0, 0), prec=30, rot=0):
+    glColor3f(max(0., fill[0] - 0.05),
+              max(0., fill[1] - 0.05),
+              max(0., fill[2] - 0.05))
+    glBegin(GL_POLYGON)
+    for i in range(prec):
+        glVertex2f(x + cos(rot + 2 * pi / prec * i) * (r + OUTLINE_WIDTH),
+                   y + sin(rot + 2 * pi / prec * i) * (r + OUTLINE_WIDTH))
+    glEnd()
     glColor3f(fill[0], fill[1], fill[2])
     glBegin(GL_POLYGON)
     for i in range(prec):
-        glVertex2f(x + cos(rot + 2 * pi / prec * i) * r, y + sin(rot + 2 * pi / prec * i) * r)
+        glVertex2f(x + cos(rot + 2 * pi / prec * i) * r,
+                   y + sin(rot + 2 * pi / prec * i) * r)
     glEnd()
 
 
@@ -111,12 +120,6 @@ def draw_players(pos, ps):
         lx = ball['x'] - x0
         ly = ball['y'] - y0
         radius = calculateRadius(ball['m'])
-        r = ball['color'][0]
-        g = ball['color'][1]
-        b = ball['color'][2]
-        r = max(0, r - 0.05)
-        g = max(0, g - 0.05)
-        b = max(0, b - 0.05)
         if ball['id'] == 0:
             prec = 5
             rot = rnd[6] * ball['x'] + \
@@ -126,8 +129,7 @@ def draw_players(pos, ps):
         else:
             prec = int(radius) + 3
             rot = 0
-        draw_circle(lx, ly, radius + OUTLINE_WIDTH, fill=(r, g, b), prec=prec, rot=rot)
-        draw_circle(lx, ly, radius, fill=ball['color'], prec=prec, rot=rot)
+        draw_ball(lx, ly, radius, fill=ball['color'], prec=prec, rot=rot)
 
 
 def draw_lattice(x0, y0):
