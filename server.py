@@ -118,7 +118,7 @@ class AgarioServer:
     def addFood(self, cnt):
         # food = self.players[0]
         for i in range(cnt):
-            self.players[0].addCircle(random.randint(FOOD_MASS, 3 * FOOD_MASS))
+            self.players[0].addCircle(random.randint(FOOD_MASS, FOOD_VAR * FOOD_MASS))
 
     def getFood(self):
         # print('getting')
@@ -196,15 +196,22 @@ class AgarioServer:
         return(lb)
 
     def makeFieldMessage(self, id, leaderboard):
-        try:
-            center = self.players[id].circles[0].center
-        except IndexError:
+        if len(self.players[id].circles) < 1:
             return []
+        x = 0
+        y = 0
+        smass = 0
+        for circ in self.players[id].circles:
+            x += circ.center.x * circ.mass
+            y += circ.center.y * circ.mass
+            smass += circ.mass
+        x /= smass
+        y /= smass
+        center = physics.pnt(x, y)
         ans = []
+        mf = massFactor(smass)
         for player in self.players.values():
             player_balls = []
-            smass = sum(c.mass for c in self.players[id].circles)
-            mf = massFactor(smass)
             for circ in player.circles:
                 if doCircleAndRectIntersect((circ.center.x, circ.center.y), calculateRadius(circ.mass),
                                             (center.x - int(WINDOW_WIDTH * mf) // 2, center.y - int(WINDOW_HEIGHT * mf) // 2),
