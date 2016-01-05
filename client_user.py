@@ -84,11 +84,12 @@ def drawing():
                 break  
          # [{'name': 'Vasya', 'color': 'blue', 'id': 1, 'balls': [{'x': 1, 'm': 1, 'y': 1}]}]
     else:
-        ourx, oury, m = 0, 0, 1
+        ourx, oury, m = 0, 0, INITIAL_MASS
         ll = []
+    mf = massFactor(m)
     canvas.delete("all")
-    canvas = draw_bg(canvas, (ourx - WINDOW_WIDTH // 2, oury - WINDOW_HEIGHT // 2))
-    canvas = draw_players(canvas, (ourx - WINDOW_WIDTH // 2, oury - WINDOW_HEIGHT // 2), ll)
+    canvas = draw_bg(canvas, (ourx - WINDOW_WIDTH // 2, oury - WINDOW_HEIGHT // 2), mf)
+    canvas = draw_players(canvas, (ourx - WINDOW_WIDTH // 2, oury - WINDOW_HEIGHT // 2), ll, mf)
     canvas = draw_mass(canvas, 'm:' + str(m) + ' x:' + str(int(round(ourx))) + ' y:' + str(int(round(oury))))
     root.after(10, drawing)
     canvas = draw_leaderboard(canvas, lb)
