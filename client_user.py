@@ -71,26 +71,31 @@ def splitMe(event):
 
 def drawing():
     global canvas, player_id, curList
-    ourx, oury, m = WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2, 0
+    ourx, oury, sum_mass = WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2, 0
     lb = []
     if (curList != []):
         ll = curList['players']
         lb = curList['leaderboard']
         for p in ll:
             if p["id"] == player_id:
-                ourx, oury = p["balls"][0]["x"], p["balls"][0]["y"]
                 for b in p["balls"]:
-                    m += b['m']
+                    newx, newy = b['x'], b['y']
+                    ourx += newx * b['m']
+                    oury += newy * b['m']
+                    sum_mass += b['m']
                 break  
          # [{'name': 'Vasya', 'color': 'blue', 'id': 1, 'balls': [{'x': 1, 'm': 1, 'y': 1}]}]
     else:
-        ourx, oury, m = 0, 0, INITIAL_MASS
+        ourx, oury, sum_mass = 0, 0, INITIAL_MASS
         ll = []
-    mf = massFactor(m)
+    if sum_mass > 0:
+        ourx /= sum_mass
+        oury /= sum_mass
+    mf = massFactor(sum_mass)
     canvas.delete("all")
     canvas = draw_bg(canvas, (ourx - WINDOW_WIDTH // 2, oury - WINDOW_HEIGHT // 2), mf)
     canvas = draw_players(canvas, (ourx - WINDOW_WIDTH // 2, oury - WINDOW_HEIGHT // 2), ll, mf)
-    canvas = draw_mass(canvas, 'm:' + str(m) + ' x:' + str(int(round(ourx))) + ' y:' + str(int(round(oury))))
+    canvas = draw_mass(canvas, 'm:' + str(sum_mass) + ' x:' + str(int(round(ourx))) + ' y:' + str(int(round(oury))))
     root.after(10, drawing)
     canvas = draw_leaderboard(canvas, lb)
 
