@@ -15,6 +15,12 @@ OUTLINE_WIDTH = 3
 splitLock = threading.Lock()
 splitted = 0
 
+curx = 0
+curt = 0
+
+player_id = 0
+cur_list = []
+
 
 def on_motion(w, x, y):
     global curx, cury
@@ -26,8 +32,8 @@ def sending():
     global curx, cury, player_id, splitLock, splitted
     while True:
         ourx, oury = 0, 0
-        if curList != []:
-            for p in curList['players']:
+        if cur_list:
+            for p in cur_list['players']:
                 if p["id"] == player_id:
                     ourx, oury = p["balls"][0]["x"], p["balls"][0]["y"]
                     break
@@ -41,14 +47,13 @@ def sending():
 
 
 def asking():
-    global curList
+    global cur_list
     fail = 0
     tm = time.time()
     cnt = 0
     while True:
-        curList = getField()
-
-        if not curList:
+        cur_list = getField()
+        if not cur_list:
             fail += 1
             if fail > FAIL_COUNT:
                 print(fail)
@@ -137,10 +142,10 @@ def draw_lattice(x0, y0):
 
 
 def draw():
-    global player_id, curList
+    global player_id, cur_list
     ourx, oury, = WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2
-    if curList:
-        ll = curList['players']
+    if cur_list:
+        ll = cur_list['players']
         for p in ll:
             if p["id"] == player_id:
                 ourx, oury = p["balls"][0]["x"], p["balls"][0]["y"]
@@ -156,7 +161,7 @@ ip, port, = open("config.txt", "r").readline().split()
 player_id = registerMe('OpenGL')
 
 curx, cury = 400, 225
-curList = []
+cur_list = []
 
 t1 = threading.Thread(target=asking, daemon=True).start()
 t2 = threading.Thread(target=sending, daemon=True).start()
@@ -165,7 +170,7 @@ if not glfw.init():
     exit(0)
 
 glfw.window_hint(glfw.RESIZABLE, GL_FALSE)
-# glfw.window_hint(glfw.GLFW_SAMPLES, 4)
+glfw.window_hint(glfw.SAMPLES, 8)
 window = glfw.create_window(WINDOW_WIDTH, WINDOW_HEIGHT, "agar.io", None, None)
 w, h = glfw.get_video_mode(glfw.get_primary_monitor())[0]
 glfw.set_window_pos(window, (w - WINDOW_WIDTH) // 2, (h - WINDOW_HEIGHT) // 2)
