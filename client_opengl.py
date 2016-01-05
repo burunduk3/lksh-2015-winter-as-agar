@@ -90,9 +90,9 @@ def draw_players(pos, ps):
             w['y'] = ball['y']
             w['m'] = ball['m']
             if p['id'] == 0:
-                w['color'] = (random.random(),
-                              random.random(),
-                              random.random())
+                w['color'] = ((1.12 * ball['x'] + 1.04 * ball['y']) % 1,
+                              (1.24 * ball['x'] + 1.13 * ball['y']) % 1,
+                              (1.03 * ball['x'] + 1.27 * ball['y']) % 1)
             else:
                 w['color'] = (int(p['color'][1:3], 16) / 255,
                               int(p['color'][3:5], 16) / 255,
@@ -164,7 +164,8 @@ t2 = threading.Thread(target=sending, daemon=True).start()
 if not glfw.init():
     exit(0)
 
-glfw.window_hint(glfw.RESIZABLE, False)
+glfw.window_hint(glfw.RESIZABLE, GL_FALSE)
+# glfw.window_hint(glfw.GLFW_SAMPLES, 4)
 window = glfw.create_window(WINDOW_WIDTH, WINDOW_HEIGHT, "agar.io", None, None)
 w, h = glfw.get_video_mode(glfw.get_primary_monitor())[0]
 glfw.set_window_pos(window, (w - WINDOW_WIDTH) // 2, (h - WINDOW_HEIGHT) // 2)
