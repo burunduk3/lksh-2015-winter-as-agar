@@ -156,7 +156,7 @@ class AgarioServer:
         self.eUpdates.clear()
         for cursor in self.cUpdates:
             if cursor['id'] in self.players:
-                self.players[cursor['id']].cursor = (cursor['x'], cursor['y'], cursor['s'])
+                self.players[cursor['id']].cursor = (cursor['x'], cursor['y'], cursor['s'] + self.players[cursor['id']].cursor[2])
                 # if cursor['s'] > 0:
                 #     self.players[cursor['id']].circleSplit(cursor)
         self.cUpdates.clear()
@@ -167,6 +167,7 @@ class AgarioServer:
     def updateCirlces(self, circles):
         for plid in self.players:
             self.players[plid].circles = []
+            self.players[plid].cursor = (self.players[plid].cursor[0], self.players[plid].cursor[1], 0)
         for circ in circles:
             r = int(calculateRadius(circ.mass))
             circ.center.x = max(min(circ.center.x, FIELD_X - r), r)
