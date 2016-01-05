@@ -120,11 +120,10 @@ if userName is None:
     print('enter your user name: ', end='', flush=True)
     userName = " ".join(sys.stdin.readline().split())
 print("OK. Your username is " + userName)
-<<<<<<< HEAD
+
 player_id = registerMe(userName)
 print(ip)
-=======
->>>>>>> 75af0777c1a6ab28a4df52b6281e92e62528b638
+
 if ip is None:
     print('enter server ip: ', end='', flush=True)
     ip = sys.stdin.readline().split()[0]
@@ -134,7 +133,6 @@ if port is None:
     print('enter port: ', end='', flush=True)
     port = sys.stdin.readline().split()[0]
 print("OK. port is " + port)
-player_id = registerMe(userName)
 
 #out = open("config.txt", "w")
 #out.write(ip + " " + port)
