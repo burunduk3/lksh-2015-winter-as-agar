@@ -1,7 +1,9 @@
 import selectors, socket, threading, sys, json, random
 
 from constants import *
-    
+from bz2 import compress, decompress
+
+
 poll = selectors.DefaultSelector ()
 clients = dict()
 localServer = ""
@@ -62,7 +64,7 @@ def accept (server, mask):
                 conn, addr = sock.accept ()     
                 print("Connected: " + str(addr))
                 v["id"] = cnt                                  
-                conn.send(bytes(json.dumps(v), 'utf-8'))
+                conn.send(compress(bytes(json.dumps(v), 'utf-8')))
             except BlockingIOError:
                 break
             conn.setblocking (False)
@@ -78,7 +80,7 @@ def read (conn, mask):
     if mask & selectors.EVENT_READ:
         while True:
             try:
-                data = conn.recv(MAX_LENGTH)
+                data = decompress(conn.recv(MAX_LENGTH))
             except BlockingIOError:
                 break
             except ConnectionResetError:
@@ -135,7 +137,7 @@ def sendMap(id, data):
     for x in q:
         try:
             if (q[x] == id):
-                x.send(bytes(data + '\n', 'utf-8'))
+                x.send(compress(bytes(data + '\n', 'utf-8')))
                 break
         except:
             clientsLock.acquire()

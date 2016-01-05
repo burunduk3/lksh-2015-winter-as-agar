@@ -1,6 +1,7 @@
 import json, socket, time
 
 from constants import *
+from bz2 import compress, decompress
 sock = socket.socket()
 old_data = ""
 old_json = []
@@ -14,11 +15,12 @@ def registerMe(name):
     tcp_port = int(tcp_port)
                                   
     sock.connect((tcp_ip, tcp_port))
-    id = json.loads(str(sock.recv(MAX_LENGTH), 'utf-8'))['id']
+    data = sock.recv(MAX_LENGTH)
+    id = json.loads(str(decompress(data), 'utf-8'))['id']
     jdata = dict()
     jdata['name'] = name
     s = json.dumps(jdata) 
-    sock.send(bytes(s + '\n', 'utf-8'))
+    sock.send(compress(bytes(s + '\n', 'utf-8')))
     return id
 
 def dearch(data):
@@ -31,7 +33,7 @@ def dearch(data):
              
 def getField():
     global sock, old_data, old_json    
-    data = sock.recv(MAX_LENGTH)
+    data = decompress(sock.recv(MAX_LENGTH))
     data = str(data, 'utf-8')
     s = old_data+data            
     l = s.split('\n')
@@ -46,7 +48,7 @@ def getField():
 def sendMe(p):
     global sock
     data = json.dumps(p)
-    sock.send(bytes(data + '\n', 'utf-8'))
+    sock.send(compress(bytes(data + '\n', 'utf-8')))
 
 def killMe():
     global sock
