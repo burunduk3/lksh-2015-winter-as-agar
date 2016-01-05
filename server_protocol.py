@@ -1,7 +1,9 @@
 import selectors, socket, threading, sys, json, random
 
 from constants import *
-    
+from bz2 import compress, decompress
+
+
 poll = selectors.DefaultSelector ()
 clients = dict()
 localServer = ""
@@ -62,7 +64,7 @@ def accept (server, mask):
                 conn, addr = sock.accept ()     
                 print("Connected: " + str(addr))
                 v["id"] = cnt                                  
-                conn.send(bytes(json.dumps(v), 'utf-8'))
+                conn.send(compress(bytes(json.dumps(v), 'utf-8')))
             except BlockingIOError:
                 break
             conn.setblocking (False)
@@ -78,7 +80,7 @@ def read (conn, mask):
     if mask & selectors.EVENT_READ:
         while True:
             try:
-                data = conn.recv(MAX_LENGTH)
+                data = decompress(conn.recv(MAX_LENGTH))
             except BlockingIOError:
                 break
             except ConnectionResetError:
@@ -96,8 +98,6 @@ def read (conn, mask):
                 break
             else:
                 data = data.decode().split(sep = '\n')
-                if DEBUG_PROTOCOL_PRINT:
-                    print(data)
                 try:               
                     v = json.loads(data[0])
                     v["id"] = clients[conn]
@@ -109,6 +109,8 @@ def read (conn, mask):
                         print("User specified no name and it isn't cursor")
                 except (json.decoder.JSONDecodeError, TypeError):
                     print("user with id " + str(clients[conn]) + " tried something incorrect")
+                    if DEBUG_PROTOCOL_PRINT:
+                        print(data)
                     if DEBUG_PROTOCOL:
                         raise
                 except :
@@ -129,13 +131,13 @@ def arch(data):
 def sendMap(id, data):
     global localServer
     data = json.dumps(arch(data))
-    if DEBUG_PROTOCOL_PRINT:
-        print(data)
+    # if DEBUG_PROTOCOL_PRINT:
+    #     print(data)
     q = clients
     for x in q:
         try:
             if (q[x] == id):
-                x.send(bytes(data + '\n', 'utf-8'))
+                x.send(compress(bytes(data + '\n', 'utf-8')))
                 break
         except:
             clientsLock.acquire()

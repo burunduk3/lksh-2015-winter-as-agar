@@ -37,11 +37,14 @@ class AgarioPlayer:
         circ = physics.circle(x, y, mass, self.id, 0, 0)
         self.circles.append(circ)
 
-    def circleSplit(self):
-        for i in range(len(self.circles)):
-            circ = self.circles[i]
-            if circ.mass > INITIAL_MASS:
-            	self.circles[i].mass //= 2
+    def circleSplit(self, cursor):
+        buf = []
+        i = random.randint(0, len(self.circles) - 1)
+        circ = self.circles[i]
+        if circ.mass > INITIAL_MASS:
+            self.circles[i].mass //= 2
+            self.circles.append(physics.circle(cursor['x'], cursor['y'], circ.mass // 2, circ.id, cursor['x'], cursor['y']))
+
 
 def distLinePoint(p, u, v):
     a = v[1] - u[1]
@@ -70,9 +73,8 @@ def distSegmentPoint(p, a, b):
 
 
 def doCircleAndRectIntersect(p, r, a, b, c, d):
-    if a[0] <= p[0] <= c[0] and a[1] <= p[1] <= c[1]:
-        return True
-    return min(distSegmentPoint(p, a, b), distSegmentPoint(p, b, c), distSegmentPoint(p, c, d), distSegmentPoint(p, d, a)) <= r
+    return a[0] - r <= p[0] and p[0] <= c[0] + r and a[1] - r <= p[1] and p[1] <= c[1] + r
+    # return min(distSegmentPoint(p, a, b), distSegmentPoint(p, b, c), distSegmentPoint(p, c, d), distSegmentPoint(p, d, a)) <= r
 
 
 class AgarioServer:
@@ -141,7 +143,7 @@ class AgarioServer:
             if cursor['id'] in self.players:
                 self.players[cursor['id']].cursor = (cursor['x'], cursor['y'])
                 if cursor['s'] > 0:
-                    self.players[cursor['id']].circleSplit()
+                    self.players[cursor['id']].circleSplit(cursor)
         self.cUpdates.clear()
 
         self.cursorLock.release()

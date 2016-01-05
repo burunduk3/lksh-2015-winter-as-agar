@@ -104,14 +104,13 @@ config_file = open("config.txt", "r")
 ip, port = open("config.txt", "r").readline().split()
 # END OF PATCH
 
-ip = '192.168.3.83'
-port = '3030'
+#ip = '192.168.3.83'
+#port = '3030'
 
 if userName is None:
     print('enter your user name: ', end='', flush=True)
     userName = " ".join(sys.stdin.readline().split())
 print("OK. Your username is " + userName)
-player_id = registerMe(userName)
 if ip is None:
     print('enter server ip: ', end='', flush=True)
     ip = sys.stdin.readline().split()[0]
@@ -121,10 +120,11 @@ if port is None:
     print('enter port: ', end='', flush=True)
     port = sys.stdin.readline().split()[0]
 print("OK. port is " + port)
+player_id = registerMe(userName)
 
-out = open("config.txt", "w")
-out.write(ip + " " + port)
-out.close()
+#out = open("config.txt", "w")
+#out.write(ip + " " + port)
+#out.close()
 # At first get name from keyboard
 print("connected")
 
@@ -140,7 +140,7 @@ t1 = threading.Thread(target=asking, daemon=True)
 t2 = threading.Thread(target=sending, daemon=True)
 t1.start()
 t2.start()
-root.bind('<Button-1>', splitMe)
+root.bind('<space>', splitMe)
 root.after(0, drawing)
 
 root.mainloop()
