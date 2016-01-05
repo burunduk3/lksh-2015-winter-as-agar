@@ -1,19 +1,31 @@
-import sys, time, json, threading, random
+import sys, time, json, threading
 from client_protocol import *
+from constants import *
+from random import *
 
 killed = False
-                         
-name = random.choice(open("bot_names.txt", "r", encoding = "utf-8").readlines())
 
-id = registerMe(name)
+name = 'Still_stupid_Bot'
+
+my_id = registerMe(name)
+print(my_id)
 x, y, m = 0, 0, 0
-data = {}
+table = {}
 
 def getData():
-	global killed, data, id
+	global killed, table
+	cnt = 0;
 	while not killed:
-		data = getField()
-	#	time.sleep(0.1)
+		pam = getField()
+	#	print(pam)
+		if(pam != []):
+			table = pam
+			cnt=0
+		else:
+			cnt += 1
+			if(cnt > 10):
+				killed = True		
+		time.sleep(0.01)
 	
 def getBestPlayerBall(player):
 	maxWeight, bestx, besty = -1, -1, -1
@@ -24,42 +36,50 @@ def getBestPlayerBall(player):
 			
 
 def getPosition():
-	global data, id
-	for player in data:
-		if player['id'] == id:
+	global table, my_id
+	for player in table:
+		if player['id'] == my_id:
 			if len(player['balls']) == 0:
 				killed = True
 				killMe()
 				return 0, 0, 0   
+		#	print(player)
 			return getBestPlayerBall(player)
-	killed = True
-	killMe()
+#	print('!')
+#	killed = True
+#	killMe()
 	return 0, 0, 0
 
 def getDist(ball):
 	global x, y
-	dist = sqrt((data['x'] - x) ** 2 + (data['y'] - y) ** 2)              
+	dist = sqrt((ball['x'] - x) ** 2 + (ball['y'] - y) ** 2)
+	return dist              
 
 def goodVictim(ball):
 	return m > 1.25 * ball['m']
 
 
 def getBestVictim():
-	global data, id, x, y
+	global table, my_id, x, y
 
-	dist = 10000
+	meow = 100000000
 	victim_x, victim_y = -1, -1
 
-	for player in data:
-		if player['id'] == id:
+	for player in table:
+		if player['id'] == my_id:
 			continue
 		for ball in player['balls']:
-			if goodVictim(ball) and getDist(ball) < dist:
-				dist = getDist(ball)
+			if goodVictim(ball) and getDist(ball) / ball['m'] < meow:
+				meow = getDist(ball) / ball['m']
 				victim_x, victim_y = ball['x'], ball['y']
 
-	if x == -1:
-		return randint(0, 10000), randint(0, 10000)
+	
+	if victim_x == -1:
+		victim_x = randint(0, 10000)
+	#	print(victim_x)
+		victim_y = randint(0, 10000)
+	#	print(victim_y)
+	
 	return victim_x, victim_y
 			 
 			
@@ -67,15 +87,18 @@ def getBestVictim():
 
 
 def createMove():
-	global killed, data, id, x, y, m
+	global killed, my_id, x, y, m
 	while not killed:
 		x, y, m = getPosition()
-		
 		victim_x, victim_y = getBestVictim()
-		dx, dy = (victim_x - x) * 1000, (victim_y - y) * 1000
-
-		arr = {'x': x + dx, 'y': y + dy, 's': 0}
+		dx, dy = (victim_x - x) * 10000000, (victim_y - y) * 10000000
+		arr = {'id': my_id,'x': x + dx, 'y': y + dy, 's': 0}
 		sendMe(arr)
+		print(m)
+		time.sleep(0.01)
 	
 threading.Thread(target = getData).start()
 threading.Thread(target = createMove).start() 	
+sys.stdin.readline()
+killMe()
+killed = True
