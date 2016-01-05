@@ -155,7 +155,7 @@ t1 = threading.Thread(target=asking, daemon=True)
 t2 = threading.Thread(target=sending, daemon=True)
 t1.start()
 t2.start()
-root.bind('<space>', splitMe)
+root.bind('<Button-1>', splitMe)
 root.after(0, drawing)
 
 root.mainloop()

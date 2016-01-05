@@ -5,8 +5,8 @@ from math import *
 time_step = 0.05
 INITIAL_MASS = 20
 
-FIELD_X = 500
-FIELD_Y = 500
+FIELD_X = 3000
+FIELD_Y = 2000
 
 WINDOW_HEIGHT = 650
 WINDOW_WIDTH = 1300
@@ -35,7 +35,9 @@ LOG_CONST = 1
 #Handles absorbtions
 MAX_DIST = (min(WINDOW_WIDTH, WINDOW_HEIGHT) / 2 - 50) * 0.8
 LIMIT_DIST = MAX_DIST * 0.85
-SLIDE_CONST = 0.7 # in range [0;1] - antibot const, adds more sliding
+SLIDE_COEF = 0.3 # in range [0;1] - antibot const, adds more sliding
+SPLIT_LOSS = 0.9
+deltaAcceleration = 0.5
 
 # Debug
 
