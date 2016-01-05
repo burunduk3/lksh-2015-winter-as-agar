@@ -50,7 +50,7 @@ class circle:
 		if not self.canAbsorb: return False
 		# if (other.id == 0) and (other.mass == 1): return True
 		if (self.mass / other.mass < ABSORB_REL): return False
-		if (self.r * ABSORB_RAD < distance(self.center, other.center)): return False
+		if (calculateRadius(self.mass) * ABSORB_RAD < distance(self.center, other.center)): return False
 		return True	
 
 def dict2circle (c):
