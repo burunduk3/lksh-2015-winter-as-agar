@@ -34,6 +34,8 @@ LOG_CONST = 1
 
 #Handles absorbtions
 MAX_DIST = (min(WINDOW_WIDTH, WINDOW_HEIGHT) / 2 - 50) * 0.8
+LIMIT_DIST = MAX_DIST * 0.85
+SLIDE_CONST = 0.7 # in range [0;1] - antibot const, adds more sliding
 
 # Debug
 

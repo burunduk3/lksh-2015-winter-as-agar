@@ -24,7 +24,7 @@ class AgarioPlayer:
         #FIXED THIS
         x = random.randint(0, FIELD_X)
         y = random.randint(0, FIELD_Y)
-        self.circles = [physics.circle(x, y, mass, id, 0, 0)]
+        self.circles = [physics.circle(x, y, mass, id, 0, 0, 10, 0)]
         #self.circles = [(random.randint(0, 8000), random.randint(0, 4000), mass)]
         self.cursor = (x, y, 0)
         r = lambda: random.randint(0, 150)
@@ -34,7 +34,7 @@ class AgarioPlayer:
     def addCircle(self, mass = INITIAL_MASS):
         x = random.randint(0, FIELD_X)
         y = random.randint(0, FIELD_Y)
-        circ = physics.circle(x, y, mass, self.id, 0, 0)
+        circ = physics.circle(x, y, mass, self.id, 0, 0, 10, 0)
         self.circles.append(circ)
 
     def circleSplit(self, cursor):
@@ -153,7 +153,7 @@ class AgarioServer:
     def updateCirlces(self, circles):
         for plid in self.players:
             self.players[plid].circles = []
-        for circ in circles:                     	
+        for circ in circles:                        
             circ.center.x = max(min(circ.center.x, FIELD_X), 0)
             circ.center.y = max(min(circ.center.y, FIELD_Y), 0)
             # circ.x = circ.center.x
@@ -171,7 +171,7 @@ class AgarioServer:
             self.players[circ.id].circles.append(circ)
     
     def findColor(self, id):       
-    	return self.players[id].color
+        return self.players[id].color
 
     def getLeaderboard(self):
         lb = []
