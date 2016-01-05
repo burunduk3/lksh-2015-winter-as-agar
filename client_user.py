@@ -140,6 +140,8 @@ print("OK. port is " + port)
 # At first get name from keyboard
 print("connected")
 
+root.tkraise()
+
 curx, cury = 400, 225
 # curList = getField()
 curList = []
