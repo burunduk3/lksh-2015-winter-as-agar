@@ -55,6 +55,8 @@ class circle:
         if (self.mass / other.mass < ABSORB_REL): return False
         if (calculateRadius(self.mass) * ABSORB_RAD < distance(self.center, other.center)): return False
         return True
+    def canSplit(self):
+        return self.mass > 20
 
 def dict2circle (c):
     return circle(c["x"], c["y"], c["m"], c["id"], c["s"])
@@ -106,9 +108,9 @@ def update_map3(in_cursors, circles, t_step):
         spaceNums[c["id"]] = c["s"]
     start_len = len(circles)
     for i in range(start_len):
-        if circles[i].id == 0 or spaceNums[circles[i].id] == 0: continue
+        if circles[i].id == 0 or spaceNums[circles[i].id] == 0 or circles[i].canSplit() == False : continue
         circ = circles[i]
-        new_mass = circ.mass / 2 * SPLIT_LOSS
+        new_mass = floor(circ.mass / 2 * SPLIT_LOSS)
         new_circ = circle(circ.center.x, circ.center.y, new_mass, circ.id, circ.momentum.x, circ.momentum.y, 10);
         circles.append(new_circ)
         circles[i].mass = new_mass
@@ -140,8 +142,7 @@ def update_map3(in_cursors, circles, t_step):
     for i in range(len(circles)):
         cur_c = circles[i]
         if not cur_c.canAbsorb: continue
-        for j in range(len(circles)):
-            if i == j: continue
+        for j in range(i):       
             prv_c = circles[j]
             if (prv_c.absorbed): continue
             if (cur_c.absorbable(prv_c)):

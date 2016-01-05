@@ -13,7 +13,7 @@ WINDOW_WIDTH = 1300
 
 MAX_LENGTH = 4096
 
-FOOD_NUM = 500
+FOOD_NUM = 600
 FOOD_MASS = 1
 FOOD_GROWTH = 30
 
@@ -55,4 +55,4 @@ def calculateRadius(mass):
     return 4 * sqrt(mass)
 
 def massFactor(mass):
-    return max(sqrt(mass) / sqrt(INITIAL_MASS) * (log(INITIAL_MASS) / log(mass)) - 1, 1)
+    return min(max(sqrt(mass) / sqrt(INITIAL_MASS) * (log(INITIAL_MASS) / log(mass)) - 1, 1), 2)
