@@ -97,7 +97,7 @@ def drawing():
     canvas = draw_players(canvas, (ourx - WINDOW_WIDTH // 2, oury - WINDOW_HEIGHT // 2), ll, mf)
     canvas = draw_mass(canvas, 'm:' + str(sum_mass) + ' x:' + str(int(round(ourx))) + ' y:' + str(int(round(oury))))
     root.after(10, drawing)
-    canvas = draw_leaderboard(canvas, lb)
+    canvas = draw_leaderboard(canvas, lb, player_id)
 
 
 

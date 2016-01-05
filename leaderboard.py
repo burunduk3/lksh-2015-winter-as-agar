@@ -1,6 +1,6 @@
 from tkinter import *
 
-def draw_leaderboard(c, p):
+def draw_leaderboard(c, p, id):
     if len(p) == 0:
         return c
     mx = c.winfo_reqwidth()
@@ -16,7 +16,10 @@ def draw_leaderboard(c, p):
     for i in range(len(p)):
         s = str(i + 1) + '.'
         s += ' ' + p[i]['name']
-        c.create_text(mx - szx / 2, h + 20 + i*step + 10, fill='black', text=s, font=('Times New Roman', 12), activefill='red')
+        if p[i]['id'] == id:
+            c.create_text(mx - szx / 2, h + 20 + i*step + 10, fill='red', text=s, font=('Times New Roman', 12), activefill='blue')
+        else:
+            c.create_text(mx - szx / 2, h + 20 + i*step + 10, fill='black', text=s, font=('Times New Roman', 12), activefill='blue')
         #c.create_text(mx-szx + 10, h + 20 + i*(szy - h - 20)/10 + 10, fill='red', text=s, anchor='w', font=('Times New Roman', 12))
     return c
 
