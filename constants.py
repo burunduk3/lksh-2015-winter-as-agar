@@ -23,7 +23,7 @@ FAIL_COUNT = 50
 
 #Relation that must be satisfied in order to be absorbed
 ABSORB_REL = 1.25
-ABSORB_RAD = 0.99
+ABSORB_RAD = 1
 
 #Various formulas for velocity
 MAX_VEL = 0.7
@@ -44,7 +44,7 @@ def debug(D):
     return (D | DEBUG_ON) & (not DEBUG_OFF)
 
 DEBUG_PROTOCOL = debug(False)
-DEBUG_PROTOCOL_PRINT = debug(False)
+DEBUG_PROTOCOL_PRINT = debug(True)
 DEBUG_SERVER_PRINT = debug(False)
 
 def calculateRadius(mass):

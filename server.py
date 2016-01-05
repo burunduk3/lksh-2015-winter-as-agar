@@ -73,6 +73,7 @@ def distSegmentPoint(p, a, b):
 
 
 def doCircleAndRectIntersect(p, r, a, b, c, d):
+    # return True
     return a[0] - r <= p[0] and p[0] <= c[0] + r and a[1] - r <= p[1] and p[1] <= c[1] + r
     # return min(distSegmentPoint(p, a, b), distSegmentPoint(p, b, c), distSegmentPoint(p, c, d), distSegmentPoint(p, d, a)) <= r
 
@@ -155,12 +156,34 @@ class AgarioServer:
         for circ in circles:                     	
             circ.x = max(min(circ.center.x, FIELD_X), 0)
             circ.y = max(min(circ.center.y, FIELD_Y), 0)
+            # circ.x = circ.center.x
+            # circ.y = circ.center.y
+            # if circ.x >= FIELD_X:
+            #     circ.x -= FIELD_X
+            # if circ.x < 0:
+            #     circ.x += FIELD_X
+            # if circ.y >= FIELD_Y:
+            #     circ.y -= FIELD_Y
+            # if circ.y < 0:
+            #     circ.y += FIELD_Y
+            # circ.x = circ.center.x % FIELD_X
+            # circ.y = circ.center.y % FIELD_Y
             self.players[circ.id].circles.append(circ)
     
     def findColor(self, id):       
     	return self.players[id].color
 
-    def makeFieldMessage(self, id):
+    def getLeaderboard(self):
+        lb = []
+        for player in self.players.values():
+            if player.id is not 0:
+                lb.append([player.name, sum(c.mass for c in player.circles)])
+        lb.sort(key = lambda a: -a[1])
+        lb = list(a[0] for a in lb[:10])
+        # print(lb)
+        return(lb)
+
+    def makeFieldMessage(self, id, leaderboard):
         try:
             center = self.players[id].circles[0].center
         except IndexError:
@@ -176,6 +199,6 @@ class AgarioServer:
                                             (center.x + WINDOW_WIDTH // 2, center.y - WINDOW_HEIGHT // 2)):
                     player_balls.append({'x' : int(circ.x), 'y': int(circ.y), 'm': circ.mass})
             ans.append({'name': player.name, 'color' : self.findColor(player.id), 'id': player.id, 'balls': player_balls})
-
+        ans = {'leaderboard' : leaderboard, 'players' : ans}
         # print(ans)
         return ans

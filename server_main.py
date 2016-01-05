@@ -47,9 +47,10 @@ while True:
         """
             рассказать всем о новых полях
         """
+        lb = server.getLeaderboard()
         for player in server.players.values():
             if (player.id is not 0):
-                protocol.sendMap(player.id, server.makeFieldMessage(player.id))
+                protocol.sendMap(player.id, server.makeFieldMessage(player.id, lb))
         if DEBUG_SERVER_PRINT:
             print(now, newcircles)
         # print(server.players.keys())
