@@ -77,6 +77,20 @@ def doCircleAndRectIntersect(p, r, a, b, c, d):
     return a[0] - r <= p[0] and p[0] <= c[0] + r and a[1] - r <= p[1] and p[1] <= c[1] + r
     # return min(distSegmentPoint(p, a, b), distSegmentPoint(p, b, c), distSegmentPoint(p, c, d), distSegmentPoint(p, d, a)) <= r
 
+# def getIntersectedCircle(circ, center):
+#     x1 = center.x - WINDOW_WIDTH // 2
+#     y1 = center.y - WINDOW_HEIGHT // 2
+#     x0 = circ.center.x - x1
+#     y0 = circ.center.y - y1
+#     if x0 > FIELD_X:
+#         x0 -= FIELD_X
+#     if x0 < -FIELD_X:
+#         x0 += FIELD_X
+#     if y0 > FIELD_Y:
+#         y0 -= FIELD_Y
+#     if y0 < -FIELD_Y:
+#         y0 += FIELD_Y
+#     if x0 > 0 and x0 < WINDOW_WIDTH and y0 > 0 and y0 < WINDOW_HEIGHT:
 
 class AgarioServer:
     def __init__(self):
@@ -153,21 +167,18 @@ class AgarioServer:
     def updateCirlces(self, circles):
         for plid in self.players:
             self.players[plid].circles = []
-        for circ in circles:                        
-            circ.center.x = max(min(circ.center.x, FIELD_X), 0)
-            circ.center.y = max(min(circ.center.y, FIELD_Y), 0)
-            # circ.x = circ.center.x
-            # circ.y = circ.center.y
-            # if circ.x >= FIELD_X:
-            #     circ.x -= FIELD_X
-            # if circ.x < 0:
-            #     circ.x += FIELD_X
-            # if circ.y >= FIELD_Y:
-            #     circ.y -= FIELD_Y
-            # if circ.y < 0:
-            #     circ.y += FIELD_Y
-            # circ.x = circ.center.x % FIELD_X
-            # circ.y = circ.center.y % FIELD_Y
+        for circ in circles:
+            r = int(calculateRadius(circ.mass))
+            circ.center.x = max(min(circ.center.x, FIELD_X - r), r)
+            circ.center.y = max(min(circ.center.y, FIELD_Y - r), r)
+            # if circ.center.x >= FIELD_X:
+            #     circ.center.x -= FIELD_X
+            # if circ.center.x < 0:
+            #     circ.center.x += FIELD_X
+            # if circ.center.y >= FIELD_Y:
+            #     circ.center.y -= FIELD_Y
+            # if circ.center.y < 0:
+            #     circ.center.y += FIELD_Y
             self.players[circ.id].circles.append(circ)
     
     def findColor(self, id):       
@@ -191,12 +202,14 @@ class AgarioServer:
         ans = []
         for player in self.players.values():
             player_balls = []
+            smass = sum(c.mass for c in self.players[id].circles)
+            mf = massFactor(smass)
             for circ in player.circles:
                 if doCircleAndRectIntersect((circ.center.x, circ.center.y), calculateRadius(circ.mass),
-                                            (center.x - WINDOW_WIDTH // 2, center.y - WINDOW_HEIGHT // 2),
-                                            (center.x - WINDOW_WIDTH // 2, center.y + WINDOW_HEIGHT // 2),
-                                            (center.x + WINDOW_WIDTH // 2, center.y + WINDOW_HEIGHT // 2),
-                                            (center.x + WINDOW_WIDTH // 2, center.y - WINDOW_HEIGHT // 2)):
+                                            (center.x - int(WINDOW_WIDTH * mf) // 2, center.y - int(WINDOW_HEIGHT * mf) // 2),
+                                            (center.x - int(WINDOW_WIDTH * mf) // 2, center.y + int(WINDOW_HEIGHT * mf) // 2),
+                                            (center.x + int(WINDOW_WIDTH * mf) // 2, center.y + int(WINDOW_HEIGHT * mf) // 2),
+                                            (center.x + int(WINDOW_WIDTH * mf) // 2, center.y - int(WINDOW_HEIGHT * mf) // 2)):
                     player_balls.append({'x' : int(circ.center.x), 'y': int(circ.center.y), 'm': circ.mass})
             ans.append({'name': player.name, 'color' : self.findColor(player.id), 'id': player.id, 'balls': player_balls})
         ans = {'leaderboard' : leaderboard, 'players' : ans}

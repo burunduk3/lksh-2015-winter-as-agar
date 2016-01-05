@@ -1,21 +1,21 @@
-from math import sqrt
+from math import *
 
 # Server
 
 time_step = 0.05
 INITIAL_MASS = 20
 
-FIELD_X = 3000
-FIELD_Y = 3000
+FIELD_X = 500
+FIELD_Y = 500
 
 WINDOW_HEIGHT = 650
 WINDOW_WIDTH = 1300
 
 MAX_LENGTH = 4096
 
-FOOD_NUM = 300
+FOOD_NUM = 500
 FOOD_MASS = 1
-FOOD_GROWTH = 10
+FOOD_GROWTH = 30
 
 FAIL_COUNT = 50
 
@@ -26,7 +26,7 @@ ABSORB_REL = 1.25
 ABSORB_RAD = 0.98
 
 #Various formulas for velocity
-MAX_VEL = 0.7
+MAX_VEL = 1
 MIN_VEL = 0.03
 MAX_MASS = 1000
 VEL_CONST = 1000
@@ -51,3 +51,6 @@ DEBUG_SERVER_PRINT = debug(False)
 
 def calculateRadius(mass):
     return 4 * sqrt(mass)
+
+def massFactor(mass):
+    return max(sqrt(mass) / sqrt(INITIAL_MASS) * (log(INITIAL_MASS) / log(mass)) - 1, 1)
