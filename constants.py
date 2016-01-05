@@ -23,7 +23,8 @@ FAIL_COUNT = 50
 
 #Relation that must be satisfied in order to be absorbed
 ABSORB_REL = 1.25
-ABSORB_RAD = 0.99
+ABSORB_RAD = 1
+EPS = 1.0e-7
 
 #Various formulas for velocity
 MAX_VEL = 0.7
@@ -34,6 +35,9 @@ LOG_CONST = 1
 
 #Handles absorbtions
 MAX_DIST = (min(WINDOW_WIDTH, WINDOW_HEIGHT) / 2 - 50) * 0.8
+
+# Client
+MAX_NAME_LEN = 21
 
 # Debug
 
