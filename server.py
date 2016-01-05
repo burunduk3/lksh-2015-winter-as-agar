@@ -82,7 +82,7 @@ class AgarioServer:
         """
         self.playerLock = Lock()
         self.cursorLock = Lock()
-        food = AgarioPlayer('Food', 0, 1) #FTFY ('Food', 1) -> ('Food', 0, 1)
+        food = AgarioPlayer('', 0, 1) #FTFY ('Food', 1) -> ('Food', 0, 1)
         food.id = 0
         self.players = {0 : food}
         self.pUpdates = []

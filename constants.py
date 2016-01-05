@@ -1,5 +1,7 @@
 from math import sqrt
 
+# Server
+
 time_step = 0.05
 INITIAL_MASS = 20
 
@@ -16,6 +18,24 @@ FOOD_MASS = 1
 FOOD_GROWTH = 10
 
 FAIL_COUNT = 50
+
+# Physics
+
+#Relation that must be satisfied in order to be absorbed
+ABSORB_REL = 1.25
+ABSORB_RAD = 0.99
+
+#Various formulas for velocity
+MAX_VEL = 0.7
+MIN_VEL = 0.03
+MAX_MASS = 1000
+VEL_CONST = 1000
+LOG_CONST = 1
+
+#Handles absorbtions
+MAX_DIST = (min(WINDOW_WIDTH, WINDOW_HEIGHT) / 2 - 50) * 0.8
+
+# Debug
 
 DEBUG_ON = False
 DEBUG_OFF = False

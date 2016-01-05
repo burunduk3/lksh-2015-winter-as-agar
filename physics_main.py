@@ -25,11 +25,7 @@ class pnt:
 		return pnt(a.x - b.x, a.y - b.y)
 	
 def distance(a, b):
-	return (b - a).abs()	
-
-#Relation that must be satisfied in order to be absorbed
-ABSORB_REL = 1.25
-ABSORB_RAD = 0.95
+	return (b - a).abs()
 
 class circle:
 	def __init__(self, x, y, m, id, to_x, to_y):
@@ -68,13 +64,6 @@ def circle2dict (c):
 # circles - list of dicts
 # t_step - real number, time of update in seconds
 
-#Various formulas for velocity
-MAX_VEL = 0.7
-MIN_VEL = 0.03  
-MAX_MASS = 1000
-VEL_CONST = 1000
-LOG_CONST = 1
-
 def calc_velocity1(mass):
 	ans = (MAX_MASS - mass) / MAX_MASS #VEL_CONST / mass
 	ans = min(ans, MAX_VEL)
@@ -102,8 +91,6 @@ def calc_log_velocity(vec_len, mass):
 	ans = max(ans, MIN_VEL)
 	return ans
 
-#Handles absorbtions
-MAX_DIST = (min(WINDOW_WIDTH, WINDOW_HEIGHT) / 2 - 50) * 0.8
                                    
 def update_map(in_cursors, in_circles, t_step):
 	curs_dict = {}
