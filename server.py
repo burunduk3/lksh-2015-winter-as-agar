@@ -26,7 +26,7 @@ class AgarioPlayer:
         y = random.randint(0, FIELD_Y)
         self.circles = [physics.circle(x, y, mass, id, 0, 0)]
         #self.circles = [(random.randint(0, 8000), random.randint(0, 4000), mass)]
-        self.cursor = (x, y)
+        self.cursor = (x, y, 0)
         r = lambda: random.randint(0, 150)
         self.color = ('#%02X%02X%02X' % (r(),r(),r()))
 
@@ -142,9 +142,9 @@ class AgarioServer:
         self.eUpdates.clear()
         for cursor in self.cUpdates:
             if cursor['id'] in self.players:
-                self.players[cursor['id']].cursor = (cursor['x'], cursor['y'])
-                if cursor['s'] > 0:
-                    self.players[cursor['id']].circleSplit(cursor)
+                self.players[cursor['id']].cursor = (cursor['x'], cursor['y'], cursor['s'])
+                # if cursor['s'] > 0:
+                #     self.players[cursor['id']].circleSplit(cursor)
         self.cUpdates.clear()
 
         self.cursorLock.release()
@@ -154,8 +154,8 @@ class AgarioServer:
         for plid in self.players:
             self.players[plid].circles = []
         for circ in circles:                     	
-            circ.x = max(min(circ.center.x, FIELD_X), 0)
-            circ.y = max(min(circ.center.y, FIELD_Y), 0)
+            circ.center.x = max(min(circ.center.x, FIELD_X), 0)
+            circ.center.y = max(min(circ.center.y, FIELD_Y), 0)
             # circ.x = circ.center.x
             # circ.y = circ.center.y
             # if circ.x >= FIELD_X:
@@ -192,12 +192,12 @@ class AgarioServer:
         for player in self.players.values():
             player_balls = []
             for circ in player.circles:
-                if doCircleAndRectIntersect((circ.x, circ.y), calculateRadius(circ.mass),
+                if doCircleAndRectIntersect((circ.center.x, circ.center.y), calculateRadius(circ.mass),
                                             (center.x - WINDOW_WIDTH // 2, center.y - WINDOW_HEIGHT // 2),
                                             (center.x - WINDOW_WIDTH // 2, center.y + WINDOW_HEIGHT // 2),
                                             (center.x + WINDOW_WIDTH // 2, center.y + WINDOW_HEIGHT // 2),
                                             (center.x + WINDOW_WIDTH // 2, center.y - WINDOW_HEIGHT // 2)):
-                    player_balls.append({'x' : int(circ.x), 'y': int(circ.y), 'm': circ.mass})
+                    player_balls.append({'x' : int(circ.center.x), 'y': int(circ.center.y), 'm': circ.mass})
             ans.append({'name': player.name, 'color' : self.findColor(player.id), 'id': player.id, 'balls': player_balls})
         ans = {'leaderboard' : leaderboard, 'players' : ans}
         # print(ans)

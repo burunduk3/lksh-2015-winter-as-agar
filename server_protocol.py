@@ -77,6 +77,7 @@ def accept (server, mask):
     assert mask == 0
 
 def read (conn, mask):
+    global clients
     if mask & selectors.EVENT_READ:
         while True:
             try:
