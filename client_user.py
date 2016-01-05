@@ -21,10 +21,11 @@ def sending():
     global curx, cury, player_id, splitLock, splitted
     while True:
         ourx, oury = 0, 0
-        for p in curList:
-            if p["id"] == player_id:
-                ourx, oury = p["balls"][0]["x"], p["balls"][0]["y"]
-                break
+        if (curList != []):
+            for p in curList['players']:
+               if p["id"] == player_id:
+                   ourx, oury = p["balls"][0]["x"], p["balls"][0]["y"]
+                   break
         splitLock.acquire()
         s = splitted
         splitted = 0
@@ -41,7 +42,7 @@ def asking():
     while True:
         # print("abacabadabacaba")
         curList = getField()
-
+     
         if curList == []:
             fail += 1
             if fail > FAIL_COUNT:
@@ -71,19 +72,28 @@ def splitMe(event):
 def drawing():
     global canvas, player_id, curList
     ourx, oury, m = WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2, 0
-    ll = curList
-    for p in ll:
-        if p["id"] == player_id:
-            ourx, oury = p["balls"][0]["x"], p["balls"][0]["y"]
-            for b in p["balls"]:
-                m += b['m']
-            break
-            # [{'name': 'Vasya', 'color': 'blue', 'id': 1, 'balls': [{'x': 1, 'm': 1, 'y': 1}]}]
+    lb = []
+    if (curList != []):
+        ll = curList['players']
+        lb = curList['leaderboard']
+        for p in ll:
+            if p["id"] == player_id:
+                ourx, oury = p["balls"][0]["x"], p["balls"][0]["y"]
+                for b in p["balls"]:
+                    m += b['m']
+                break  
+         # [{'name': 'Vasya', 'color': 'blue', 'id': 1, 'balls': [{'x': 1, 'm': 1, 'y': 1}]}]
+    else:
+        ourx, oury, m = 0, 0, INITIAL_MASS
+        ll = []
+    mf = massFactor(m)
     canvas.delete("all")
-    canvas = draw_bg(canvas, (ourx - WINDOW_WIDTH // 2, oury - WINDOW_HEIGHT // 2))
-    canvas = draw_players(canvas, (ourx - WINDOW_WIDTH // 2, oury - WINDOW_HEIGHT // 2), ll)
+    canvas = draw_bg(canvas, (ourx - WINDOW_WIDTH // 2, oury - WINDOW_HEIGHT // 2), mf)
+    canvas = draw_players(canvas, (ourx - WINDOW_WIDTH // 2, oury - WINDOW_HEIGHT // 2), ll, mf)
     canvas = draw_mass(canvas, 'm:' + str(m) + ' x:' + str(int(round(ourx))) + ' y:' + str(int(round(oury))))
     root.after(10, drawing)
+    canvas = draw_leaderboard(canvas, lb)
+
 
 
 root = Tk()
@@ -99,13 +109,21 @@ if len(sys.argv) > 2:
 if len(sys.argv) > 2:
     port = sys.argv[3]
 
-ip = '192.168.3.83'
-port = '3030'
+# PATCHED BY BURUNDUK1 
+config_file = open("config.txt", "r")
+ip, port = open("config.txt", "r").readline().split()
+# END OF PATCH
+
+#ip = '192.168.3.83'
+#port = '3030'
 
 if userName is None:
     print('enter your user name: ', end='', flush=True)
     userName = " ".join(sys.stdin.readline().split())
 print("OK. Your username is " + userName)
+
+player_id = registerMe(userName)
+print(ip)
 
 if ip is None:
     print('enter server ip: ', end='', flush=True)
@@ -117,12 +135,13 @@ if port is None:
     port = sys.stdin.readline().split()[0]
 print("OK. port is " + port)
 
-out = open("config.txt", "w")
-out.write(ip + " " + port)
-out.close()
+#out = open("config.txt", "w")
+#out.write(ip + " " + port)
+#out.close()
 # At first get name from keyboard
-player_id = registerMe(userName)
 print("connected")
+
+root.tkraise()
 
 curx, cury = 400, 225
 # curList = getField()
@@ -136,7 +155,7 @@ t1 = threading.Thread(target=asking, daemon=True)
 t2 = threading.Thread(target=sending, daemon=True)
 t1.start()
 t2.start()
-root.bind('<Button-1>', splitMe)
+root.bind('<space>', splitMe)
 root.after(0, drawing)
 
 root.mainloop()

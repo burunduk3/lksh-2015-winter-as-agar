@@ -1,6 +1,8 @@
 import selectors, socket, threading, sys, json, random
 
 from constants import *
+from bz2 import compress, decompress
+
 
 poll = selectors.DefaultSelector ()
 clients = dict()
@@ -14,7 +16,13 @@ def initserver(ss):
     global a, sock, poll, localServer
     localServer = ss
     sock = socket.socket()
-    sock.bind (('0.0.0.0', 3030))
+
+    # PATCHED BY BURUNDUK1 
+    config_file = open("config.txt", "r")
+    ip, port = open("config.txt", "r").readline().split()
+    sock.bind (('0.0.0.0', int(port)))
+    # END OF PATCH
+
     sock.listen (10)
     sock.setblocking (False)
     poll.register (sock, selectors.EVENT_READ, accept)
@@ -56,6 +64,7 @@ def accept (server, mask):
                 conn, addr = sock.accept ()     
                 print("Connected: " + str(addr))
                 v["id"] = cnt                                  
+                # conn.send(compress(bytes(json.dumps(v), 'utf-8')))
                 conn.send(bytes(json.dumps(v), 'utf-8'))
             except BlockingIOError:
                 break
@@ -69,9 +78,11 @@ def accept (server, mask):
     assert mask == 0
 
 def read (conn, mask):
+    global clients
     if mask & selectors.EVENT_READ:
         while True:
             try:
+                # data = decompress(conn.recv(MAX_LENGTH))
                 data = conn.recv(MAX_LENGTH)
             except BlockingIOError:
                 break
@@ -90,8 +101,6 @@ def read (conn, mask):
                 break
             else:
                 data = data.decode().split(sep = '\n')
-                if DEBUG_PROTOCOL_PRINT:
-                    print(data)
                 try:               
                     v = json.loads(data[0])
                     v["id"] = clients[conn]
@@ -103,6 +112,8 @@ def read (conn, mask):
                         print("User specified no name and it isn't cursor")
                 except (json.decoder.JSONDecodeError, TypeError):
                     print("user with id " + str(clients[conn]) + " tried something incorrect")
+                    if DEBUG_PROTOCOL_PRINT:
+                        print(data)
                     if DEBUG_PROTOCOL:
                         raise
                 except :
@@ -112,23 +123,16 @@ def read (conn, mask):
         mask &=~ selectors.EVENT_READ
     assert mask == 0
 
-def arch(data):
-    for pl in data:
-        buf = []
-        for b in pl['balls']:
-            buf.append([b['x'], b['y'], b['m']])
-        pl['balls'] = buf
-    return data
-
 def sendMap(id, data):
     global localServer
-    data = json.dumps(arch(data))
-    if DEBUG_PROTOCOL_PRINT:
-        print(data)
+    data = json.dumps(data)
+    # if DEBUG_PROTOCOL_PRINT:
+    #     print(data)
     q = clients
     for x in q:
         try:
             if (q[x] == id):
+                # x.send(compress(bytes(data + '\n', 'utf-8')))
                 x.send(bytes(data + '\n', 'utf-8'))
                 break
         except:

@@ -1,22 +1,34 @@
+import random
 from constants import *
 
 LATTICE_STEP = 25
 OUTLINE_WIDTH = 2
 
 
-def draw_bg(c, pos):
+def draw_bg(c, pos, mf):
     # c - Canvas, pos - (x0, y0)
     x0, y0 = pos
-    x0 = LATTICE_STEP - x0 % LATTICE_STEP
-    y0 = LATTICE_STEP - y0 % LATTICE_STEP
-    for i in range(int(WINDOW_WIDTH / LATTICE_STEP) + 1):
-        c.create_line(i * LATTICE_STEP + x0, 0, i * LATTICE_STEP + x0, WINDOW_HEIGHT, fill='#D0D0D0')
-    for i in range(int(WINDOW_HEIGHT / LATTICE_STEP) + 1):
-        c.create_line(0, i * LATTICE_STEP + y0, WINDOW_WIDTH, i * LATTICE_STEP + y0, fill='#D0D0D0')
+    dx = WINDOW_WIDTH // 2
+    dy = WINDOW_HEIGHT // 2
+    x1 = dx + x0
+    y1 = dx + y0
+    LT = int(LATTICE_STEP / mf)
+    x1 = x1 % LATTICE_STEP
+    y1 = y1 % LATTICE_STEP
+    x1 = int(x1 / mf)
+    y1 = int(y1 / mf)
+    # x0 = LATTICE_STEP - x0 % LATTICE_STEP
+    # y0 = LATTICE_STEP - y0 % LATTICE_STEP
+    x0 = LT - x1
+    y0 = LT - y1
+    for i in range(int(WINDOW_WIDTH / LT) + 1):
+        c.create_line(i * LT + x0, 0, i * LT + x0, WINDOW_HEIGHT, fill='#D0D0D0')
+    for i in range(int(WINDOW_HEIGHT / LT) + 1):
+        c.create_line(0, i * LT + y0, WINDOW_WIDTH, i * LT + y0, fill='#D0D0D0')
     return c
 
 
-def draw_players(c, pos, ps):
+def draw_players(c, pos, ps, mf):
     # c - Canvas, pos - (x0, y0), ps - players
     x0, y0 = pos
     q = []
@@ -26,7 +38,12 @@ def draw_players(c, pos, ps):
             w['x'] = ball['x']
             w['y'] = ball['y']
             w['m'] = ball['m']
-            w['color'] = p['color']
+            if p['id'] == 0:
+                w['color'] = ('#%02X%02X%02X' % (random.randint(0, 150),
+                                                 random.randint(0, 150),
+                                                 random.randint(0, 150)))
+            else:
+                w['color'] = p['color']
             w['name'] = p['name']
             w['id'] = p['id']
             q.append(w)
@@ -34,7 +51,15 @@ def draw_players(c, pos, ps):
     for ball in q:
         lx = ball['x'] - x0
         ly = ball['y'] - y0
-        radius = calculateRadius(ball['m'])
+        x1 = WINDOW_WIDTH // 2
+        y1 = WINDOW_HEIGHT // 2
+        rx = lx - x1
+        ry = ly - y1
+        rx = int(rx / mf)
+        ry = int(ry / mf)
+        lx = rx + x1
+        ly = ry + y1
+        radius = calculateRadius(ball['m']) / mf
         r = int(ball['color'][1:3], 16)
         g = int(ball['color'][3:5], 16)
         b = int(ball['color'][5:7], 16)

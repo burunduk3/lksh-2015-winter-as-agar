@@ -37,21 +37,22 @@ while True:
         for pl in server.players.values():
             id = pl.id
             if len(pl.circles) > 0:
-                cursors.append({'x' : pl.cursor[0], 'y' : pl.cursor[1], 'id' : id})
-            for circle in pl.circles:
-                circles.append({'x' : circle[0], 'y' : circle[1], 'm' : circle[2], 'id' : id})
-        newcirlces = physics.update_map(cursors, circles, dt)
-        server.updateCirlces(newcirlces)
+                cursors.append({'x' : pl.cursor[0], 'y' : pl.cursor[1], 'id' : id, 's' : pl.cursor[2]})
+            for circ in pl.circles:
+                circles.append(circ)
+        newcircles = physics.update_map3(cursors, circles, dt)
+        server.updateCirlces(newcircles)
         # print(server.players[0].circles)
         # print(len(newcirlces), len(circles))
         """
             рассказать всем о новых полях
         """
+        lb = server.getLeaderboard()
         for player in server.players.values():
             if (player.id is not 0):
-                protocol.sendMap(player.id, server.makeFieldMessage(player.id))
+                protocol.sendMap(player.id, server.makeFieldMessage(player.id, lb))
         if DEBUG_SERVER_PRINT:
-            print(now, newcirlces)
+            print(now, newcircles)
         # print(server.players.keys())
     # else:
     #     sleep(0.01)

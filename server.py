@@ -22,23 +22,28 @@ class AgarioPlayer:
         self.name = name
         self.id = id
         #FIXED THIS
-        self.circles = [(random.randint(0, FIELD_X), random.randint(0, FIELD_Y), mass)]
+        x = random.randint(0, FIELD_X)
+        y = random.randint(0, FIELD_Y)
+        self.circles = [physics.circle(x, y, mass, id, 0, 0, 10, 0)]
         #self.circles = [(random.randint(0, 8000), random.randint(0, 4000), mass)]
-        self.cursor = self.circles[0][:2]
+        self.cursor = (x, y, 0)
         r = lambda: random.randint(0, 150)
         self.color = ('#%02X%02X%02X' % (r(),r(),r()))
 
 
     def addCircle(self, mass = INITIAL_MASS):
-        #FIXED THIS
-        self.circles.append((random.randint(0, FIELD_X), random.randint(0, FIELD_Y), mass))
-        #self.circles.append((random.randint(0, 8000), random.randint(0, 4000), mass))
+        x = random.randint(0, FIELD_X)
+        y = random.randint(0, FIELD_Y)
+        circ = physics.circle(x, y, mass, self.id, 0, 0, 10, 0)
+        self.circles.append(circ)
 
-    def circleSplit(self):
-        for i in range(len(self.circles)):
-            circle = self.circles[i]
-            if circle[2] > INITIAL_MASS:
-                self.circles[i] = (circle[0], circle[1], circle[2] // 2)
+    def circleSplit(self, cursor):
+        buf = []
+        i = random.randint(0, len(self.circles) - 1)
+        circ = self.circles[i]
+        if circ.mass > INITIAL_MASS:
+            self.circles[i].mass //= 2
+            self.circles.append(physics.circle(cursor['x'], cursor['y'], circ.mass // 2, circ.id, cursor['x'], cursor['y']))
 
 
 def distLinePoint(p, u, v):
@@ -68,10 +73,24 @@ def distSegmentPoint(p, a, b):
 
 
 def doCircleAndRectIntersect(p, r, a, b, c, d):
-    if a[0] <= p[0] <= c[0] and a[1] <= p[1] <= c[1]:
-        return True
-    return min(distSegmentPoint(p, a, b), distSegmentPoint(p, b, c), distSegmentPoint(p, c, d), distSegmentPoint(p, d, a)) <= r
+    # return True
+    return a[0] - r <= p[0] and p[0] <= c[0] + r and a[1] - r <= p[1] and p[1] <= c[1] + r
+    # return min(distSegmentPoint(p, a, b), distSegmentPoint(p, b, c), distSegmentPoint(p, c, d), distSegmentPoint(p, d, a)) <= r
 
+# def getIntersectedCircle(circ, center):
+#     x1 = center.x - WINDOW_WIDTH // 2
+#     y1 = center.y - WINDOW_HEIGHT // 2
+#     x0 = circ.center.x - x1
+#     y0 = circ.center.y - y1
+#     if x0 > FIELD_X:
+#         x0 -= FIELD_X
+#     if x0 < -FIELD_X:
+#         x0 += FIELD_X
+#     if y0 > FIELD_Y:
+#         y0 -= FIELD_Y
+#     if y0 < -FIELD_Y:
+#         y0 += FIELD_Y
+#     if x0 > 0 and x0 < WINDOW_WIDTH and y0 > 0 and y0 < WINDOW_HEIGHT:
 
 class AgarioServer:
     def __init__(self):
@@ -137,9 +156,9 @@ class AgarioServer:
         self.eUpdates.clear()
         for cursor in self.cUpdates:
             if cursor['id'] in self.players:
-                self.players[cursor['id']].cursor = (cursor['x'], cursor['y'])
-                if cursor['s'] > 0:
-                    self.players[cursor['id']].circleSplit()
+                self.players[cursor['id']].cursor = (cursor['x'], cursor['y'], cursor['s'])
+                # if cursor['s'] > 0:
+                #     self.players[cursor['id']].circleSplit(cursor)
         self.cUpdates.clear()
 
         self.cursorLock.release()
@@ -148,27 +167,51 @@ class AgarioServer:
     def updateCirlces(self, circles):
         for plid in self.players:
             self.players[plid].circles = []
-        for circle in circles:
-            self.players[circle['id']].circles.append((max(min(circle['x'], FIELD_X), 0), max(min(circle['y'], FIELD_Y), 0), circle['m']))
+        for circ in circles:
+            r = int(calculateRadius(circ.mass))
+            circ.center.x = max(min(circ.center.x, FIELD_X - r), r)
+            circ.center.y = max(min(circ.center.y, FIELD_Y - r), r)
+            # if circ.center.x >= FIELD_X:
+            #     circ.center.x -= FIELD_X
+            # if circ.center.x < 0:
+            #     circ.center.x += FIELD_X
+            # if circ.center.y >= FIELD_Y:
+            #     circ.center.y -= FIELD_Y
+            # if circ.center.y < 0:
+            #     circ.center.y += FIELD_Y
+            self.players[circ.id].circles.append(circ)
     
-    def findColor(self, id):
-    	#FIX this: 'red' -> #FF0000
-    	return self.players[id].color
+    def findColor(self, id):       
+        return self.players[id].color
 
-    def makeFieldMessage(self, id):
+    def getLeaderboard(self):
+        lb = []
+        for player in self.players.values():
+            if player.id is not 0:
+                lb.append([player.name, sum(c.mass for c in player.circles)])
+        lb.sort(key = lambda a: -a[1])
+        lb = list({'name' : a[0]} for a in lb[:10])
+        # print(lb)
+        return(lb)
+
+    def makeFieldMessage(self, id, leaderboard):
         try:
-            center = self.players[id].circles[0][:2]
+            center = self.players[id].circles[0].center
         except IndexError:
             return []
         ans = []
         for player in self.players.values():
             player_balls = []
-            for circle in player.circles:
-                if doCircleAndRectIntersect((circle[0], circle[1]), math.sqrt(circle[2]),
-                                            (center[0] - WINDOW_WIDTH // 2, center[1] - WINDOW_WIDTH // 2), (center[0] - WINDOW_WIDTH // 2, center[1] + WINDOW_WIDTH // 2),
-                                            (center[0] + WINDOW_WIDTH // 2, center[1] + WINDOW_WIDTH // 2), (center[0] + WINDOW_WIDTH // 2, center[1] - WINDOW_WIDTH // 2)):
-                    player_balls.append({'x' : int(circle[0]), 'y': int(circle[1]), 'm': circle[2]})
+            smass = sum(c.mass for c in self.players[id].circles)
+            mf = massFactor(smass)
+            for circ in player.circles:
+                if doCircleAndRectIntersect((circ.center.x, circ.center.y), calculateRadius(circ.mass),
+                                            (center.x - int(WINDOW_WIDTH * mf) // 2, center.y - int(WINDOW_HEIGHT * mf) // 2),
+                                            (center.x - int(WINDOW_WIDTH * mf) // 2, center.y + int(WINDOW_HEIGHT * mf) // 2),
+                                            (center.x + int(WINDOW_WIDTH * mf) // 2, center.y + int(WINDOW_HEIGHT * mf) // 2),
+                                            (center.x + int(WINDOW_WIDTH * mf) // 2, center.y - int(WINDOW_HEIGHT * mf) // 2)):
+                    player_balls.append({'x' : int(circ.center.x), 'y': int(circ.center.y), 'm': circ.mass})
             ans.append({'name': player.name, 'color' : self.findColor(player.id), 'id': player.id, 'balls': player_balls})
-
+        ans = {'leaderboard' : leaderboard, 'players' : ans}
         # print(ans)
         return ans

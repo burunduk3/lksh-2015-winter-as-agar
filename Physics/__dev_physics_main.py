@@ -29,7 +29,7 @@ def distance(a, b):
 
 #Realation that must be satisfied in order to be absorbed
 ABSORB_REL = 1.25
-ABSORB_RAD = 0.97
+ABSORB_RAD = 0.98
 
 class circle:
 	def __init__(self, x, y, m, id):
