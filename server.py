@@ -179,7 +179,7 @@ class AgarioServer:
             if player.id is not 0:
                 lb.append([player.name, sum(c.mass for c in player.circles)])
         lb.sort(key = lambda a: -a[1])
-        lb = list(a[0] for a in lb[:10])
+        lb = list({'name' : a[0]} for a in lb[:10])
         # print(lb)
         return(lb)
 

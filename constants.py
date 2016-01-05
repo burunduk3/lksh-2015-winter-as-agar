@@ -44,7 +44,7 @@ def debug(D):
     return (D | DEBUG_ON) & (not DEBUG_OFF)
 
 DEBUG_PROTOCOL = debug(False)
-DEBUG_PROTOCOL_PRINT = debug(True)
+DEBUG_PROTOCOL_PRINT = debug(False)
 DEBUG_SERVER_PRINT = debug(False)
 
 def calculateRadius(mass):
