@@ -4,8 +4,8 @@ from constants import *
 from random import *
 
 killed = False
-
-name = 'Still_stupid_Bot'
+                          
+name = random.choice(open("bot_names.txt", "r", encoding = "utf-8").readlines())
 
 my_id = registerMe(name)
 print(my_id)

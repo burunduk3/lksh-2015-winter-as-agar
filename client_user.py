@@ -110,6 +110,8 @@ port = '3030'
 if userName is None:
     print('enter your user name: ', end='', flush=True)
     userName = " ".join(sys.stdin.readline().split())
+if len(userName) > MAX_NAME_LEN:
+	userName = userName[:MAX_NAME_LEN]
 print("OK. Your username is " + userName)
 player_id = registerMe(userName)
 if ip is None:
