@@ -35,7 +35,8 @@ class circle:
         self.id = id
         self.absorbed = False
         self.canAbsorb = True
-        self.acceleration = given_acc                    
+        self.acceleration = given_acc
+        self.lifetime = 0                   
         if id == 0:
             self.canAbsorb = False
         self.momentum = pnt(to_x, to_y)
@@ -49,7 +50,7 @@ class circle:
     def absorbable(self, other):
         if not self.canAbsorb: return False
         if (self.id == other.id): 
-            if (self.acceleration != 0) or (other.acceleration != 0): return False
+            if (self.lifetime != 0) or (other.lifetime != 0): return False
             if (calculateRadius(self.mass) * ABSORB_RAD < distance(self.center, other.center)): return False
             return True
         if (self.mass / other.mass < ABSORB_REL): return False
@@ -112,9 +113,11 @@ def update_map3(in_cursors, circles, t_step):
         circ = circles[i]
         new_mass = floor(circ.mass / 2 * SPLIT_LOSS)
         new_circ = circle(circ.center.x, circ.center.y, new_mass, circ.id, circ.momentum.x, circ.momentum.y, 10);
+        new_circ.lifetime = SPLIT_TIME
         circles.append(new_circ)
         circles[i].mass = new_mass
     for i in range(len(circles)):
+        circles[i].lifetime = max(0, circles[i].lifetime - t_step)
         if not circles[i].id in curs_dict or circles[i].id is 0:
             circles[i].canAbsorb = False
             continue

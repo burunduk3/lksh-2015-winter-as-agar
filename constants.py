@@ -2,8 +2,10 @@ from math import *
 
 # Server
 
+MAX_MASS = 500
+
 time_step = 0.05
-INITIAL_MASS = 20
+INITIAL_MASS = 495 
 
 FIELD_X = 3000
 FIELD_Y = 2000
@@ -37,6 +39,7 @@ MAX_DIST = (min(WINDOW_WIDTH, WINDOW_HEIGHT) / 2 - 50) * 0.8
 LIMIT_DIST = MAX_DIST * 0.85
 SLIDE_COEF = 0.3 # in range [0;1] - antibot const, adds more sliding
 SPLIT_LOSS = 0.9
+SPLIT_TIME = 15
 deltaAcceleration = 0.5
 
 # Debug

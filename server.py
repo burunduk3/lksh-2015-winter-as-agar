@@ -21,6 +21,7 @@ class AgarioPlayer:
     def __init__(self, name, id, mass = INITIAL_MASS):
         self.name = name
         self.id = id
+        self.mass = mass
         #FIXED THIS
         x = random.randint(0, FIELD_X)
         y = random.randint(0, FIELD_Y)
@@ -34,6 +35,7 @@ class AgarioPlayer:
     def addCircle(self, mass = INITIAL_MASS):
         x = random.randint(0, FIELD_X)
         y = random.randint(0, FIELD_Y)
+        self.mass += mass
         circ = physics.circle(x, y, mass, self.id, 0, 0, 0)
         self.circles.append(circ)
 

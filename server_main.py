@@ -37,7 +37,9 @@ while True:
         for pl in server.players.values():
             id = pl.id
             if len(pl.circles) > 0:
-                cursors.append({'x' : pl.cursor[0], 'y' : pl.cursor[1], 'id' : id, 's' : pl.cursor[2]})
+                x = pl.cursor[2]
+                if pl.mass > MAX_MASS: x = 1
+                cursors.append({'x' : pl.cursor[0], 'y' : pl.cursor[1], 'id' : id, 's' : x})
             for circ in pl.circles:
                 circles.append(circ)
         newcircles = physics.update_map3(cursors, circles, dt)
