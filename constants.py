@@ -14,7 +14,7 @@ WINDOW_WIDTH = 1300
 MAX_LENGTH = 4096
 
 FOOD_NUM = 600
-FOOD_MASS = 1
+FOOD_MASS = 4
 FOOD_GROWTH = 30
 FOOD_VAR = 3
 
@@ -40,6 +40,10 @@ SLIDE_COEF = 0.7 # in range [0;1] - antibot const, adds more sliding
 SPLIT_LOSS = 0.9
 deltaAcceleration = 0.5
 SPLIT_ACCELERATION = 20
+
+# Client
+
+DELTA_MF = 0.003
 
 # Debug
 
