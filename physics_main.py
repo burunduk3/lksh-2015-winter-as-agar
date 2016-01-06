@@ -112,9 +112,8 @@ def update_map3(in_cursors, circles, t_step):
         if circles[i].id == 0 or spaceNums[circles[i].id] == 0 or circles[i].canSplit() == False : continue
         circ = circles[i]
         new_mass = floor(circ.mass / 2 * SPLIT_LOSS)
-        new_circ = circle(circ.center.x, circ.center.y, new_mass, circ.id, circ.momentum.x, circ.momentum.y, 10);
-        new_circ.lifetime = SPLIT_TIME
         new_circ = circle(circ.center.x, circ.center.y, new_mass, circ.id, circ.momentum.x, circ.momentum.y, SPLIT_ACCELERATION);
+        new_circ.lifetime = SPLIT_TIME
         circles.append(new_circ)
         circles[i].mass = new_mass
     for i in range(len(circles)):
