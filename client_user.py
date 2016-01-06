@@ -11,6 +11,7 @@ from constants import *
 
 splitLock = threading.Lock()
 splitted = 0
+last_mf = 1
 
 def onMotion(e):
     global curx, cury, canvas
@@ -92,6 +93,12 @@ def drawing():
         ourx /= sum_mass
         oury /= sum_mass
     mf = massFactor(sum_mass)
+    global last_mf
+    if mf > last_mf:
+        last_mf += min(DELTA_MF, mf - last_mf)
+    else:
+        last_mf -= min(DELTA_MF, last_mf - mf)
+    mf = last_mf
     canvas.delete("all")
     canvas = draw_bg(canvas, (ourx - WINDOW_WIDTH // 2, oury - WINDOW_HEIGHT // 2), mf)
     canvas = draw_players(canvas, (ourx - WINDOW_WIDTH // 2, oury - WINDOW_HEIGHT // 2), ll, mf)

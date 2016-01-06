@@ -19,6 +19,7 @@ updateCursorCallback = lambda cursor: server.updateCursor(cursor)
 
 lastTime = time()
 
+print('server_main: start main loop');
 while True:
     now = time()
     if (lastTime + time_step < now):

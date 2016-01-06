@@ -92,7 +92,7 @@ def calc_velocity(mass):
 
 def calc_log_velocity(vec_len, mass):
     vec_len = max(vec_len, 1)
-    ans = LOG_CONST * math.log(vec_len) / math.sqrt(mass)
+    ans = LOG_CONST * math.log(vec_len) / math.sqrt(math.sqrt(mass))
     ans = min(ans, MAX_VEL)
     ans = max(ans, MIN_VEL)
     return ans
@@ -112,8 +112,12 @@ def update_map3(in_cursors, circles, t_step):
         if circles[i].id == 0 or spaceNums[circles[i].id] == 0 or circles[i].canSplit() == False : continue
         circ = circles[i]
         new_mass = floor(circ.mass / 2 * SPLIT_LOSS)
+<<<<<<< HEAD
         new_circ = circle(circ.center.x, circ.center.y, new_mass, circ.id, circ.momentum.x, circ.momentum.y, 10);
         new_circ.lifetime = SPLIT_TIME
+=======
+        new_circ = circle(circ.center.x, circ.center.y, new_mass, circ.id, circ.momentum.x, circ.momentum.y, SPLIT_ACCELERATION);
+>>>>>>> b574999589d4a97dd66bec00968c1d8230398076
         circles.append(new_circ)
         circles[i].mass = new_mass
     for i in range(len(circles)):
