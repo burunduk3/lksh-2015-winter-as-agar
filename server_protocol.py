@@ -18,7 +18,6 @@ def initserver(ss):
     sock = socket.socket()
 
     # PATCHED BY BURUNDUK1 
-    config_file = open("config.txt", "r")
     ip, port = open("config.txt", "r").readline().split()
     sock.bind (('0.0.0.0', int(port)))
     # END OF PATCH

@@ -122,7 +122,6 @@ if len(sys.argv) > 2:
     port = sys.argv[3]
 
 # PATCHED BY BURUNDUK1 
-config_file = open("config.txt", "r")
 ip, port = open("config.txt", "r").readline().split()
 # END OF PATCH
 
