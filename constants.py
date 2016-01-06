@@ -56,7 +56,7 @@ DEBUG_OFF = False
 def debug(D):
     return (D | DEBUG_ON) & (not DEBUG_OFF)
 
-DEBUG_PROTOCOL = debug(False)
+DEBUG_PROTOCOL = debug(True)
 DEBUG_PROTOCOL_PRINT = debug(False)
 DEBUG_SERVER_PRINT = debug(False)
 
@@ -64,4 +64,4 @@ def calculateRadius(mass):
     return 4 * sqrt(mass)
 
 def massFactor(mass):
-    return min(max(sqrt(mass) / sqrt(INITIAL_MASS) * (log(INITIAL_MASS) / log(mass)) - 1, 1), 2)
+    return min(max(sqrt(mass) / sqrt(INITIAL_MASS) * (log(INITIAL_MASS) / log(mass)) * 0.1, 1), 2)
