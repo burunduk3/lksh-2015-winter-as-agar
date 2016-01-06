@@ -89,6 +89,9 @@ def read (conn, mask):
             except ConnectionResetError:
                 print ("user disconnected")
                 data = False
+            except Exception as e:
+                print("ServerProtocol: strange exception", e)
+                break
             if not data:
                 clientsLock.acquire()
                 if conn in clients:
