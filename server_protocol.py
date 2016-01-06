@@ -110,7 +110,7 @@ def read (conn, mask):
                         localServer.addPlayer(v["name"], clients[conn])
                     else:
                         print("User specified no name and it isn't cursor")
-                except (json.decoder.JSONDecodeErrorr, TypeError):
+                except (json.decoder.JSONDecodeError, TypeError):
                     print("user with id " + str(clients[conn]) + " tried something incorrect")
                     if DEBUG_PROTOCOL_PRINT:
                         print(data)
