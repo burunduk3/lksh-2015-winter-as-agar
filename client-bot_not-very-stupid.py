@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import sys, time, json, threading
 from client_protocol import *
 from constants import *

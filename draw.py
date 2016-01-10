@@ -67,10 +67,10 @@ def draw_players(c, pos, ps, mf):
         r = max(0, r - 20)
         g = max(0, g - 20)
         b = max(0, b - 20)
-        c.create_oval(lx - radius - OUTLINE_WIDTH,
-                      ly - radius - OUTLINE_WIDTH,
-                      lx + radius + OUTLINE_WIDTH,
-                      ly + radius + OUTLINE_WIDTH,
+        c.create_oval(lx - (radius + OUTLINE_WIDTH),
+                      ly - (radius + OUTLINE_WIDTH),
+                      lx + (radius + OUTLINE_WIDTH),
+                      ly + (radius + OUTLINE_WIDTH),
                       fill='#%02X%02X%02X' % (r, g, b),
                       outline='')
         c.create_oval(lx - radius,

@@ -5,7 +5,9 @@ from math import *
 MAX_MASS = 500
 
 time_step = 0.05
-INITIAL_MASS = 495 
+INITIAL_MASS = 20
+DAMPING_FACTOR = 1 / 1000000000 
+#DAMPING_FACTOR = 1.0007
 
 FIELD_X = 2500
 FIELD_Y = 2500
@@ -15,10 +17,10 @@ WINDOW_WIDTH = 1300
 
 MAX_LENGTH = 4096
 
-FOOD_DENSITY = 1/13000
+FOOD_DENSITY = 1/30000
 FOOD_NUM = round(FIELD_X * FIELD_Y * FOOD_DENSITY)
-FOOD_MASS = 4
-FOOD_GROWTH = 30
+FOOD_MASS = 2
+FOOD_GROWTH = 10
 FOOD_VAR = 3
 
 FAIL_COUNT = 50
@@ -33,7 +35,7 @@ ABSORB_RAD = 0.98
 MAX_VEL = 1
 MIN_VEL = 0.03
 MAX_MASS = 1000
-VEL_CONST = 1000
+VEL_CONST = 50
 LOG_CONST = 1
 
 #Handles absorbtions
@@ -62,7 +64,7 @@ DEBUG_PROTOCOL_PRINT = debug(False)
 DEBUG_SERVER_PRINT = debug(False)
 
 def calculateRadius(mass):
-    return 4 * sqrt(mass)
+    return 3 * sqrt(mass)
 
 def massFactor(mass):
     return min(max(sqrt(mass) / sqrt(INITIAL_MASS) * (log(INITIAL_MASS) / log(mass)) * 0.1, 1), 2)

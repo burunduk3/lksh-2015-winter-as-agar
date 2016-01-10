@@ -215,6 +215,8 @@ class AgarioServer:
         for player in self.players.values():
             player_balls = []
             for circ in player.circles:
+                if len(player.name) != 0:
+                    circ.mass = max(INITIAL_MASS, circ.mass * (1 - (circ.mass ** 2) * DAMPING_FACTOR))
                 if doCircleAndRectIntersect((circ.center.x, circ.center.y), calculateRadius(circ.mass),
                                             (center.x - int(WINDOW_WIDTH * mf) // 2, center.y - int(WINDOW_HEIGHT * mf) // 2),
                                             (center.x - int(WINDOW_WIDTH * mf) // 2, center.y + int(WINDOW_HEIGHT * mf) // 2),

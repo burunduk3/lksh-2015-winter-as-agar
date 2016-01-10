@@ -82,7 +82,7 @@ def calc_velocity2(mass):
     return ans
                                
 def calc_velocity3(mass):
-    ans = min(1.0, VEL_CONST / mass)
+    ans = min(1.0, (VEL_CONST / mass))
     return ans
 
 #Returns a real number in range[0, 1]
@@ -92,7 +92,7 @@ def calc_velocity(mass):
 
 def calc_log_velocity(vec_len, mass):
     vec_len = max(vec_len, 1)
-    ans = LOG_CONST * math.log(vec_len) / math.sqrt(math.sqrt(mass))
+    ans = LOG_CONST * math.log(vec_len) / ((mass / VEL_CONST) ** 0.75)
     ans = min(ans, MAX_VEL)
     ans = max(ans, MIN_VEL)
     return ans
